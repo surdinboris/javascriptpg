@@ -3,44 +3,60 @@
 <head>
     <meta charset="UTF-8">
 
-    <script>
-        /*zf='#';
-                do {console.log(zf); zf+=zf[0];}
-                while (zf.length<=7);
-        */
+    <script> //triangle
+    zfsign='#';
+    zf='';
+    do
+    {zf+=zfsign;
+    console.log(zf);
+    }
+
+    while (zf.length<=7);
+
     </script>
-    <script>
-        var rsize=60;
+    <script> //chess board
+        var rsize=30;
         var csize=8;
         var bl='#'; //black cell
         var wt=' '; //white cell
-        var erow =''; //even row
-        var orow=''; //odd row
+        var erow =''; //even row collector
+        var orow=''; //odd row collector
         //generating even pattern
         for(var ercounter=0; ercounter<rsize; ercounter+=1)
-        {var erboolvar=!(ercounter %2);
-                  erow+=(erboolvar ? bl:wt);
+        {
+            var erboolvar=!(ercounter %2);
+            erow+=(erboolvar ? bl:wt);
         }
         //generating odd pattern
         for(var orcounter=0; orcounter<rsize; orcounter+=1)
-        {var orboolvar=!(orcounter %2);
+        {
+            var orboolvar=!(orcounter %2);
             orow+=(orboolvar ? wt:bl);
         }
         //combining patterns
         for(var ccounter=0; ccounter<csize; ccounter+=1) //appending row
-        {var cboolvar=!(ccounter %2);
-                console.log(cboolvar ? erow:orow);
-            }
+        {
+            var cboolvar=!(ccounter %2);
+            console.log(cboolvar ? erow:orow);
+        }
+    </script>
+    <script> //fizzbizz
+       for (var fizcountr=0; fizcountr<100; fizcountr+=1)
+       {
+
+           if (fizcountr % 3 == 0) console.log('Fizz' + fizcountr);
+
+           else if (fizcountr % 5 == 0)
+           {
+               if (fizcountr % 3 != 0) console.log('Bizz' + fizcountr);
+
+           }
+           else (console.log(fizcountr));
 
 
-        /*      if(counter %2) //checking if row is even or odd to produce rows difference
-                    for(rcounter=0; counter<=8; counter+=1)
-                        console.log('even');
+       }
 
-                else (console.log('odd'));}
 
-             console.log('\n');
-    */
 
     </script>
 
