@@ -3,13 +3,79 @@
 <head>
     <meta charset="UTF-8">
 <script>
-    var f1=function (t) {return t*t;
+     function main(factr){
+         return function insde(multipl) {
+             return function moreinside(mmultipl){return factr*multipl*mmultipl};
+         };
+     }
 
-    };
+     var tt = main(6);
+     var ttt= tt(8);
+     console.log(ttt(4));
+
+</script>
+    <!--<script>-->
+    <!--function wrapVal(n) {-->
+        <!--var internVar = n;-->
+        <!--return function () { return internVar;-->
+
+        <!--};-->
+
+    <!--}-->
+
+    <!--var wr1= wrapVal(3);-->
+    <!--var wr2=wrapVal(5);-->
+    <!--console.log(wr1());-->
+    <!--console.log(wr2());-->
+    <!--console.log(wr1());-->
+<!--</script>-->
+
+    <!--<script>-->
+    <!--var vario = 'out';-->
+    <!--var ddt= function () {-->
+
+        <!--console.log(vario);-->
+        <!--var varia = 'in';-->
+        <!--console.log(varia);-->
+        <!--return varia;-->
+    <!--};-->
+
+    <!--varia=ddt();-->
+    <!--console.log(varia);-->
+<!--</script>-->
 
 
-    console.log(f1(9))
-    </script>
+
+
+    <!--<script>-->
+   <!--var landscape = function ()-->
+   <!--{   var result ='';-->
+
+       <!--var lblock = function(size)-->
+       <!--{ for(var countr=0; countr<size; countr+=1)-->
+           <!--result+='[[';-->
+
+       <!--};-->
+       <!--var cblock = function(size)-->
+       <!--{ for(var countr=0; countr<size; countr+=1)-->
+           <!--result+='~';-->
+
+       <!--};-->
+       <!--var rblock = function(size)-->
+       <!--{ for(var countr=0; countr<size; countr+=1)-->
+           <!--result+=']]';-->
+       <!--result+='\\\\'-->
+
+       <!--};-->
+       <!--lblock(2);-->
+       <!--cblock(60)-->
+       <!--rblock(10);-->
+       <!--return(result)-->
+
+   <!--};-->
+
+   <!--console.log(landscape())-->
+    <!--</script>-->
 
     <!--<script> //triangle-->
     <!--zfsign='#';-->
@@ -22,36 +88,36 @@
     <!--while (zf.length<=7);-->
 
     <!--</script>-->
-    <script> //chess board
-        var rsize=9;
-        var csize=80;
-        var bl='#'; //black cell
-        var wt=' '; //white cell
-        var erow =''; //even row collector
-        var orow=''; //odd row collector
+    <!--<script> //chess board-->
+        <!--var rsize=9;-->
+        <!--var csize=80;-->
+        <!--var bl='#'; //black cell-->
+        <!--var wt=' '; //white cell-->
+        <!--var erow =''; //even row collector-->
+        <!--var orow=''; //odd row collector-->
 
-    //generating patterns function
+    <!--//generating patterns function-->
 
-    var gener= function (parit,size)
-        { grww='';
-        for(var counter=0; counter<size; counter+=1)
-        {
-            var boolvar=!(counter %2);
-            {
-                if (parit)
-                    grww += (boolvar ? bl:wt);
-                else grww += (boolvar ? wt:bl);
-            }
-        }
-            return grww;
-        };
-        //combining patterns with function call
-        for(var ccounter=0; ccounter<csize; ccounter+=1) //appending row
-        {
-            var cboolvar=!(ccounter %2);
-            console.log(cboolvar ? gener(true,rsize):gener(false,rsize));
-        }
-    </script>
+    <!--var gener= function (parit,size)-->
+        <!--{ grww='';-->
+        <!--for(var counter=0; counter<size; counter+=1)-->
+        <!--{-->
+            <!--var boolvar=!(counter %2);-->
+            <!--{-->
+                <!--if (parit)-->
+                    <!--grww += (boolvar ? bl:wt);-->
+                <!--else grww += (boolvar ? wt:bl);-->
+            <!--}-->
+        <!--}-->
+            <!--return grww;-->
+        <!--};-->
+        <!--//combining patterns with function call-->
+        <!--for(var ccounter=0; ccounter<csize; ccounter+=1) //appending row-->
+        <!--{-->
+            <!--var cboolvar=!(ccounter %2);-->
+            <!--console.log(cboolvar ? gener(true,rsize):gener(false,rsize));-->
+        <!--}-->
+    <!--</script>-->
     <!--<script> //fizzbizz-->
        <!--for (var fizcountr=0; fizcountr<100; fizcountr+=1)-->
        <!--{-->
