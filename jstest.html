@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
 <script>
-     function main(factr){
-         return function insde(multipl) {
-             return function moreinside(mmultipl){return factr*multipl*mmultipl};
-         };
-     }
+    function findSol (targ){
+        function find(cur, hist){
+            if(cur == targ)
+                return hist;
 
-     var tt = main(6);
-     var ttt= tt(8);
-     console.log(ttt(4));
+            else if (cur>targ)
+                return null;
 
+            else
+               return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');
+
+        }
+        return find(1,'1');
+    }
+    console.log(findSol(9800))
 </script>
+    <!--<script>-->
+     <!--function main(factr){-->
+         <!--return function insde(multipl) {-->
+             <!--return function moreinside(mmultipl){return factr*multipl*mmultipl};-->
+         <!--};-->
+     <!--}-->
+
+     <!--var tt = main(6);-->
+     <!--var ttt= tt(8);-->
+     <!--console.log(ttt(4));-->
+
+<!--</script>-->
     <!--<script>-->
     <!--function wrapVal(n) {-->
         <!--var internVar = n;-->
