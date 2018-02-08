@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <script>
-      function getCt(str) {
+      function getCt(str, char) {
           letterCount=0;
           for(var cnt=0; cnt < str.length; cnt++) {
               var lettr = str.charAt(cnt);
-              if (lettr == 'Q')
+              if (lettr ==char)
                   letterCount++;
           }
          return letterCount;
       }
-    console.log(getCt('AQUAQIUM'));
+    console.log(getCt('AQUAQIUM', 'A'));
 
     </script>
 <!--<script>-->
