@@ -2,23 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-<script>
-    function findSol (targ){
-        function find(cur, hist){
-            if(cur == targ)
-                return hist;
+    <script>
+      function getCt(str) {
+          letterCount=0;
+          for(var cnt=0; cnt < str.length; cnt++) {
+              var lettr = str.charAt(cnt);
+              if (lettr == 'Q')
+                  letterCount++;
+          }
+         return letterCount;
+      }
+    console.log(getCt('AQUAQIUM'));
 
-            else if (cur>targ)
-                return null;
+    </script>
+<!--<script>-->
+    <!--var grog = 34;-->
+    <!--var glog = -76;-->
+    <!--function getmin(a,b) {-->
 
-            else
-               return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');
+        <!--return Math.min(a,b);-->
 
-        }
-        return find(1,'1');
-    }
-    console.log(findSol(9800))
-</script>
+    <!--}-->
+    <!--console.log(getmin(grog,glog))-->
+<!--</script>-->
+    <!--<script>-->
+    <!--function isEven(nu) {-->
+
+        <!--function intfind(num)-->
+        <!--{  console.log('analysing'+ num);-->
+           <!--if (num == 0)-->
+                <!--return true;-->
+           <!--else if (num == 1)-->
+                <!--return false;-->
+           <!--else-->
+               <!--return intfind(num-2);-->
+        <!--}-->
+        <!--return(intfind(nu))-->
+    <!--}-->
+    <!--console.log(isEven(9))-->
+
+<!--</script>-->
+
+<!--<script>-->
+    <!--function ext(stt){-->
+        <!--var sttStr=String(stt);-->
+        <!--while (sttStr.length<30){-->
+            <!--console.log(sttStr)-->
+            <!--sttStr='0'+sttStr;}-->
+        <!--return sttStr-->
+    <!--}-->
+    <!--console.log(ext(56))-->
+    <!--console.log(sttStr)-->
+<!--</script>-->
+
+    <!--<script>-->
+    <!--function findSol (targ){-->
+        <!--function find(cur, hist){-->
+            <!--if(cur == targ)-->
+                <!--return hist;-->
+
+            <!--else if (cur>targ)-->
+                <!--return null;-->
+
+            <!--else-->
+               <!--return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');-->
+
+        <!--}-->
+        <!--return find(1,'1');-->
+    <!--}-->
+    <!--console.log(findSol(9800))-->
+<!--</script>-->
     <!--<script>-->
      <!--function main(factr){-->
          <!--return function insde(multipl) {-->
