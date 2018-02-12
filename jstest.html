@@ -2,46 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script>
-        function kaka(k0,ke) {
-            ar=[];
-            for (var rn = k0; rn<=ke; rn++)
-            ar.push(rn);
-        return ar
-        }
+  <script>
+    // var list= 677;
+    // var glist= {value:0, rst:{value:91, rst:99}};
+    // glist.rst['value']='56';
+    //
+    //
+    // var glist2= {value:1, rst:list};
+    // console.log(glist);
+    // console.log(glist2);
+    // //+++++++++++++++++++++++++++++++++++++++
 
+    lst=[2,4,80];
 
-        // function summa(arr) {
-        //     sum=0;
-        //     console.log(arr.length);
-        //     for(var t=0; t<arr.length; t++)
-        //         sum+=arr[t];
-        //     return sum
-        // }
-        // //console.log(summa(kaka(23,89)))
-        //
-        function gravy(td) {
-            sum=0;
-            for(t in td)
-                sum+=td[t];
-            return sum
-        }
-        console.log(gravy(kaka(23,89)), 'gravy');
+    function arrayToList (ar){
+        var struc={};
+        //for (a=0; a<ar.length; a++)
+        function intern(pos,struc) {
+            console.log(struc['rest']);
 
-        function excausted(arra) {
-            function innr(pos, sum) {
-                console.log(sum, 'star', pos, 'pos', arra.length);
-                if (pos < arra.length) {
-                    sum += arra[pos];
+            if (pos == ar.length) {
+                console.log('final return' + struc);
+                return struc;
+            }
+            else if (struc['rest'] == undefined) {
+                console.log('no struc parent, creating first');//in case of first loop
+                struc['value'] = [ar[pos]];
+                struc['rest'] = {};
                 pos++;
-                return innr(pos, sum);}
-                else
-                    return 'end of summarising. result=' + sum;
+                return intern(pos,struc)
+            }
+            else{
+                console.log('parent detected, appending'+struc);
+                //in case a valid parent already in structure
+                for (var i in struc)
+                console.log(i);
+
+                struc['rest'] = {value: [ar[pos]], rest:{}};
+                pos++;
+                return intern(pos,struc)
           }
-            return(innr(0, 0))
+
+
         }
-        console.log(excausted(kaka(23,89)));
-    </script>
+        return intern(0,struc);
+    }
+
+    console.log(arrayToList(lst))
+
+  </script>
+    <!--<script>-->
+
+        <!--// function kaka(k0,ke) {-->
+        <!--//     ar=[];-->
+        <!--//     for (var rn = k0; rn<=ke; rn++)-->
+        <!--//     ar.push(rn);-->
+        <!--// return ar-->
+        <!--// }-->
+
+         <!--function summa(arr) {-->
+             <!--sum=0;-->
+             <!--console.log(arr.length);-->
+             <!--for(var t=0; t<arr.length; t++)-->
+                 <!--sum+=arr[t];-->
+             <!--return sum-->
+         <!--}-->
+         <!--//console.log(summa(kaka(23,89)))-->
+        <!---->
+        <!--function gravy(td) {-->
+            <!--sum=0;-->
+            <!--for(t in td)-->
+                <!--sum+=td[t];-->
+            <!--return sum-->
+        <!--}-->
+        <!--console.log(gravy(kaka(23,89)), 'gravy');-->
+
+        <!--function excausted(arra) {-->
+            <!--function innr(pos, sum) {-->
+                <!--console.log(sum, 'star', pos, 'pos', arra.length);-->
+                <!--if (pos < arra.length) {-->
+                    <!--sum += arra[pos];-->
+                <!--pos++;-->
+                <!--return innr(pos, sum);}-->
+                <!--else-->
+                    <!--return 'end of summarising. result=' + sum;-->
+          <!--}-->
+            <!--return(innr(0, 0))-->
+        <!--}-->
+        <!--console.log(excausted(kaka(23,89)));-->
+    <!--</script>-->
 
 
     <!--<script>-->
