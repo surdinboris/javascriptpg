@@ -9,8 +9,41 @@
             ar.push(rn);
         return ar
         }
-        console.log(kaka(23,89))
+
+
+        // function summa(arr) {
+        //     sum=0;
+        //     console.log(arr.length);
+        //     for(var t=0; t<arr.length; t++)
+        //         sum+=arr[t];
+        //     return sum
+        // }
+        // //console.log(summa(kaka(23,89)))
+        //
+        function gravy(td) {
+            sum=0;
+            for(t in td)
+                sum+=td[t];
+            return sum
+        }
+        console.log(gravy(kaka(23,89)), 'gravy');
+
+        function excausted(arra) {
+            function innr(pos, sum) {
+                console.log(sum, 'star', pos, 'pos', arra.length);
+                if (pos < arra.length) {
+                    sum += arra[pos];
+                pos++;
+                return innr(pos, sum);}
+                else
+                    return 'end of summarising. result=' + sum;
+          }
+            return(innr(0, 0))
+        }
+        console.log(excausted(kaka(23,89)));
     </script>
+
+
     <!--<script>-->
         <!--var  ug={};-->
         <!--var er= '5654', rr= 100500;-->
@@ -60,13 +93,13 @@
 
         <!--function intfind(num)-->
         <!--{  console.log('analysing'+ num);-->
-           <!--if (num == 0)-->
-                <!--return true;-->
-           <!--else if (num == 1)-->
-                <!--return false;-->
-           <!--else-->
-               <!--return intfind(num-2);-->
-        <!--}-->
+    <!--if (num == 0)-->
+    <!--return true;-->
+    <!--else if (num == 1)-->
+    <!--return false;-->
+    <!--else-->
+    <!--return intfind(num-2);-->
+    <!--}-->
         <!--return(intfind(nu))-->
     <!--}-->
     <!--console.log(isEven(9))-->
@@ -95,7 +128,7 @@
                 <!--return null;-->
 
             <!--else-->
-               <!--return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');-->
+                <!--return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');-->
 
         <!--}-->
         <!--return find(1,'1');-->
