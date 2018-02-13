@@ -46,14 +46,23 @@
                return(flattnd[pos])
         }
         console.log(nth(li,3));
-        function nth2r(lst, pos) {
+        //recursive
+        console.log(li, 'li')
+
+        function nth2r(lst, fin) {
             function recur(pos) {
-            }
-
-            return intern(0, struc);
+                //console.log(pos.value);
+                if (pos == undefined)
+                    return undefined
+                if (pos.value==fin)
+                    return pos.rest;
+                else
+                    return recur(pos.rest)
+                //rem = {'value': arr[a], 'rest': rem};}
+                  }
+            return recur(lst);
         }
-
-    //console.log(arrayToList(lst));
+        console.log(nth2r(li,89));
 
   </script>
     <!--<script>-->
