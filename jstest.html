@@ -2,18 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script>
-        arr=[56,89,45];
-        function bldlst(arr) {
-            function looper(list,iter)
-            list.ecursive code that goes to the end of object
-            //
-            // for (var a in arr)
-            // list['value'] = arr[a]
 
-            return looper({},0);
+    <script>
+        var arr=[56,89,45,99];
+        function bldlst(arr) {
+            var rem={};
+            for (var a=0; a < arr.length; a++){
+                rem = {'value': arr[a], 'rest': rem};}
+                return rem;
         }
+
+        console.log(bldlst(arr));
+        var li=bldlst(arr);
+
+        function bldarr(lst) {
+            function itr(obj,ar) {
+                //console.log(obj['rest']);
+
+                if (obj['rest']) {
+                    ar.push(obj['value']);
+                    return itr(obj['rest'], ar);
+                }
+                else
+                    return ar
+            } return itr(lst,[]);
+        }
+
+        console.log(bldarr(li))
     </script>
+
+    <!--<script>-->
+        <!--var arr=[56,89,45,99];-->
+        <!--function bldlst(arr) {-->
+
+            <!--function intrnl(pos, rem, remp) {-->
+
+                <!--if (pos < arr.length){-->
+                    <!--console.log(pos);-->
+                    <!--rem['rest']=rem;-->
+                    <!--rem['value']=arr[pos];-->
+                    <!--console.log(arr[pos]);-->
+                    <!--pos++;-->
+                 <!--return intrnl(pos, rem, remp)}-->
+                <!--else-->
+                    <!--return rem-->
+            <!--}-->
+
+            <!--return intrnl(0, {})-->
+        <!--}-->
+      <!--console.log(bldlst(arr))-->
+    <!--</script>-->
     <!--<script>-->
         <!--function arguga(lstarg) {-->
             <!--var arr=[];-->
@@ -59,18 +97,20 @@
             <!--return sum-->
         <!--}-->
         <!--console.log(gravy(kaka(23,89)), 'gravy');-->
-
-        <!--function excausted(arra) {-->
-            <!--function innr(pos, sum) {-->
-                <!--console.log(sum, 'star', pos, 'pos', arra.length);-->
-                <!--if (pos < arra.length) {-->
-                    <!--sum += arra[pos];-->
-                <!--pos++;-->
-                <!--return innr(pos, sum);}-->
-                <!--else-->
-                    <!--return 'end of summarising. result=' + sum;-->
-          <!--}-->
-            <!--return(innr(0, 0))-->
+<script>
+        function excausted(arra) {
+            function innr(pos, sum) {
+                console.log(sum, 'star', pos, 'pos', arra.length);
+                if (pos < arra.length) {
+                    sum += arra[pos];
+                    pos++;
+                    return innr(pos, sum);
+                }
+                else
+                    return 'end of summarising. result=' + sum;
+            }
+        }
+    </script><!--return(innr(0, 0))-->
         <!--}-->
         <!--console.log(excausted(kaka(23,89)));-->
     <!--</script>-->
