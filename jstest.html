@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <script>
         var arr=[56,89,45,99];
         function bldlst(arr) {
@@ -18,7 +17,6 @@
         function bldarr(lst) {
             function itr(obj,ar) {
                 //console.log(obj['rest']);
-
                 if (obj['rest']) {
                     ar.push(obj['value']);
                     return itr(obj['rest'], ar);
@@ -28,9 +26,27 @@
             } return itr(lst,[]);
         }
 
-        console.log(bldarr(li), 'rebuilded')
-    </script>
+        console.log(bldarr(li), 'rebuilded');
 
+        //helpers
+        function prepend(lst,elem) {
+            var newlst={};
+            newlst['value']=elem;
+            newlst['rest']=lst;
+            return(newlst);
+        }
+        console.log(prepend(li,666));
+
+        function  nth(lst, pos) {
+            var flattnd= bldarr(lst);
+            if (pos>flattnd.length)
+                return undefined;
+            else
+               return(flattnd[pos])
+        }
+        console.log(nth(li,3))
+
+    </script>
     <!--<script>-->
         <!--var arr=[56,89,45,99];-->
         <!--function bldlst(arr) {-->
