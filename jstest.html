@@ -53,13 +53,12 @@
             function recur(pos) {
                 //console.log(pos.value);
                 if (pos == undefined)
-                    return undefined
+                    return undefined;
                 if (pos.value==fin)
                     return pos.rest;
                 else
                     return recur(pos.rest)
-                //rem = {'value': arr[a], 'rest': rem};}
-                  }
+                 }
             return recur(lst);
         }
         console.log(nth2r(li,89));
