@@ -11,8 +11,7 @@
                 return rem;
         }
 
-
-        console.log(bldlst(arr));
+        //onsole.log(bldlst(arr));
         var li=bldlst(arr);
 
         function bldarr(lst) {
@@ -27,7 +26,7 @@
             } return itr(lst,[]);
         }
 
-        console.log(bldarr(li), 'rebuilded');
+        //console.log(bldarr(li), 'rebuilded');
 
         //helpers
         function prepend(lst,elem) {
@@ -36,7 +35,7 @@
             newlst['rest']=lst;
             return(newlst);
         }
-        console.log(prepend(li,666));
+        //console.log(prepend(li,666));
 
         function  nth(lst, pos) {
             var flattnd= bldarr(lst);
@@ -45,9 +44,9 @@
             else
                return(flattnd[pos])
         }
-        console.log(nth(li,3));
+        //console.log(nth(li,3));
         //recursive
-        console.log(li, 'li')
+        //console.log(li, 'li');
 
         function nth2r(lst, fin) {
             function recur(pos) {
@@ -61,28 +60,38 @@
                  }
             return recur(lst);
         }
-        console.log(nth2r(li,89));
+        //console.log(nth2r(li,89));
 
-        //comparing of two lists
-
-        function compare(ob1, ob2) {
-            function recur(o1,o2) {
-               //insert recursive funct for looping over objeccts in list and comparing
-
+        function deepEqual(obj1, obj2) {
+            var comflg = true;
+            function compareq(ob1, ob2) {
+                console.log(ob1);
+                   for (var v in ob1){}
+                       vaconsole.log(v);
+                    //console.log(ob1, ob2);
+                return comflg;
             }
-            var comflg= true;
-            console.log(typeof ob1);
-            if (typeof ob1 == typeof ob1)
-                if (typeof ob1 == "object")
-
-                                comflg = false;
-
-                else comflg=false;
-
-                    return comflg }
 
 
-        console.log(compare(li,li))
+
+
+            if (typeof obj1 == typeof obj1) {  //not equal by type
+
+                if (typeof obj1 == "object") //starting iteration
+                    compareq(obj1, obj2);
+
+                else {
+                    if (obj1 === obj2)
+
+                        return comflg;
+                    else
+                        comflg = false;
+                }
+            }
+                return comflg
+
+        }
+        console.log(deepEqual(li,li))
   </script>
     <!--<script>-->
 
