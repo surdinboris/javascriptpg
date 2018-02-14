@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <script>
-        var arr=[56,89,45,99];
+        var arr=[56,89,45,99,90,87,89];
         function bldlst(arr) {
             var rem={};
             for (var a=0; a < arr.length; a++){
@@ -66,8 +66,10 @@
             var comflg = true;
             function compareq(ob1, ob2) {
                 console.log(ob1);
-                   for (var v in ob1){}
-                       vaconsole.log(v);
+                   for (var v in ob1) {
+                       console.log(typeof v,v);
+                       console.log(typeof ob1[v],ob1[v])
+                   }
                     //console.log(ob1, ob2);
                 return comflg;
             }
