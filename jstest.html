@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <script>
-        var arr = [56, 89, 45, 99, 90, 87, 89];
-        var arr2 = [56, 89, 45, 99, 90, 87, 89];
+        var arr = [56, 86, 45, 99, 90, 87, 89];
+        var arr2 = [56, 86, 45, 99, 90, 87, 89];
 
         function bldlst(arr) {
             var rem = {};
@@ -51,7 +51,6 @@
             else
                 return (flattnd[pos])
         }
-
         //console.log(nth(li,3));
         //recursive
         //console.log(li, 'li');
@@ -71,10 +70,8 @@
         }
 
         //console.log(nth2r(li,89));
-
         function deepEqual(obj1, obj2) {
             var comflg = true;
-
             function compareq(ob1, ob2) {
                 //retrieving properties for objects
                 var props1 = Object.getOwnPropertyNames(ob1);
@@ -86,38 +83,42 @@
                 }
                 //verifying prop names and types
                 for (var pr in props1) {
-                    console.log(props1[pr], props2[pr]);
+                    console.log(props1[pr], props2[pr], 'type?');
                     //verifying prop names
                     if (props1[pr] != props2[pr]) {
                         comflg = false;
-                        return comflg;}
-                    //verifying prop types
-                    console.log(typeof ob1[props1[pr]]);
-                    if (typeof ob1[props1[pr]] != typeof ob2[props2[pr]]){
-                        comflg = false;
-                    return comflg;
-
-                    //in case of object verifying both objects -  recursing
-                        
+                        return comflg;
                     }
+                    //verifying prop values
+                    else if (props1[pr] == "value" && props2[pr] == "value"){
+                        console.log('checking values', ob1[props1[pr]], ob2[props2[pr]]);
 
-
+                        if (ob1[props1[pr]] != ob2[props2[pr]])
+                        {
+                            console.log('found invalid value', ob1[props1[pr]], ob2[props2[pr]]);
+                            comflg = false;
+                            return comflg;
+                        }
+                    }
+                    //verifying prop types in case of object verifying both objects -  recursing
+                    else if (typeof ob1[props1[pr]] == "object" && typeof ob2[props2[pr]] == "object") {
+                        console.log('recursing');
+                        return compareq(ob1[props1[pr]], ob2[props2[pr]]);
+                    }
+                    else if (typeof ob1[props1[pr]] != typeof ob2[props2[pr]]) {
+                        comflg = false;
+                        return comflg;
+                    }
                 }
-
-
                 return comflg;
             }
-
-
             //root checking
             if (typeof obj1 == typeof obj1) {  //not equal by type
 
                 if (typeof obj1 == "object") //forwarding to recursive processing
                     compareq(obj1, obj2); //waiting for result
-
                 else {                       //say we've got a simple type objects like strings or numbers
                     if (obj1 === obj2)
-
                         return comflg;
                     else
                         comflg = false;
@@ -125,10 +126,9 @@
                 }
             }
             return comflg
-
         }
-
         console.log(deepEqual(li1, li2))
+
     </script>
     <!--<script>-->
 
