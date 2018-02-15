@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <script>
-        var arr=[56,89,45,99,90,87,89];
+        var arr = [56, 89, 45, 99, 90, 87, 89];
+        var arr2 = [56, 89, 45, 99, 90, 87, 89];
+
         function bldlst(arr) {
-            var rem={};
-            for (var a=0; a < arr.length; a++){
-                rem = {'value': arr[a], 'rest': rem};}
-                return rem;
+            var rem = {};
+            for (var a = 0; a < arr.length; a++) {
+                rem = {'value': arr[a], 'rest': rem};
+            }
+            return rem;
         }
 
         //onsole.log(bldlst(arr));
-        var li=bldlst(arr);
+        var li1 = bldlst(arr);
+        var li2 = bldlst(arr2);
 
         function bldarr(lst) {
-            function itr(obj,ar) {
+            function itr(obj, ar) {
                 //console.log(obj['rest']);
                 if (obj['rest']) {
                     ar.push(obj['value']);
@@ -23,27 +27,31 @@
                 }
                 else
                     return ar
-            } return itr(lst,[]);
+            }
+
+            return itr(lst, []);
         }
 
         //console.log(bldarr(li), 'rebuilded');
 
         //helpers
-        function prepend(lst,elem) {
-            var newlst={};
-            newlst['value']=elem;
-            newlst['rest']=lst;
-            return(newlst);
+        function prepend(lst, elem) {
+            var newlst = {};
+            newlst['value'] = elem;
+            newlst['rest'] = lst;
+            return (newlst);
         }
+
         //console.log(prepend(li,666));
 
-        function  nth(lst, pos) {
-            var flattnd= bldarr(lst);
-            if (pos>flattnd.length)
+        function nth(lst, pos) {
+            var flattnd = bldarr(lst);
+            if (pos > flattnd.length)
                 return undefined;
             else
-               return(flattnd[pos])
+                return (flattnd[pos])
         }
+
         //console.log(nth(li,3));
         //recursive
         //console.log(li, 'li');
@@ -53,218 +61,245 @@
                 //console.log(pos.value);
                 if (pos == undefined)
                     return undefined;
-                if (pos.value==fin)
+                if (pos.value == fin)
                     return pos.rest;
                 else
                     return recur(pos.rest)
-                 }
+            }
+
             return recur(lst);
         }
+
         //console.log(nth2r(li,89));
 
         function deepEqual(obj1, obj2) {
             var comflg = true;
+
             function compareq(ob1, ob2) {
-                console.log(ob1);
-                   for (var v in ob1) {
-                       console.log(typeof v,v);
-                       console.log(typeof ob1[v],ob1[v])
-                   }
-                    //console.log(ob1, ob2);
+                //retrieving properties for objects
+                var props1 = Object.getOwnPropertyNames(ob1);
+                var props2 = Object.getOwnPropertyNames(ob2);
+                //verifying length
+                if (props1.length != props2.length) {
+                    comflg = false;
+                    return comflg;
+                }
+                //verifying prop names and types
+                for (var pr in props1) {
+                    console.log(props1[pr], props2[pr]);
+                    //verifying prop names
+                    if (props1[pr] != props2[pr]) {
+                        comflg = false;
+                        return comflg;}
+                    //verifying prop types
+                    console.log(typeof ob1[props1[pr]]);
+                    if (typeof ob1[props1[pr]] != typeof ob2[props2[pr]]){
+                        comflg = false;
+                    return comflg;
+
+                    //in case of object verifying both objects -  recursing
+                        
+                    }
+
+
+                }
+
+
                 return comflg;
             }
 
 
-
-
+            //root checking
             if (typeof obj1 == typeof obj1) {  //not equal by type
 
-                if (typeof obj1 == "object") //starting iteration
-                    compareq(obj1, obj2);
+                if (typeof obj1 == "object") //forwarding to recursive processing
+                    compareq(obj1, obj2); //waiting for result
 
-                else {
+                else {                       //say we've got a simple type objects like strings or numbers
                     if (obj1 === obj2)
 
                         return comflg;
                     else
                         comflg = false;
+                    console.log('objects not fully equals')
                 }
             }
-                return comflg
+            return comflg
 
         }
-        console.log(deepEqual(li,li))
-  </script>
+
+        console.log(deepEqual(li1, li2))
+    </script>
     <!--<script>-->
 
-        <!--// function kaka(k0,ke) {-->
-        <!--//     ar=[];-->
-        <!--//     for (var rn = k0; rn<=ke; rn++)-->
-        <!--//     ar.push(rn);-->
-        <!--// return ar-->
-        <!--// }-->
+    <!--// function kaka(k0,ke) {-->
+    <!--//     ar=[];-->
+    <!--//     for (var rn = k0; rn<=ke; rn++)-->
+    <!--//     ar.push(rn);-->
+    <!--// return ar-->
+    <!--// }-->
 
-         <!--function summa(arr) {-->
-             <!--sum=0;-->
-             <!--console.log(arr.length);-->
-             <!--for(var t=0; t<arr.length; t++)-->
-                 <!--sum+=arr[t];-->
-             <!--return sum-->
-         <!--}-->
-         <!--//console.log(summa(kaka(23,89)))-->
-        <!---->
+    <!--function summa(arr) {-->
+    <!--sum=0;-->
+    <!--console.log(arr.length);-->
+    <!--for(var t=0; t<arr.length; t++)-->
+    <!--sum+=arr[t];-->
+    <!--return sum-->
+    <!--}-->
+    <!--//console.log(summa(kaka(23,89)))-->
+    <!---->
 
-    <!--</script>-->
-       <!--<script>-->
-        <!--var arr=[56,89,45,99];-->
-        <!--function bldlst(arr) {-->
-
-            <!--function intrnl(pos, rem, remp) {-->
-
-                <!--if (pos < arr.length){-->
-                    <!--console.log(pos);-->
-                    <!--rem['rest']=rem;-->
-                    <!--rem['value']=arr[pos];-->
-                    <!--console.log(arr[pos]);-->
-                    <!--pos++;-->
-                 <!--return intrnl(pos, rem, remp)}-->
-                <!--else-->
-                    <!--return rem-->
-            <!--}-->
-
-            <!--return intrnl(0, {})-->
-        <!--}-->
-      <!--console.log(bldlst(arr))-->
     <!--</script>-->
     <!--<script>-->
-        <!--function arguga(lstarg) {-->
-            <!--var arr=[];-->
-            <!--arr.push({eve:lstarg});-->
-            <!--arr.push({evening:[]});-->
-            <!--for(var a=1; a<arguments.length; a++){-->
-                <!--arr[1].evening.push(arguments[a])}-->
-            <!--return arr-->
-        <!--}-->
-        <!--var arr=arguga('kaka',234234,2342034,24234,234234242342,234);-->
+    <!--var arr=[56,89,45,99];-->
+    <!--function bldlst(arr) {-->
+
+    <!--function intrnl(pos, rem, remp) {-->
+
+    <!--if (pos < arr.length){-->
+    <!--console.log(pos);-->
+    <!--rem['rest']=rem;-->
+    <!--rem['value']=arr[pos];-->
+    <!--console.log(arr[pos]);-->
+    <!--pos++;-->
+    <!--return intrnl(pos, rem, remp)}-->
+    <!--else-->
+    <!--return rem-->
+    <!--}-->
+
+    <!--return intrnl(0, {})-->
+    <!--}-->
+    <!--console.log(bldlst(arr))-->
+    <!--</script>-->
+    <!--<script>-->
+    <!--function arguga(lstarg) {-->
+    <!--var arr=[];-->
+    <!--arr.push({eve:lstarg});-->
+    <!--arr.push({evening:[]});-->
+    <!--for(var a=1; a<arguments.length; a++){-->
+    <!--arr[1].evening.push(arguments[a])}-->
+    <!--return arr-->
+    <!--}-->
+    <!--var arr=arguga('kaka',234234,2342034,24234,234234242342,234);-->
     <!--//reversing array-->
     <!--function reverseArray(arr) {-->
-        <!--var reversedarr=[];-->
-        <!--for (var a in arr)-->
-            <!--reversedarr.push(arr[a]);-->
-        <!--return reversedarr.reverse()-->
+    <!--var reversedarr=[];-->
+    <!--for (var a in arr)-->
+    <!--reversedarr.push(arr[a]);-->
+    <!--return reversedarr.reverse()-->
     <!--}-->
-        <!--console.log(reverseArray(arr));-->
-        <!--console.log(arr.reverse());-->
+    <!--console.log(reverseArray(arr));-->
+    <!--console.log(arr.reverse());-->
     <!--</script>-->
     <!--<script>-->
-        <!--function kaka(k0,ke) {-->
-            <!--ar=[];-->
-            <!--for (var rn = k0; rn<=ke; rn++)-->
-            <!--ar.push(rn);-->
-        <!--return ar-->
-        <!--}-->
+    <!--function kaka(k0,ke) {-->
+    <!--ar=[];-->
+    <!--for (var rn = k0; rn<=ke; rn++)-->
+    <!--ar.push(rn);-->
+    <!--return ar-->
+    <!--}-->
 
 
-        <!--function summa(arr) {-->
-            <!--sum=0;-->
-            <!--console.log(arr.length);-->
-            <!--for(var t=0; t<arr.length; t++)-->
-                <!--sum+=arr[t];-->
-            <!--return sum-->
-        <!--}-->
-        <!--console.log(summa(kaka(23,89)))-->
+    <!--function summa(arr) {-->
+    <!--sum=0;-->
+    <!--console.log(arr.length);-->
+    <!--for(var t=0; t<arr.length; t++)-->
+    <!--sum+=arr[t];-->
+    <!--return sum-->
+    <!--}-->
+    <!--console.log(summa(kaka(23,89)))-->
 
 
-        <!--function gravy(td) {-->
-            <!--sum=0;-->
-            <!--for(t in td)-->
-                <!--sum+=td[t];-->
-            <!--return sum-->
-        <!--}-->
-        <!--console.log(gravy(kaka(23,89)), 'gravy');-->
+    <!--function gravy(td) {-->
+    <!--sum=0;-->
+    <!--for(t in td)-->
+    <!--sum+=td[t];-->
+    <!--return sum-->
+    <!--}-->
+    <!--console.log(gravy(kaka(23,89)), 'gravy');-->
 
 
-        <!--function excausted(arra) {-->
-            <!--function innr(pos, sum) {-->
-                <!--console.log(sum, 'star', pos, 'pos', arra.length);-->
-                <!--if (pos < arra.length) {-->
-                    <!--sum += arra[pos];-->
-                <!--pos++;-->
-                <!--return innr(pos, sum);}-->
-                <!--else-->
-                    <!--return 'end of summarising. result=' + sum;-->
-          <!--}-->
-            <!--return(innr(0, 0))-->
+    <!--function excausted(arra) {-->
+    <!--function innr(pos, sum) {-->
+    <!--console.log(sum, 'star', pos, 'pos', arra.length);-->
+    <!--if (pos < arra.length) {-->
+    <!--sum += arra[pos];-->
+    <!--pos++;-->
+    <!--return innr(pos, sum);}-->
+    <!--else-->
+    <!--return 'end of summarising. result=' + sum;-->
+    <!--}-->
+    <!--return(innr(0, 0))-->
 
-<!--<script>-->
-        <!--function excausted(arra) {-->
-            <!--function innr(pos, sum) {-->
-                <!--console.log(sum, 'star', pos, 'pos', arra.length);-->
-                <!--if (pos < arra.length) {-->
-                    <!--sum += arra[pos];-->
-                    <!--pos++;-->
-                    <!--return innr(pos, sum);-->
-                <!--}-->
-                <!--else-->
-                    <!--return 'end of summarising. result=' + sum;-->
-            <!--}-->
-        <!--}-->
+    <!--<script>-->
+    <!--function excausted(arra) {-->
+    <!--function innr(pos, sum) {-->
+    <!--console.log(sum, 'star', pos, 'pos', arra.length);-->
+    <!--if (pos < arra.length) {-->
+    <!--sum += arra[pos];-->
+    <!--pos++;-->
+    <!--return innr(pos, sum);-->
+    <!--}-->
+    <!--else-->
+    <!--return 'end of summarising. result=' + sum;-->
+    <!--}-->
+    <!--}-->
     <!--</script>&lt;!&ndash;return(innr(0, 0))&ndash;&gt;-->
 
-        <!--}-->
-        <!--console.log(excausted(kaka(23,89)));-->
+    <!--}-->
+    <!--console.log(excausted(kaka(23,89)));-->
     <!--</script>-->
 
 
     <!--<script>-->
-        <!--var  ug={};-->
-        <!--var er= '5654', rr= 100500;-->
-        <!--console.log(rr);-->
-        <!--console.log(er);-->
-        <!--var edd = {-->
-            <!--list1:[['rtr','dtr'], 'rtrt', 787],-->
-            <!--dub:['uda','cuda']-->
-        <!--};-->
-        <!--for (var ff in  edd)-->
-            <!--console.log(ff+'halabuda'+(String(Math.random()*10)).slice(0,3))-->
+    <!--var  ug={};-->
+    <!--var er= '5654', rr= 100500;-->
+    <!--console.log(rr);-->
+    <!--console.log(er);-->
+    <!--var edd = {-->
+    <!--list1:[['rtr','dtr'], 'rtrt', 787],-->
+    <!--dub:['uda','cuda']-->
+    <!--};-->
+    <!--for (var ff in  edd)-->
+    <!--console.log(ff+'halabuda'+(String(Math.random()*10)).slice(0,3))-->
 
-        <!--console.log(edd.list1[0][1]);-->
-        <!--edd.list1[0][1]='luck';-->
+    <!--console.log(edd.list1[0][1]);-->
+    <!--edd.list1[0][1]='luck';-->
 
-        <!--function inof(event) {-->
+    <!--function inof(event) {-->
 
-        <!--}-->
+    <!--}-->
 
 
     <!--</script>-->
     <!--<script>-->
-      <!--function getCt(str, char) {-->
-          <!--letterCount=0;-->
-          <!--for(var cnt=0; cnt < str.length; cnt++) {-->
-              <!--var lettr = str.charAt(cnt);-->
-              <!--if (lettr ==char)-->
-                  <!--letterCount++;-->
-          <!--}-->
-         <!--return letterCount;-->
-      <!--}-->
+    <!--function getCt(str, char) {-->
+    <!--letterCount=0;-->
+    <!--for(var cnt=0; cnt < str.length; cnt++) {-->
+    <!--var lettr = str.charAt(cnt);-->
+    <!--if (lettr ==char)-->
+    <!--letterCount++;-->
+    <!--}-->
+    <!--return letterCount;-->
+    <!--}-->
     <!--console.log(getCt('AQUAQIUM', 'A'));-->
 
     <!--</script>-->
-<!--<script>-->
+    <!--<script>-->
     <!--var grog = 34;-->
     <!--var glog = -76;-->
     <!--function getmin(a,b) {-->
 
-        <!--return Math.min(a,b);-->
+    <!--return Math.min(a,b);-->
 
     <!--}-->
     <!--console.log(getmin(grog,glog))-->
-<!--</script>-->
+    <!--</script>-->
     <!--<script>-->
     <!--function isEven(nu) {-->
 
-        <!--function intfind(num)-->
-        <!--{  console.log('analysing'+ num);-->
+    <!--function intfind(num)-->
+    <!--{  console.log('analysing'+ num);-->
     <!--if (num == 0)-->
     <!--return true;-->
     <!--else if (num == 1)-->
@@ -272,59 +307,59 @@
     <!--else-->
     <!--return intfind(num-2);-->
     <!--}-->
-        <!--return(intfind(nu))-->
+    <!--return(intfind(nu))-->
     <!--}-->
     <!--console.log(isEven(9))-->
 
-<!--</script>-->
+    <!--</script>-->
 
-<!--<script>-->
+    <!--<script>-->
     <!--function ext(stt){-->
-        <!--var sttStr=String(stt);-->
-        <!--while (sttStr.length<30){-->
-            <!--console.log(sttStr)-->
-            <!--sttStr='0'+sttStr;}-->
-        <!--return sttStr-->
+    <!--var sttStr=String(stt);-->
+    <!--while (sttStr.length<30){-->
+    <!--console.log(sttStr)-->
+    <!--sttStr='0'+sttStr;}-->
+    <!--return sttStr-->
     <!--}-->
     <!--console.log(ext(56))-->
     <!--console.log(sttStr)-->
-<!--</script>-->
+    <!--</script>-->
 
     <!--<script>-->
     <!--function findSol (targ){-->
-        <!--function find(cur, hist){-->
-            <!--if(cur == targ)-->
-                <!--return hist;-->
+    <!--function find(cur, hist){-->
+    <!--if(cur == targ)-->
+    <!--return hist;-->
 
-            <!--else if (cur>targ)-->
-                <!--return null;-->
+    <!--else if (cur>targ)-->
+    <!--return null;-->
 
-            <!--else-->
-                <!--return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');-->
+    <!--else-->
+    <!--return find(cur +5, '(' +hist+'+2)') || find(cur *40, '(' +hist+'*40)');-->
 
-        <!--}-->
-        <!--return find(1,'1');-->
+    <!--}-->
+    <!--return find(1,'1');-->
     <!--}-->
     <!--console.log(findSol(9800))-->
-<!--</script>-->
+    <!--</script>-->
     <!--<script>-->
-     <!--function main(factr){-->
-         <!--return function insde(multipl) {-->
-             <!--return function moreinside(mmultipl){return factr*multipl*mmultipl};-->
-         <!--};-->
-     <!--}-->
+    <!--function main(factr){-->
+    <!--return function insde(multipl) {-->
+    <!--return function moreinside(mmultipl){return factr*multipl*mmultipl};-->
+    <!--};-->
+    <!--}-->
 
-     <!--var tt = main(6);-->
-     <!--var ttt= tt(8);-->
-     <!--console.log(ttt(4));-->
+    <!--var tt = main(6);-->
+    <!--var ttt= tt(8);-->
+    <!--console.log(ttt(4));-->
 
-<!--</script>-->
+    <!--</script>-->
     <!--<script>-->
     <!--function wrapVal(n) {-->
-        <!--var internVar = n;-->
-        <!--return function () { return internVar;-->
+    <!--var internVar = n;-->
+    <!--return function () { return internVar;-->
 
-        <!--};-->
+    <!--};-->
 
     <!--}-->
 
@@ -333,53 +368,51 @@
     <!--console.log(wr1());-->
     <!--console.log(wr2());-->
     <!--console.log(wr1());-->
-<!--</script>-->
+    <!--</script>-->
 
     <!--<script>-->
     <!--var vario = 'out';-->
     <!--var ddt= function () {-->
 
-        <!--console.log(vario);-->
-        <!--var varia = 'in';-->
-        <!--console.log(varia);-->
-        <!--return varia;-->
+    <!--console.log(vario);-->
+    <!--var varia = 'in';-->
+    <!--console.log(varia);-->
+    <!--return varia;-->
     <!--};-->
 
     <!--varia=ddt();-->
     <!--console.log(varia);-->
-<!--</script>-->
-
-
+    <!--</script>-->
 
 
     <!--<script>-->
-   <!--var landscape = function ()-->
-   <!--{   var result ='';-->
+    <!--var landscape = function ()-->
+    <!--{   var result ='';-->
 
-       <!--var lblock = function(size)-->
-       <!--{ for(var countr=0; countr<size; countr+=1)-->
-           <!--result+='[[';-->
+    <!--var lblock = function(size)-->
+    <!--{ for(var countr=0; countr<size; countr+=1)-->
+    <!--result+='[[';-->
 
-       <!--};-->
-       <!--var cblock = function(size)-->
-       <!--{ for(var countr=0; countr<size; countr+=1)-->
-           <!--result+='~';-->
+    <!--};-->
+    <!--var cblock = function(size)-->
+    <!--{ for(var countr=0; countr<size; countr+=1)-->
+    <!--result+='~';-->
 
-       <!--};-->
-       <!--var rblock = function(size)-->
-       <!--{ for(var countr=0; countr<size; countr+=1)-->
-           <!--result+=']]';-->
-       <!--result+='\\\\'-->
+    <!--};-->
+    <!--var rblock = function(size)-->
+    <!--{ for(var countr=0; countr<size; countr+=1)-->
+    <!--result+=']]';-->
+    <!--result+='\\\\'-->
 
-       <!--};-->
-       <!--lblock(2);-->
-       <!--cblock(60)-->
-       <!--rblock(10);-->
-       <!--return(result)-->
+    <!--};-->
+    <!--lblock(2);-->
+    <!--cblock(60)-->
+    <!--rblock(10);-->
+    <!--return(result)-->
 
-   <!--};-->
+    <!--};-->
 
-   <!--console.log(landscape())-->
+    <!--console.log(landscape())-->
     <!--</script>-->
 
     <!--<script> //triangle-->
@@ -394,60 +427,58 @@
 
     <!--</script>-->
     <!--<script> //chess board-->
-        <!--var rsize=9;-->
-        <!--var csize=80;-->
-        <!--var bl='#'; //black cell-->
-        <!--var wt=' '; //white cell-->
-        <!--var erow =''; //even row collector-->
-        <!--var orow=''; //odd row collector-->
+    <!--var rsize=9;-->
+    <!--var csize=80;-->
+    <!--var bl='#'; //black cell-->
+    <!--var wt=' '; //white cell-->
+    <!--var erow =''; //even row collector-->
+    <!--var orow=''; //odd row collector-->
 
     <!--//generating patterns function-->
 
     <!--var gener= function (parit,size)-->
-        <!--{ grww='';-->
-        <!--for(var counter=0; counter<size; counter+=1)-->
-        <!--{-->
-            <!--var boolvar=!(counter %2);-->
-            <!--{-->
-                <!--if (parit)-->
-                    <!--grww += (boolvar ? bl:wt);-->
-                <!--else grww += (boolvar ? wt:bl);-->
-            <!--}-->
-        <!--}-->
-            <!--return grww;-->
-        <!--};-->
-        <!--//combining patterns with function call-->
-        <!--for(var ccounter=0; ccounter<csize; ccounter+=1) //appending row-->
-        <!--{-->
-            <!--var cboolvar=!(ccounter %2);-->
-            <!--console.log(cboolvar ? gener(true,rsize):gener(false,rsize));-->
-        <!--}-->
+    <!--{ grww='';-->
+    <!--for(var counter=0; counter<size; counter+=1)-->
+    <!--{-->
+    <!--var boolvar=!(counter %2);-->
+    <!--{-->
+    <!--if (parit)-->
+    <!--grww += (boolvar ? bl:wt);-->
+    <!--else grww += (boolvar ? wt:bl);-->
+    <!--}-->
+    <!--}-->
+    <!--return grww;-->
+    <!--};-->
+    <!--//combining patterns with function call-->
+    <!--for(var ccounter=0; ccounter<csize; ccounter+=1) //appending row-->
+    <!--{-->
+    <!--var cboolvar=!(ccounter %2);-->
+    <!--console.log(cboolvar ? gener(true,rsize):gener(false,rsize));-->
+    <!--}-->
     <!--</script>-->
     <!--<script> //fizzbizz-->
-       <!--for (var fizcountr=0; fizcountr<100; fizcountr+=1)-->
-       <!--{-->
+    <!--for (var fizcountr=0; fizcountr<100; fizcountr+=1)-->
+    <!--{-->
 
-           <!--if (fizcountr % 3 == 0) console.log('Fizz' + fizcountr);-->
+    <!--if (fizcountr % 3 == 0) console.log('Fizz' + fizcountr);-->
 
-           <!--else if (fizcountr % 5 == 0)-->
-           <!--{-->
-               <!--if (fizcountr % 3 != 0) console.log('Bizz' + fizcountr);-->
+    <!--else if (fizcountr % 5 == 0)-->
+    <!--{-->
+    <!--if (fizcountr % 3 != 0) console.log('Bizz' + fizcountr);-->
 
-           <!--}-->
-           <!--else (console.log(fizcountr));-->
+    <!--}-->
+    <!--else (console.log(fizcountr));-->
 
 
-       <!--}-->
-
+    <!--}-->
 
 
     <!--</script>-->
-
 
 
     <title>Title</title>
 </head>
 <body>
-<p style="font-size: 90px" >JStest</p>
+<p style="font-size: 90px">JStest</p>
 </body>
 </html>
