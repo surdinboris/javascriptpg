@@ -3,133 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <script>
-        var arr = [56, 86, 45, 99, 90, 87, 89];
-        var arr2 = [56, 86, 45, 99, 90, 87, 809];
-
-        function bldlst(arr) {
-            var rem = {};
-            for (var a = 0; a < arr.length; a++) {
-                rem = {'value': arr[a], 'rest': rem};
-            }
-            return rem;
-        }
-
-        //onsole.log(bldlst(arr));
-        var li1 = bldlst(arr);
-        var li2 = bldlst(arr2);
-
-        function bldarr(lst) {
-            function itr(obj, ar) {
-                //console.log(obj['rest']);
-                if (obj['rest']) {
-                    ar.push(obj['value']);
-                    return itr(obj['rest'], ar);
-                }
-                else
-                    return ar
-            }
-
-            return itr(lst, []);
-        }
-
-        //console.log(bldarr(li), 'rebuilded');
-
-        //helpers
-        function prepend(lst, elem) {
-            var newlst = {};
-            newlst['value'] = elem;
-            newlst['rest'] = lst;
-            return (newlst);
-        }
-
-        //console.log(prepend(li,666));
-
-        function nth(lst, pos) {
-            var flattnd = bldarr(lst);
-            if (pos > flattnd.length)
-                return undefined;
-            else
-                return (flattnd[pos])
-        }
-        //console.log(nth(li,3));
-        //recursive
-        //console.log(li, 'li');
-
-        function nth2r(lst, fin) {
-            function recur(pos) {
-                //console.log(pos.value);
-                if (pos == undefined)
-                    return undefined;
-                if (pos.value == fin)
-                    return pos.rest;
-                else
-                    return recur(pos.rest)
-            }
-
-            return recur(lst);
-        }
-
-        //console.log(nth2r(li,89));
-        function deepEqual(obj1, obj2) {
-            var comflg = true;
-            function compareq(ob1, ob2) {
-                //retrieving properties for objects
-                var props1 = Object.getOwnPropertyNames(ob1);
-                var props2 = Object.getOwnPropertyNames(ob2);
-                //verifying length
-                if (props1.length != props2.length) {
-                    comflg = false;
-                    return comflg;
-                }
-                //verifying prop names and types
-                for (var pr in props1) {
-                    console.log(props1[pr], props2[pr], 'type?');
-                    //verifying prop names
-                    if (props1[pr] != props2[pr]) {
-                        comflg = false;
-                        return comflg;
-                    }
-                    //verifying prop values
-                    else if (props1[pr] == "value" && props2[pr] == "value"){
-                        console.log('checking values', ob1[props1[pr]], ob2[props2[pr]]);
-
-                        if (ob1[props1[pr]] != ob2[props2[pr]])
-                        {
-                            console.log('found invalid value', ob1[props1[pr]], ob2[props2[pr]]);
-                            comflg = false;
-                            return comflg;
-                        }
-                    }
-                    //verifying prop types in case of object verifying both objects -  recursing
-                    else if (typeof ob1[props1[pr]] == "object" && typeof ob2[props2[pr]] == "object") {
-                        console.log('recursing');
-                        return compareq(ob1[props1[pr]], ob2[props2[pr]]);
-                    }
-                    else if (typeof ob1[props1[pr]] != typeof ob2[props2[pr]]) {
-                        comflg = false;
-                        return comflg;
-                    }
-                }
-                return comflg;
-            }
-            //root checking
-            if (typeof obj1 == typeof obj1) {  //not equal by type
-
-                if (typeof obj1 == "object") //forwarding to recursive processing
-                    compareq(obj1, obj2); //waiting for result
-                else {                       //say we've got a simple type objects like strings or numbers
-                    if (obj1 === obj2)
-                        return comflg;
-                    else
-                        comflg = false;
-                    console.log('objects not fully equals')
-                }
-            }
-            return comflg
-        }
-        console.log(deepEqual(li1, li2))
+        // function unless(tst, then) {
+        //     if (!tst) then();
+        // }
+        // function repeat(times,body) {
+        //     for(var i=0; i<times; i++)
+        //         body(i);
+        // }
+        //
+        //
+        // repeat(9, function (n) { unless(n % 2, function () {console.log(n, 'is even'); }) })
+        //
+        var arr=[8,3,4,5,6,2,1,9];
+        console.log(arr.filter(function (value) {
+            return value == 3}))
+        //
+        // function pr (f) {
+        //      return f
+        // }
+        //
+        // var ty= pr.apply(null,arr);
+        // console.log(ty);
+        // console.log(JSON.stringify('ghjghjg'));
 
     </script>
+    <!--<script>-->
+
+    <!--var journal =[{events:['work','sllep'],squirrel:true},{events:['work1','sllep1'],squirrel:false}];-->
+
+    <!--function forEach(array,func){-->
+
+        <!--for (var c =0; c < array.length; c++)-->
+            <!--func(array[c]);-->
+    <!--}-->
+    <!--forEach(journal,console.log);-->
+
+    <!--var sum =0;-->
+    <!--var numbers = [1 , 2 , 3 , 4 , 50];-->
+    <!--forEach ( numbers , function (number) {sum += number ;});-->
+    <!--console.log ( sum ) ;-->
+
+    <!--function  gt(journal) {-->
+
+        <!--var phis={};-->
+        <!--journal.forEach(function(entry)-->
+        <!--{ console.log(entry); entry.events.forEach(function(event)-->
+        <!--{console.log(event)}-->
+        <!--)}-->
+        <!--)}-->
+    <!--gt(journal);-->
+
+<!--function nui(numbs)-->
+
+<!--{var sumo=0;-->
+    <!--numbs.forEach(function (value) {sumo+=value});-->
+<!--console.log(sumo)-->
+<!--}-->
+    <!--nui(numbers);-->
+
+<!--function grt(n) {return function (m) {return m > n;} }-->
+
+<!--var tu=grt(5);-->
+<!--console.log(tu(2))-->
+
+    <!--function  noi(f) {-->
+    <!--return function (arg) {-->
+        <!--console.log('call w', arg );-->
+        <!--var val =f(arg);-->
+        <!--console.log('called w', arg, 'val is', val);-->
+        <!--return val;-->
+
+    <!--};-->
+
+        <!--}-->
+
+       <!--console.log(noi(String)(1))-->
+
+        <!---->
+
+    <!--</script>-->
+
+
+
+    <!--====================equal thing=========================-->
+    <!--<script>-->
+        <!--var arr = [56, 86, 45, 99, 90, 87, 89];-->
+        <!--var arr2 = [56, 86, 45, 99, 90, 87, 809];-->
+
+        <!--function bldlst(arr) {-->
+            <!--var rem = {};-->
+            <!--for (var a = 0; a < arr.length; a++) {-->
+                <!--rem = {'value': arr[a], 'rest': rem};-->
+            <!--}-->
+            <!--return rem;-->
+        <!--}-->
+
+        <!--//onsole.log(bldlst(arr));-->
+        <!--var li1 = bldlst(arr);-->
+        <!--var li2 = bldlst(arr2);-->
+
+        <!--function bldarr(lst) {-->
+            <!--function itr(obj, ar) {-->
+                <!--//console.log(obj['rest']);-->
+                <!--if (obj['rest']) {-->
+                    <!--ar.push(obj['value']);-->
+                    <!--return itr(obj['rest'], ar);-->
+                <!--}-->
+                <!--else-->
+                    <!--return ar-->
+            <!--}-->
+
+            <!--return itr(lst, []);-->
+        <!--}-->
+
+        <!--//console.log(bldarr(li), 'rebuilded');-->
+
+        <!--//helpers-->
+        <!--function prepend(lst, elem) {-->
+            <!--var newlst = {};-->
+            <!--newlst['value'] = elem;-->
+            <!--newlst['rest'] = lst;-->
+            <!--return (newlst);-->
+        <!--}-->
+
+        <!--//console.log(prepend(li,666));-->
+
+        <!--function nth(lst, pos) {-->
+            <!--var flattnd = bldarr(lst);-->
+            <!--if (pos > flattnd.length)-->
+                <!--return undefined;-->
+            <!--else-->
+                <!--return (flattnd[pos])-->
+        <!--}-->
+        <!--//console.log(nth(li,3));-->
+        <!--//recursive-->
+        <!--//console.log(li, 'li');-->
+
+        <!--function nth2r(lst, fin) {-->
+            <!--function recur(pos) {-->
+                <!--//console.log(pos.value);-->
+                <!--if (pos == undefined)-->
+                    <!--return undefined;-->
+                <!--if (pos.value == fin)-->
+                    <!--return pos.rest;-->
+                <!--else-->
+                    <!--return recur(pos.rest)-->
+            <!--}-->
+
+            <!--return recur(lst);-->
+        <!--}-->
+
+        <!--//console.log(nth2r(li,89));-->
+        <!--function deepEqual(obj1, obj2) {-->
+            <!--var comflg = true;-->
+            <!--function compareq(ob1, ob2) {-->
+                <!--//retrieving properties for objects-->
+                <!--var props1 = Object.getOwnPropertyNames(ob1);-->
+                <!--var props2 = Object.getOwnPropertyNames(ob2);-->
+                <!--//verifying length-->
+                <!--if (props1.length != props2.length) {-->
+                    <!--comflg = false;-->
+                    <!--return comflg;-->
+                <!--}-->
+                <!--//verifying prop names and types-->
+                <!--for (var pr in props1) {-->
+                    <!--console.log(props1[pr], props2[pr], 'type?');-->
+                    <!--//verifying prop names-->
+                    <!--if (props1[pr] != props2[pr]) {-->
+                        <!--comflg = false;-->
+                        <!--return comflg;-->
+                    <!--}-->
+                    <!--//verifying prop values-->
+                    <!--else if (props1[pr] == "value" && props2[pr] == "value"){-->
+                        <!--console.log('checking values', ob1[props1[pr]], ob2[props2[pr]]);-->
+
+                        <!--if (ob1[props1[pr]] != ob2[props2[pr]])-->
+                        <!--{-->
+                            <!--console.log('found invalid value', ob1[props1[pr]], ob2[props2[pr]]);-->
+                            <!--comflg = false;-->
+                            <!--return comflg;-->
+                        <!--}-->
+                    <!--}-->
+                    <!--//verifying prop types in case of object verifying both objects -  recursing-->
+                    <!--else if (typeof ob1[props1[pr]] == "object" && typeof ob2[props2[pr]] == "object") {-->
+                        <!--console.log('recursing');-->
+                        <!--return compareq(ob1[props1[pr]], ob2[props2[pr]]);-->
+                    <!--}-->
+                    <!--else if (typeof ob1[props1[pr]] != typeof ob2[props2[pr]]) {-->
+                        <!--comflg = false;-->
+                        <!--return comflg;-->
+                    <!--}-->
+                <!--}-->
+                <!--return comflg;-->
+            <!--}-->
+            <!--//root checking-->
+            <!--if (typeof obj1 == typeof obj1) {  //not equal by type-->
+
+                <!--if (typeof obj1 == "object") //forwarding to recursive processing-->
+                    <!--compareq(obj1, obj2); //waiting for result-->
+                <!--else {                       //say we've got a simple type objects like strings or numbers-->
+                    <!--if (obj1 === obj2)-->
+                        <!--return comflg;-->
+                    <!--else-->
+                        <!--comflg = false;-->
+                    <!--console.log('objects not fully equals')-->
+                <!--}-->
+            <!--}-->
+            <!--return comflg-->
+        <!--}-->
+        <!--console.log(deepEqual(li1, li2))-->
+
+    <!--</script>-->
+    <!--=============================================-->
+
     <!--<script>-->
 
     <!--// function kaka(k0,ke) {-->
