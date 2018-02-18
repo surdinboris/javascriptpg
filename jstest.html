@@ -14,13 +14,66 @@
         //
         // repeat(9, function (n) { unless(n % 2, function () {console.log(n, 'is even'); }) })
         //
-        var arr=[8,3,4,5,6,2,1,9];
-        console.log(arr.filter(function (value) {
-            return value == 3}))
+
+        var jss= [{'rty':[
+                {
+                    "title": "Sample Konfabulator Widget",
+                    "name": "main_window",
+                    "width": 500,
+                    "height": 500
+                },
+                {
+                    "src": "Images/Sun.png",
+                    "name": "sun1",
+                    "hOffset": 250,
+                    "vOffset": 250,
+                    "alignment": "center"
+                },
+                {
+                    "data": "Click Here",
+                    "size": 36,
+                    "style": "bold",
+                    "name": "text1",
+                    "hOffset": 250,
+                    "vOffset": 100,
+                    "alignment": "center",
+                    "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"}
+                ]}];
         //
-        // function pr (f) {
-        //      return f
-        // }
+        //console.log(jss[0].rty);
+        console.log(jss[0].rty.filter(function (value) {
+            return value.name == "sun1" || value.name == "main_window" || value.name == "text1"  }));
+
+        console.log(jss[0].rty.filter(function (value) {
+            return value["alignment"]=='center'}));
+        //
+        // console.log(jss.filter(function (value) {
+        //     return true}));
+
+        for (var f in jss[0].rty) {
+            var obct = jss[0].rty[f];
+            for (var o in obct){
+                //console.log(o);
+                if (obct.width)
+                    console.log('width found', obct.width);
+                else if (obct.hOffset)
+                    console.log('offset found', obct.hOffset)
+            }
+            //console.log(obct);
+        }
+
+        //=====================================
+        var arr1=[8,3,4,5,6,2,1,9];
+
+        function pr (fff) {
+            console.log(fff.length);
+
+            for(var i =0; i<fff.length; i++) {
+                console.log(arr1[i])
+            }}
+        pr(arr1);
+
+
         //
         // var ty= pr.apply(null,arr);
         // console.log(ty);
