@@ -41,26 +41,26 @@
                 ]}];
         //
         //console.log(jss[0].rty);
-        console.log(jss[0].rty.filter(function (value) {
-            return value.name == "sun1" || value.name == "main_window" || value.name == "text1"  }));
-
-        console.log(jss[0].rty.filter(function (value) {
-            return value["alignment"]=='center'}));
+        // console.log(jss[0].rty.filter(function (value) {
+        //     return value.name == "sun1" || value.name == "main_window" || value.name == "text1"  }));
+        //
+        // console.log(jss[0].rty.filter(function (value) {
+        //     return value["alignment"]=='center'}));
         //
         // console.log(jss.filter(function (value) {
         //     return true}));
 
-        for (var f in jss[0].rty) {
-            var obct = jss[0].rty[f];
-            for (var o in obct){
-                //console.log(o);
-                if (obct.width)
-                    console.log('width found', obct.width);
-                else if (obct.hOffset)
-                    console.log('offset found', obct.hOffset)
-            }
-            //console.log(obct);
-        }
+        // for (var f in jss[0].rty) {
+        //     var obct = jss[0].rty[f];
+        //     for (var o in obct){
+        //         //console.log(o);
+        //         if (obct.width)
+        //             console.log('width found', obct.width);
+        //         else if (obct.hOffset)
+        //             console.log('offset found', obct.hOffset)
+        //     }
+        //     //console.log(obct);
+        // }
 
         //=====================================
         var arr1=[8,3,4,5,6,2,1,9];
@@ -71,13 +71,26 @@
             for(var i =0; i<fff.length; i++) {
                 console.log(arr1[i])
             }}
-        pr(arr1);
-
+        //pr(arr1);
 
         //
         // var ty= pr.apply(null,arr);
         // console.log(ty);
         // console.log(JSON.stringify('ghjghjg'));
+
+
+        function map(arr,func) {
+            var ret=[];
+            for (var c=0; c< arr.length; c++)
+                ret.push(func(arr[c]));
+            return ret
+        }
+
+        console.log(map(arr1,function (val) {
+            return val+678678797898  ;   }
+
+            ))
+            //combine!
 
     </script>
     <!--<script>-->
