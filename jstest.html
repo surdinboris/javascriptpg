@@ -41,14 +41,16 @@
                 ]}];
         //
         //console.log(jss[0].rty);
-        // console.log(jss[0].rty.filter(function (value) {
-        //     return value.name == "sun1" || value.name == "main_window" || value.name == "text1"  }));
-        //
-        // console.log(jss[0].rty.filter(function (value) {
-        //     return value["alignment"]=='center'}));
-        //
-        // console.log(jss.filter(function (value) {
-        //     return true}));
+
+
+        console.log(jss[0].rty.filter(function (value) {
+            return value.name == "sun1" || value.name == "main_window" || value.name == "text1"  }));
+
+        console.log(jss[0].rty.filter(function (value) {
+            return value["alignment"]=='center'}));
+
+        console.log(jss.filter(function (value) {
+            return true}));
 
         // for (var f in jss[0].rty) {
         //     var obct = jss[0].rty[f];
@@ -88,9 +90,16 @@
 
         console.log(map(arr1,function (val) {
             return val+678678797898  ;   }
+              ))
 
-            ))
-            //combine!
+
+        function forEach(array, action) {
+            for (var i =0; i<array.length; i++)
+                action(array[1])}
+
+                
+
+        //combine!
 
     </script>
     <!--<script>-->
