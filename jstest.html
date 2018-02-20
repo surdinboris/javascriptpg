@@ -54,11 +54,13 @@
 
         function reduceAncestors(person, f, defaultValue) {
             function valueFor(person) {
-                if (person == null)
-                    return defaultValue;
+                if (person == null){
+                    return defaultValue;}
                 else
+
                     return f(person, valueFor(byName[person.mother]),
                         valueFor(byName[person.father]));
+
             }
             return valueFor(person);
         }
@@ -67,6 +69,7 @@
             if (person.name == "Pauwels van Haverbeke")
                 return 1;
             else
+                console.log(fromMother + fromFather) / 2;
                 return (fromMother + fromFather) / 2;
         }
 
@@ -95,7 +98,9 @@
             return per.died <=1743
 
         }
+        //console.log(byName);
         var ph = byName["Philibert Haverbeke"];
+
         console.log(ph);
         console.log(ancestry.filter(female).filter(diedBefore1743) );
       
