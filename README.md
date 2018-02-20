@@ -1,2 +1,0 @@
-# javascriptpg
-javascript playground
