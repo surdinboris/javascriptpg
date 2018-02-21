@@ -53,23 +53,27 @@
         });
 
         function reduceAncestors(person, f, defaultValue) {
+            console.log('reduceAncestors called with', person,f,defaultValue);
             function valueFor(person) {
+                console.log('inner valueFor called with', person,f,defaultValue);
                 if (person == null){
                     return defaultValue;}
                 else
-
+                    console.log('valueFor returned ValueFor',byName[person.mother],byName[person.father]);
                     return f(person, valueFor(byName[person.mother]),
                         valueFor(byName[person.father]));
+
 
             }
             return valueFor(person);
         }
 
         function sharedDNA(person, fromMother, fromFather) {
+            console.log('DNA called with ',person.name,fromMother, fromFather);
             if (person.name == "Pauwels van Haverbeke")
                 return 1;
             else
-                console.log(fromMother + fromFather) / 2;
+
                 return (fromMother + fromFather) / 2;
         }
 
@@ -101,7 +105,6 @@
         //console.log(byName);
         var ph = byName["Philibert Haverbeke"];
 
-        console.log(ph);
         console.log(ancestry.filter(female).filter(diedBefore1743) );
       
         console.log(reduceAncestors(ph,sharedDNA,0)/4);
