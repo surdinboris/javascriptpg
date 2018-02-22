@@ -103,21 +103,22 @@
 
         //console.log(average(ancestry.filter(male)))
         // Your code here.
-// var yu= [5,4,76,65,6];
-// function  coco(arr) {
-//     var why= 5-5 && arr[3];
-//     console.log(why);
-//     return why ? 4:'fff'
-// }
-//
-// console.log(coco(yu));
+var yu= [5,4,76,65,6];
+function  coco(arr) {
+    var why= 5-9 && arr[3];
+    console.log(why);
+    return why ? 4:'fff'
+}
+
+console.log(coco(yu));
 
 
 
         function countAncestors(person, test) {
             function combine(current, fromMother, fromFather) {
+                //if current != person then executing test
                 var thisOneCounts = current != person && test(current);
-                console.log(fromMother + fromFather + (thisOneCounts ? 1 : 0));
+                console.log(thisOneCounts);
                 return fromMother + fromFather + (thisOneCounts ? 1 : 0);
             }
             return reduceAncestors(person, combine, 0);
