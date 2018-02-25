@@ -52,19 +52,45 @@
             byName[person.name] = person;
             });
 
-        function reduceAncestors(person, f, defaultValue) {
-            function valueFor(person) {
-                if (person == null)
-                    return defaultValue;
-                else
-                    return f(person, valueFor(byName[person.mother]));
+        function average (array) {
+            function  plus(a,b) {return a+b}
+            return array.reduce(plus) / array.length;
             }
+        var differs=[];
+        ancestry.forEach(function (person) {
+            if (byName[person.mother] != undefined ) {
+                differs.push(person.born-byName[person.mother].born)
+            }
+        });
+        console.log(average(differs))
 
-            return valueFor(person);
-        }
+        //console.log(differs)
 
-        function getMotherAge()
+       //
+       // function average (array) {
+       //     function  plus(a,b) {return a+b}
+       //     return array.reduce(plus) / array.length;
+       //
+       //     }
+       //
+       //  function female(p) {
+       //     return p.sex == 'f'
+       //  }
+       //
+       //  console.log(average(ancestry.filter(female)))
 
+
+        //
+        // function reduceAncestors(person, f, defaultValue) {
+        //     function valueFor(person) {
+        //         if (person == null)
+        //             return defaultValue;
+        //         else
+        //             return f(person, valueFor(byName[person.mother]),
+        //                 valueFor(byName[person.father]));
+        //     }
+        //     return valueFor(person);
+        // }
 
         </script>
 
