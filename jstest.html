@@ -51,18 +51,30 @@
        ancestry.forEach(function(person) {
             byName[person.name] = person;
             });
+       var popul={};
+        ancestry.forEach(function (person) {
+            console.log(person.died-person.born);
+            if (popul[Math.ceil(person.died /100)] != NaN)
+             popul[Math.ceil(person.died /100)]=person.died-person.born;
+            else
+                popul[Math.ceil(person.died /100)]=(person.died-person.born+popul[Math.ceil(person.died /100)])/2
+                });
+
+        console.log(popul);
+
 
         function average (array) {
             function  plus(a,b) {return a+b}
-            return array.reduce(plus) / array.length;
+            return array.reduce(plus) / array.length; //summarising and accumulating in current var of reduce
             }
-        var differs=[];
-        ancestry.forEach(function (person) {
-            if (byName[person.mother] != undefined ) {
-                differs.push(person.born-byName[person.mother].born)
-            }
-        });
-        console.log(average(differs))
+
+        // var differs=[];
+        // ancestry.forEach(function (person) {
+        //     if (byName[person.mother] != undefined ) {
+        //         differs.push(person.born-byName[person.mother].born)
+        //     }
+        // });
+        // console.log(average(differs))
 
         //console.log(differs)
 
