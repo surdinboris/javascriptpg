@@ -53,16 +53,11 @@
             });
        var popul={};
         ancestry.forEach(function (person) {
-            console.log(person.died-person.born);
-            if (popul[Math.ceil(person.died /100)] != NaN)
-             popul[Math.ceil(person.died /100)]=person.died-person.born;
-            else
-                popul[Math.ceil(person.died /100)]=(person.died-person.born+popul[Math.ceil(person.died /100)])/2
-                });
+            console.log(person.died - person.born);
+            popul[Math.ceil(person.died / 100)]=[person.died - person.born];
+        });
 
         console.log(popul);
-
-
         function average (array) {
             function  plus(a,b) {return a+b}
             return array.reduce(plus) / array.length; //summarising and accumulating in current var of reduce
