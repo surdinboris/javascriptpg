@@ -51,13 +51,21 @@
        ancestry.forEach(function(person) {
             byName[person.name] = person;
             });
-       var popul={};
+       var popul=[];
         ancestry.forEach(function (person) {
-            console.log(person.died - person.born);
-            popul[Math.ceil(person.died / 100)]=[person.died - person.born];
+            if (popul[Math.ceil(person.died / 100)] == undefined)
+                popul[Math.ceil(person.died / 100)] =[];
+            popul[Math.ceil(person.died / 100)].push(person.died - person.born)
         });
 
         console.log(popul);
+       // var valsCent =popul.
+
+        console.log(popul.forEach(function (person) {
+
+            person=(average(person));}));
+
+
         function average (array) {
             function  plus(a,b) {return a+b}
             return array.reduce(plus) / array.length; //summarising and accumulating in current var of reduce
