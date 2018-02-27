@@ -57,19 +57,26 @@
                 popul[Math.ceil(person.died / 100)] =[];
             popul[Math.ceil(person.died / 100)].push(person.died - person.born)
         });
-
         console.log(popul);
-       // var valsCent =popul.
 
-        console.log(popul.forEach(function (person) {
+        //console output
+     var neww=[];
+     console.log(popul.map(function (person) {
+            return (average(person))}));
+    //collecting to dedicated variable
+     for(var k in popul)
+         neww[k]=average(popul[k]);
+        console.log('neww',neww);
 
-            person=(average(person));}));
+     popul.map(function (person) {
+            return (average(person))});
 
-
-        function average (array) {
-            function  plus(a,b) {return a+b}
-            return array.reduce(plus) / array.length; //summarising and accumulating in current var of reduce
+     function average (array) {
+            function plus(a, b) {
+                return a + b
             }
+            return array.reduce(plus) / array.length; //summarising and accumulating in current var of reduce
+        }
 
         // var differs=[];
         // ancestry.forEach(function (person) {
