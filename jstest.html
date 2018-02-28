@@ -77,7 +77,49 @@
             }
             return array.reduce(plus) / array.length; //summarising and accumulating in current var of reduce
         }
+// Grouping objects by type
 
+        var needGroup=['tr',1,3,'rtrtrw',{'vova':'f'},function some () {
+            
+        }];
+        var elemGroups ={};
+        function groupBy(arr, func) {
+         var groups=[];
+         for (var i =0; i<arr.length; i++)
+                 groups.push(func(arr[i]));
+            return groups
+        }
+
+        function detectType (a) {
+            var aType= typeof a;
+            function appendToType(elem) {
+                if(elemGroups[elem.objtype]== undefined){
+                    elemGroups[elem.objtype]={};
+                    elemGroups[elem.objtype]=[elem.elemVal]
+                }
+                else
+                    elemGroups[elem.objtype].push(elem.elemVal)
+            }
+            switch (aType){
+                case "object":
+                    appendToType({'objtype':'object','elemVal':a});
+                    break;
+                case "string":
+                    appendToType({'objtype':'string','elemVal':a});
+                    break;
+                case 'number':
+                    appendToType({'objtype':'number','elemVal':a});
+                    break;
+                default:
+                    appendToType({'objtype':'unreconzed','elemVal':a});
+                    break;
+                                }
+                    }
+
+        groupBy(needGroup,detectType);
+        console.log(elemGroups) //object that acuumulates groupped by type elements
+
+        // console.log(groupBy(grouu,trt));
         // var differs=[];
         // ancestry.forEach(function (person) {
         //     if (byName[person.mother] != undefined ) {
