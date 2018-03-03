@@ -3,7 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <script>
+        //====================constructor============================
+
+        function Increase(base) {
+            this.base = base;
+            this.mult=0;
+        }
+
+        var newIncrease = new Increase(function (arg) { //passing base function
+            return arg*5*this.mult
+
+        });
+
+        newIncrease.mult=7;
+        console.log(newIncrease.base(9)); //calling base function with arg
+        //console.log(newIncrease.base);
+
+        var oldIncrease = new Increase(function (arg) { //passing base function
+            return arg*5*this.mult
+        });
+
+        oldIncrease.mult=800;
+        console.log(oldIncrease.base(900));
+
+        Increase.prototype.dance = function () { console.log('dance')
+
+        };
+        oldIncrease.dance();
+
        //=====================prototypes=============================
+        var map ={};
+        function storeMap(key,val) {
+            map[key] =val;
+                    }
+        storeMap(1,'kuku');
+        storeMap(2,'uuku');
+        storeMap('toString','ruku');
+        storeMap(7,'nuku');
+
+        Object.prototype.nonsense = '345';
+
+        Object.defineProperty(Object.prototype,'nonsense',{value:'go', enumerable : false});
+        for (var n in map)
+            console.log(n)
+        console.log('toString' in map);
+        console.log(map.hasOwnProperty('toString'))
+        console.log(map.toString)
+        
 
        // var empty = {};
        //  console.log(empty.toString);
@@ -11,16 +57,36 @@
        //  console.log(empty.toString());
        //  // . [object Object]
        //
-       var  protoRabbi = {
-           speak: function (line) {
-               console.log( "The " +this.typed + ' rabbi say ' +  line);
-           }
-       };
-       var megaRabbi = Object.create((protoRabbi));
-       megaRabbi.typed = 'multi';
-       megaRabbi.speak('hakabuda')
+       // var  protoRabbi = {
+       //     sleep: function (line) {
+       //         //console.log(this.types!=undefined? this.types : 'fallback ');
+       //
+       //         var  th=this.typesp||'fallback ';
+       //         console.log( "The " +this.type + ' rabbi say ' +  line+' '+ th );
+       //     },
+       //     speak: function (line) {
+       //         //console.log(this.types!=undefined? this.types : 'fallback ');
+       //
+       //         var  th=this.typesp||'fallback ';
+       //         console.log( "The " +this.type + ' rabbi say ' +  line+' '+ th );
+       //     }
+       //
+       // };
+       // var megaRabbi = Object.create((protoRabbi));
+       // protoRabbi.type = 'haredi';
+       // megaRabbi.typesp = 'buchari';
+       // protoRabbi.speak('everybody speak');
+       //
+       //
+       //
+       //
+       // megaRabbi.speak('everybody speak');
+       // megaRabbi.type = 'sabre';
+       // megaRabbi.sleep('everybody sleep');
+       //
+       //
+       // console.log(Object.getPrototypeOf(megaRabbi))
 
-       // console.log(Object.getPrototypeOf([]))
 
        //  //=====================properties=============================
        //  function speak(line) {
