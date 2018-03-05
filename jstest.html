@@ -10,7 +10,7 @@
                 }, 0);
             });
         }
-        function colWidths(rows) {
+        function colWidths(rows) {                        //columns based on upper row, for each column i (iterator) counting longer element in whole array based on minWidth method
             return rows[0].map(function(_, i) {
                 return rows.reduce(function(max, row) {
                     return Math.max(max, row[i].minWidth());
@@ -48,11 +48,11 @@
         }
 
         function TextCell(text) {
-            this.text = text.split("\n");
+            this.text = text.split("\n"); //retrieving lines
         }
         TextCell.prototype.minWidth = function() {
 
-            return this.text.reduce(function(width, line) { //iterates and returns max of array's width for max (earlier splitted this.text)line.length
+            return this.text.reduce(function(width, line) { //iterates and returns max width inside of array's members  (earlier splitted  row elemetsby  (this.text array) line.length)
 
                 return Math.max(width, line.length);
             }, 0);
@@ -70,20 +70,20 @@
             }
             return result;
         };
-        //generation of dataset
+        //generating dataset
         var rows = [];
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 15; i++) {
             var row = [];
             for (var j = 0; j < 5; j++) {
                 if ((j + i) % 2 == 0) {
                     //var rn= String(Math.random()*10).slice(0,1);
                     //if (rn % 2 == 0)
-                    {
-                        row.push(new TextCell("##"));
-                    }
+
+                        row.push(new TextCell(j+"#"));
+
                     }
                 else
-                    row.push(new TextCell("++++++++++"));
+                    row.push(new TextCell(j+"++++++++++"));
             }
             rows.push(row);
         }
@@ -97,13 +97,26 @@
             [new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
             [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
 
-        //console.log(rf);
-        //console.log(drawTable(rf));
+        // rows.forEach(function (value) {
+        //     console.log(value[0]) });
+        //console.log('------------------');
+        //console.log(rf[0]);
+        //console.log('------------------');
+        console.log(
+        rf[0].map(function (_,iter) {
+            return rf.reduce(function (mx,row) {
+                return Math.max(mx,row[iter].minWidth());
+
+            },0);
+        }));
+
+        //console.log(drawTable(rows));
 
         //sample one element testing
-        var tst=new TextCell('yum0 \ndfgdf \nsdgsdg \n');
-
-        //console.log(tst.text);
+        // var tst=new TextCell('yum0 \ndfgdf \nsdgsdg \n');
+        //
+        // console.log(tst.text);
+        // console.log(tst.minHeight());
         //console.log(tst.minWidth());
         //console.log(tst.minHeight());
 
