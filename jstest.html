@@ -51,13 +51,15 @@
             this.text = text.split("\n");
         }
         TextCell.prototype.minWidth = function() {
-            return this.text.reduce(function(width, line) {
+
+            return this.text.reduce(function(width, line) { //iterates and returns max of array's width for max (earlier splitted this.text)line.length
+
                 return Math.max(width, line.length);
             }, 0);
         };
 
         TextCell.prototype.minHeight = function() {
-            return this.text.length;
+            return this.text.length; //count of splitted this.text rows - as cell's height
         };
 
         TextCell.prototype.draw = function(width, height) {
@@ -84,7 +86,6 @@
                     row.push(new TextCell("++++++++++"));
             }
             rows.push(row);
-
         }
 
         //console.log(drawTable(rows));
@@ -92,7 +93,7 @@
         //console.log(new TextCell('yum1'));
 
         //sample manual dataset
-        var rf=[[new TextCell('yum0'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
+        var rf=[[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
             [new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
             [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
 
@@ -100,10 +101,13 @@
         //console.log(drawTable(rf));
 
         //sample one element testing
-        var tst=new TextCell('yum0 \n dfgdf \n sdgsdg \n');
-        console.log(tst.text);
-        console.log(tst.minWidth());
-        console.log(tst.minHeight());
+        var tst=new TextCell('yum0 \ndfgdf \nsdgsdg \n');
+
+        //console.log(tst.text);
+        //console.log(tst.minWidth());
+        //console.log(tst.minHeight());
+
+
 
         // //====================constructor============================
         // //
@@ -1211,6 +1215,12 @@
     <!--ar.push(rn);-->
     <!--return ar-->
     <!--}-->
+    <!--var numbos = [4,7,2,45,334,1231,34534,6545654,45641231,123123,123123,3123213123,1231221222,2131212332,123123123234,23,2,3423432423423,234234234234234]-->
+    <!--var tr= numbos.reduce(function (a,b) {-->
+    <!--return Math.min(a,b)-->
+
+    <!--});-->
+    <!--console.log(tr)-->
 
 
     <!--function summa(arr) {-->
