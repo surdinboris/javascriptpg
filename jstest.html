@@ -24,7 +24,8 @@
             var heights = rowHeights(rows); //retrieving geometry
             var widths = colWidths(rows);
 
-            function drawLine(blocks, lineNo) {  //getting lines - blocks from separated sells (in case of multiline cells)
+            function drawLine(blocks, lineNo) {  //getting lines - blocks from
+                                                // separated sells (in case of multiline cells)
                 return blocks.map(function(block) {
                     return block[lineNo];
                 }).join(" ");
@@ -32,6 +33,7 @@
 
             function drawRow(row, rowNum) {
                 var blocks = row.map(function(cell, colNum) {
+                    console.log(cell.draw(widths[colNum], heights[rowNum]));
                     return cell.draw(widths[colNum], heights[rowNum]);
                 });
 
