@@ -33,10 +33,11 @@
 
             function drawRow(row, rowNum) {
                 var blocks = row.map(function(cell, colNum) {
-                    console.log(cell.draw(widths[colNum], heights[rowNum]));
+
                     return cell.draw(widths[colNum], heights[rowNum]);
                 });
-
+                //console.log(blocks);
+                console.log(blocks);
                 return blocks[0].map(function(_, lineNo) {  // for each column block calling drawline function by its index and appending line break
                     return drawLine(blocks, lineNo);
                 }).join("\n");
@@ -100,10 +101,10 @@
 
         //sample manual dataset
         var rf=[[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
-            [new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
+            [new TextCell('bum0'),new TextCell('yum1'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
             [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
         console.log(drawTable(rf));
-        console.log(rf);
+
 
 
         // rows.forEach(function (value) {
