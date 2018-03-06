@@ -10,7 +10,8 @@
                 }, 0);
             });
         }
-        function colWidths(rows) {                        //columns based on upper row, for each column i (iterator) counting longer element in whole array based on minWidth method
+        function colWidths(rows) {  //columns based on upper row, for each column i
+            // (iterator) counting longer element in whole array based on minWidth method
             return rows[0].map(function(_, i) {
                 return rows.reduce(function(max, row) {
                     return Math.max(max, row[i].minWidth());
@@ -20,9 +21,10 @@
         //drawing execution
 
         function drawTable(rows) {
-            var heights = rowHeights(rows);
+            var heights = rowHeights(rows); //retrieving geometry
             var widths = colWidths(rows);
-            function drawLine(blocks, lineNo) {
+
+            function drawLine(blocks, lineNo) {  //getting lines - blocks from separated sells (in case of multiline cells)
                 return blocks.map(function(block) {
                     return block[lineNo];
                 }).join(" ");
@@ -32,12 +34,13 @@
                 var blocks = row.map(function(cell, colNum) {
                     return cell.draw(widths[colNum], heights[rowNum]);
                 });
-                return blocks[0].map(function(_, lineNo) {
+
+                return blocks[0].map(function(_, lineNo) {  // for each column block calling drawline function by its index and appending line break
                     return drawLine(blocks, lineNo);
                 }).join("\n");
             }
 
-            return rows.map(drawRow).join("\n");
+            return rows.map(drawRow).join("\n"); //calling whole function
         }
 
         function repeat(string, times) {
@@ -52,7 +55,8 @@
         }
         TextCell.prototype.minWidth = function() {
 
-            return this.text.reduce(function(width, line) { //iterates and returns max width inside of array's members  (earlier splitted  row elemetsby  (this.text array) line.length)
+            return this.text.reduce(function(width, line) { //iterates and returns max width
+                // inside of array's members  (earlier splitted  row elemetsby  (this.text array) line.length)
 
                 return Math.max(width, line.length);
             }, 0);
@@ -62,11 +66,11 @@
             return this.text.length; //count of splitted this.text rows - as cell's height
         };
 
-        TextCell.prototype.draw = function(width, height) {
+        TextCell.prototype.draw = function(width, height) {  //building block of text
             var result = [];
             for (var i = 0; i < height; i++) {
-                var line = this.text[i] || "";
-                result.push(line + repeat(" ", width - line.length));
+                var line = this.text[i] || ""; //in case of empty line - no text for this index
+                result.push(line + repeat(" ", width - line.length)); //filling spaces after cell to align
             }
             return result;
         };
@@ -88,27 +92,30 @@
             rows.push(row);
         }
 
-        //console.log(drawTable(rows));
-        //console.log(rows);
+
+
         //console.log(new TextCell('yum1'));
 
         //sample manual dataset
         var rf=[[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
             [new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
             [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
+        console.log(drawTable(rf));
+        console.log(rf);
+
 
         // rows.forEach(function (value) {
         //     console.log(value[0]) });
         //console.log('------------------');
         //console.log(rf[0]);
         //console.log('------------------');
-        console.log(
-        rf[0].map(function (_,iter) {
-            return rf.reduce(function (mx,row) {
-                return Math.max(mx,row[iter].minWidth());
-
-            },0);
-        }));
+        // console.log(
+        // rf[0].map(function (_,iter) {
+        //     return rf.reduce(function (mx,row) {
+        //         return Math.max(mx,row[iter].minWidth());
+        //
+        //     },0);
+        // }));
 
         //console.log(drawTable(rows));
 
