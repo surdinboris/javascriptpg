@@ -32,6 +32,7 @@
             }
 
             function drawRow(row, rowNum) {
+                //drawing row line by line  by blocks (line contain blocks separated by columns)
                 var blocks = row.map(function(cell, colNum) {  //extracting blocks by iterating over rows and extracting cells with earlier calculated width and heights (for each cell pulling its own property via i (colNum iterator), rowNum is fixed for each call)
                     return cell.draw(widths[colNum], heights[rowNum]);
                 });
