@@ -145,9 +145,14 @@
             [new TextCell('bum0'),new TextCell('yum1'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
             [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
 
-        console.log(drawTable(dataTable(rf)));
+        //console.log(drawTable(dataTable(rf)));
 
+        function RtCell(text) {
+        return    console.log(TextCell.call(this,text))
+        }
 
+var ff = new RtCell('34534\nrferf');
+        console.log(ff)
 
         // rows.forEach(function (value) {
         //     console.log(value[0]) });
