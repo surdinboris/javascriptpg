@@ -24,8 +24,7 @@
             var heights = rowHeights(rows); //retrieving geometry
             var widths = colWidths(rows);
 
-            function drawLine(blocks, lineNo) {  //getting lines - blocks from
-                                                // separated sells (in case of multiline cells)
+            function drawLine(blocks, lineNo) {  //getting lines - blocks from separated sells (in case of multiline cells)
                 return blocks.map(function(block) {
                     return block[lineNo];
                 }).join(" ");
@@ -37,7 +36,6 @@
                     return cell.draw(widths[colNum], heights[rowNum]);
                 });
                 //console.log(blocks);
-                console.log(blocks);
                 return blocks[0].map(function(_, lineNo) {  // for each column block calling drawline function by its index and appending line break
                     return drawLine(blocks, lineNo);
                 }).join("\n");
@@ -46,7 +44,7 @@
             return rows.map(drawRow).join("\n"); //calling whole function
         }
 
-        function repeat(string, times) {
+        function repeat(string, times) {  //filler function
             var result = "";
             for (var i = 0; i < times; i++)
                 result += string;
@@ -59,8 +57,7 @@
         TextCell.prototype.minWidth = function() {
 
             return this.text.reduce(function(width, line) { //iterates and returns max width
-                // inside of array's members  (earlier splitted  row elemetsby  (this.text array) line.length)
-
+                // inside of array's members  (earlier splitted  row elemets by  (this.text array) line.length)
                 return Math.max(width, line.length);
             }, 0);
         };
@@ -95,15 +92,60 @@
             rows.push(row);
         }
 
+        function UnderlinedCell(inner) {
+            this.inner = inner;
+        };
+        UnderlinedCell.prototype.minWidth = function() { //function that calls minWidth method of passed this.cell
+            console.log(this.inner.minWidth());
+            return this.inner.minWidth();
 
+
+        };
+        UnderlinedCell.prototype.minHeight = function() { //function that calls minHeight method of passed this.cell and appends one line for underlines
+            return this.inner.minHeight() + 1;
+        };
+        UnderlinedCell.prototype.draw = function(width, height) {
+             //using TextCell's method
+            return this.inner.draw(width, height - 1)
+                .concat([repeat("-", width)]);
+        };
+
+
+        function dataTable(data) {
+            var keys = Object.keys(data[0]); //retrieving upper row as headers
+            var headers = keys.map(function(name) {
+                return new UnderlinedCell(new TextCell(name));
+            });
+            var body = data.map(function(row) {
+                return keys.map(function(name) {
+                    return new TextCell(String(row[name]));
+
+                });
+            });
+            return [headers].concat(body);
+        }
+
+        var MOUNTAINS = [
+            {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
+            {name: "Everest", height: 8848, country: "Nepal"},
+            {name: "Mount Fuji", height: 3776, country: "Japan"},
+            {name: "Mont Blanc", height: 4808, country: "Italy/France"},
+            {name: "Vaalserberg", height: 323, country: "Netherlands"},
+            {name: "Denali", height: 6168, country: "United States"},
+            {name: "Popocatepetl", height: 5465, country: "Mexico"}
+        ];
+
+        if (typeof module != "undefined" && module.exports)
+            module.exports = MOUNTAINS;
 
         //console.log(new TextCell('yum1'));
 
         //sample manual dataset
-        var rf=[[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
+        var rf=[[new TextCell('zum0'),new TextCell('zum0'),new TextCell('yum1')],[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
             [new TextCell('bum0'),new TextCell('yum1'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
             [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
-        console.log(drawTable(rf));
+
+        console.log(drawTable(dataTable(rf)));
 
 
 
