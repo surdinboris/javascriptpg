@@ -3,156 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <script>
-        function rowHeights(rows) {
-            return rows.map(function(row) {
-                return row.reduce(function(max, cell) {
-                    return Math.max(max, cell.minHeight());
-                }, 0);
-            });
-        }
-        function colWidths(rows) {  //columns based on upper row, for each column i
-            // (iterator) counting longer element in whole array based on minWidth method
-            return rows[0].map(function(_, i) {
-                return rows.reduce(function(max, row) {
-                    return Math.max(max, row[i].minWidth());
-                }, 0);
-            });
-        }
-        //drawing execution
+  //       function rowHeights(rows) {
+  //           return rows.map(function(row) {
+  //               return row.reduce(function(max, cell) {
+  //                   return Math.max(max, cell.minHeight());
+  //               }, 0);
+  //           });
+  //       }
+  //       function colWidths(rows) {  //columns based on upper row, for each column i
+  //           // (iterator) counting longer element in whole array based on minWidth method
+  //           return rows[0].map(function(_, i) {
+  //               return rows.reduce(function(max, row) {
+  //                   return Math.max(max, row[i].minWidth());
+  //               }, 0);
+  //           });
+  //       }
+  //       //drawing execution
+  //
+  //       function drawTable(rows) {
+  //           var heights = rowHeights(rows); //retrieving geometry
+  //           var widths = colWidths(rows);
+  //
+  //           function drawLine(blocks, lineNo) {  //getting lines - blocks from separated sells (in case of multiline cells)
+  //               return blocks.map(function(block) {
+  //                   return block[lineNo];
+  //               }).join(" ");
+  //           }
+  //
+  //           function drawRow(row, rowNum) {
+  //               //drawing row line by line  by blocks (line contain blocks separated by columns)
+  //               var blocks = row.map(function(cell, colNum) {  //extracting blocks by iterating over rows and extracting cells with earlier calculated width and heights (for each cell pulling its own property via i (colNum iterator), rowNum is fixed for each call)
+  //                   return cell.draw(widths[colNum], heights[rowNum]);
+  //               });
+  //               //console.log(blocks);
+  //               return blocks[0].map(function(_, lineNo) {  // for each column block calling drawline function by its index and appending line break
+  //                   return drawLine(blocks, lineNo);
+  //               }).join("\n");
+  //           }
+  //
+  //           return rows.map(drawRow).join("\n"); //calling whole function
+  //       }
+  //
+  //       function repeat(string, times) {  //filler function
+  //           var result = "";
+  //           for (var i = 0; i < times; i++)
+  //               result += string;
+  //           return result;
+  //       }
+  //
+  //       function TextCell(text) {
+  //           this.text = text.split("\n"); //retrieving lines
+  //
+  //       }
+  //       TextCell.prototype.minWidth = function() {
+  //
+  //           return this.text.reduce(function(width, line) { //iterates and returns max width
+  //               // inside of array's members  (earlier splitted  row elemets by  (this.text array) line.length)
+  //               return Math.max(width, line.length);
+  //           }, 0);
+  //       };
+  //
+  //       TextCell.prototype.minHeight = function() {
+  //           return this.text.length; //count of splitted this.text rows - as cell's height
+  //       };
+  //
+  //       TextCell.prototype.draw = function(width, height) {  //building block of text
+  //           var result = [];
+  //           for (var i = 0; i < height; i++) {
+  //               var line = this.text[i] || ""; //in case of empty line - no text for this index
+  //               result.push(line + repeat(" ", width - line.length)); //filling spaces after cell to align
+  //           }
+  //           return result;
+  //       };
+  //       //generating dataset
+  //       var rows = [];
+  //       for (var i = 0; i < 15; i++) {
+  //           var row = [];
+  //           for (var j = 0; j < 5; j++) {
+  //               if ((j + i) % 2 == 0) {
+  //                   //var rn= String(Math.random()*10).slice(0,1);
+  //                   //if (rn % 2 == 0)
+  //
+  //                       row.push(new TextCell(j+"#"));
+  //
+  //                   }
+  //               else
+  //                   row.push(new TextCell(j+"++++++++++"));
+  //           }
+  //           rows.push(row);
+  //       }
+  //
+  //       function UnderlinedCell(inner) {
+  //           this.inner = inner;
+  //       };
+  //       UnderlinedCell.prototype.minWidth = function() { //function that calls minWidth method of passed this.cell
+  //           console.log(this.inner.minWidth());
+  //           return this.inner.minWidth();
+  //
+  //
+  //       };
+  //       UnderlinedCell.prototype.minHeight = function() { //function that calls minHeight method of passed this.cell and appends one line for underlines
+  //           return this.inner.minHeight() + 1;
+  //       };
+  //       UnderlinedCell.prototype.draw = function(width, height) {
+  //            //using TextCell's method
+  //           return this.inner.draw(width, height - 1)
+  //               .concat([repeat("-", width)]);
+  //       };
+  //
+  //
+  //       function dataTable(data) {
+  //           var keys = Object.keys(data[0]); //retrieving upper row as headers
+  //           var headers = keys.map(function(name) {
+  //               return new UnderlinedCell(new TextCell(name));
+  //           });
+  //           var body = data.map(function(row) {
+  //               return keys.map(function(name) {
+  //                   return new TextCell(String(row[name]));
+  //
+  //               });
+  //           });
+  //           return [headers].concat(body);
+  //       }
+  //
+  //       var MOUNTAINS = [
+  //           {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
+  //           {name: "Everest", height: 8848, country: "Nepal"},
+  //           {name: "Mount Fuji", height: 3776, country: "Japan"},
+  //           {name: "Mont Blanc", height: 4808, country: "Italy/France"},
+  //           {name: "Vaalserberg", height: 323, country: "Netherlands"},
+  //           {name: "Denali", height: 6168, country: "United States"},
+  //           {name: "Popocatepetl", height: 5465, country: "Mexico"}
+  //       ];
+  //
+  //       if (typeof module != "undefined" && module.exports)
+  //           module.exports = MOUNTAINS;
+  //
+  //       //console.log(new TextCell('yum1'));
+  //
+  //       //sample manual dataset
+  //       var rf=[[new TextCell('zum0'),new TextCell('zum0'),new TextCell('yum1')],[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
+  //           [new TextCell('bum0'),new TextCell('yum1'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
+  //           [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
+  //
+  //       //console.log(drawTable(dataTable(rf)));
+  //
+  //       function RtCell(text) {
+  //           TextCell.call(this,'34534\nrferf');
+  //       }
+  //
+  // var ff = new RtCell('34534\nrferf');
+  //       console.log(ff);
 
-        function drawTable(rows) {
-            var heights = rowHeights(rows); //retrieving geometry
-            var widths = colWidths(rows);
-
-            function drawLine(blocks, lineNo) {  //getting lines - blocks from separated sells (in case of multiline cells)
-                return blocks.map(function(block) {
-                    return block[lineNo];
-                }).join(" ");
-            }
-
-            function drawRow(row, rowNum) {
-                //drawing row line by line  by blocks (line contain blocks separated by columns)
-                var blocks = row.map(function(cell, colNum) {  //extracting blocks by iterating over rows and extracting cells with earlier calculated width and heights (for each cell pulling its own property via i (colNum iterator), rowNum is fixed for each call)
-                    return cell.draw(widths[colNum], heights[rowNum]);
-                });
-                //console.log(blocks);
-                return blocks[0].map(function(_, lineNo) {  // for each column block calling drawline function by its index and appending line break
-                    return drawLine(blocks, lineNo);
-                }).join("\n");
-            }
-
-            return rows.map(drawRow).join("\n"); //calling whole function
-        }
-
-        function repeat(string, times) {  //filler function
-            var result = "";
-            for (var i = 0; i < times; i++)
-                result += string;
-            return result;
-        }
-
-        function TextCell(text) {
-            this.text = text.split("\n"); //retrieving lines
-        }
-        TextCell.prototype.minWidth = function() {
-
-            return this.text.reduce(function(width, line) { //iterates and returns max width
-                // inside of array's members  (earlier splitted  row elemets by  (this.text array) line.length)
-                return Math.max(width, line.length);
-            }, 0);
-        };
-
-        TextCell.prototype.minHeight = function() {
-            return this.text.length; //count of splitted this.text rows - as cell's height
-        };
-
-        TextCell.prototype.draw = function(width, height) {  //building block of text
-            var result = [];
-            for (var i = 0; i < height; i++) {
-                var line = this.text[i] || ""; //in case of empty line - no text for this index
-                result.push(line + repeat(" ", width - line.length)); //filling spaces after cell to align
-            }
-            return result;
-        };
-        //generating dataset
-        var rows = [];
-        for (var i = 0; i < 15; i++) {
-            var row = [];
-            for (var j = 0; j < 5; j++) {
-                if ((j + i) % 2 == 0) {
-                    //var rn= String(Math.random()*10).slice(0,1);
-                    //if (rn % 2 == 0)
-
-                        row.push(new TextCell(j+"#"));
-
-                    }
-                else
-                    row.push(new TextCell(j+"++++++++++"));
-            }
-            rows.push(row);
-        }
-
-        function UnderlinedCell(inner) {
-            this.inner = inner;
-        };
-        UnderlinedCell.prototype.minWidth = function() { //function that calls minWidth method of passed this.cell
-            console.log(this.inner.minWidth());
-            return this.inner.minWidth();
-
-
-        };
-        UnderlinedCell.prototype.minHeight = function() { //function that calls minHeight method of passed this.cell and appends one line for underlines
-            return this.inner.minHeight() + 1;
-        };
-        UnderlinedCell.prototype.draw = function(width, height) {
-             //using TextCell's method
-            return this.inner.draw(width, height - 1)
-                .concat([repeat("-", width)]);
-        };
-
-
-        function dataTable(data) {
-            var keys = Object.keys(data[0]); //retrieving upper row as headers
-            var headers = keys.map(function(name) {
-                return new UnderlinedCell(new TextCell(name));
-            });
-            var body = data.map(function(row) {
-                return keys.map(function(name) {
-                    return new TextCell(String(row[name]));
-
-                });
-            });
-            return [headers].concat(body);
-        }
-
-        var MOUNTAINS = [
-            {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
-            {name: "Everest", height: 8848, country: "Nepal"},
-            {name: "Mount Fuji", height: 3776, country: "Japan"},
-            {name: "Mont Blanc", height: 4808, country: "Italy/France"},
-            {name: "Vaalserberg", height: 323, country: "Netherlands"},
-            {name: "Denali", height: 6168, country: "United States"},
-            {name: "Popocatepetl", height: 5465, country: "Mexico"}
-        ];
-
-        if (typeof module != "undefined" && module.exports)
-            module.exports = MOUNTAINS;
-
-        //console.log(new TextCell('yum1'));
-
-        //sample manual dataset
-        var rf=[[new TextCell('zum0'),new TextCell('zum0'),new TextCell('yum1')],[new TextCell('fgjgj \ndfgdf \nsdgsdg \n'),new TextCell('yum1')],[new TextCell('yum0'),new TextCell('yum0')],[new TextCell('yum0'),new TextCell('yum1')],
-            [new TextCell('bum0'),new TextCell('yum1'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],[new TextCell('bum0'),new TextCell('yum1')],
-            [new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')],[new TextCell('zum0'),new TextCell('yum1')]];
-
-        //console.log(drawTable(dataTable(rf)));
-
-        function RtCell(text) {
-        return    console.log(TextCell.call(this,text))
-        }
-
-var ff = new RtCell('34534\nrferf');
-        console.log(ff)
 
         // rows.forEach(function (value) {
         //     console.log(value[0]) });
@@ -189,6 +191,45 @@ var ff = new RtCell('34534\nrferf');
         // };
         // console.log(superInstanceRabbi.getaddr());
         // console.log(Object.getPrototypeOf(superInstanceRabbi));
+
+        //=======================constructor example=====================
+        //
+       //  var InhConstr = function (u) {
+       //      this.w = u;
+       //      this.v = 7;
+       //  //     this.getW=function () {
+       //  //         return this.w
+       //  //    }
+       // };
+       //
+       //  // if defining after prototype function declaration, instead of this inside, we use ptototype outside when changing already created prototype
+       //  InhConstr.prototype.getW=function () {
+       //      return this.w
+       //  };
+       //  var Inh1= new InhConstr(99);
+       //  console.log(Inh1.getW());
+       //
+       //  var Inh2 = new InhConstr(109);
+       //  console.log(Inh2.getW());
+       //
+
+        //============================obj factory========================
+
+  //   var ObFact= function (par1,par2) {
+      //
+      //       var retobj={};
+      //       retobj.func1=function () {
+      //           console.log(par1, "func1 reurnet par1");
+      //       };
+      //       retobj.func2=function () {
+      //               console.log(par2,"func2 reurnet par2")
+      //       };
+      //       return retobj
+      //   };
+      // var newObjfel=ObFact('gupa1','zupa2');
+      // newObjfel.func1();
+      // newObjfel.func2();
+
         // //============================================================
         //
         // function Increase(base) {
@@ -227,6 +268,34 @@ var ff = new RtCell('34534\nrferf');
         //
         // };
         // oldIncrease.dance();
+        //========================object.create vs new Object
+  var vObj={
+      prop1: 'this is Object',
+      func: function (action) {
+
+          console.log(action);
+          console.log(this.action)
+
+      }
+  };
+
+
+
+  var tobj = Object.create(vObj);
+  tobj.func('do'); //this and prototype doesn't work i.e. tobj  inherits directly from prototype
+
+  vObj.func2= function (action) {
+      console.log(action)  };
+
+  tobj.func2('do2');
+
+  //trying with function
+
+  function Vfunc () { console.log('tratata')
+  };
+
+  var vfun = new Vfunc;
+
 
        //=====================prototypes=============================
       //   var map ={};
@@ -255,8 +324,6 @@ var ff = new RtCell('34534\nrferf');
       //   // console.log(map.toString)
       //   for (var t in vf)
       //       console.log(t*8)
-      //
-      //
       //  // var empty = {};
       //  //  console.log(empty.toString);
       //  //  // . function toString(){...}
@@ -279,23 +346,17 @@ var ff = new RtCell('34534\nrferf');
       //      }
       //
       //  };
-      //
       //  var megaRabbi = Object.create((protoRabbi)); //object  way to create via Object
-      //
       //
       //  protoRabbi.type = 'haredi';
       //  protoRabbi.kind='Journey to the past';
       //  protoRabbi.dream=function (arg) { return "Rabbi dreams about "+ this.kind +' '+ (arg || '')
       //
       //  };
-      //
       // console.log(protoRabbi.dream('in time machine'));
       //
       //  megaRabbi.typesp = 'buchari';
       //  protoRabbi.speak('everybody speak');
-      //
-      //
-      //
       //
       //   megaRabbi.speak('everybody speak');
       //   megaRabbi.type = 'sabre';
@@ -303,14 +364,14 @@ var ff = new RtCell('34534\nrferf');
       //
       //
       //   console.log(Object.getPrototypeOf(megaRabbi));
-
-        // var fresh= Object.create(null);
-        // fresh.arr=[1,3,4,5,9];
-        // fresh.exec=function () {this.arr.forEach( function (a) {console.log(a)
-        // })
-        // };
-        // console.log(fresh.exec());
-        // console.log('toString' in fresh);
+      //
+      //   var fresh= Object.create(null);
+      //   fresh.arr=[1,3,4,5,9];
+      //   fresh.exec=function () {this.arr.forEach( function (a) {console.log(a)
+      //   })
+      //   };
+      //   console.log(fresh.exec());
+      //   console.log('toString' in fresh);
 
        //  //=====================properties=============================
        //  function speak(line) {
@@ -419,6 +480,49 @@ var ff = new RtCell('34534\nrferf');
      //
      //
      //
+//========================basic object creations=====================================
+  //action dictor produce some talks
+  //
+  //
+  // function speach() {
+  //     console.log(this.talk);
+  // }
+  //
+  // function agitation() {
+  //     console.log(this.agitation)
+  //
+  // }
+  // //prototype of what dictor do
+  // var Dictor = {
+  //     dictorDo: speach
+  // };
+  //
+  // var Polititian = {
+  //     polititianDo: agitation
+  //
+  // };
+  // Object.setPrototypeOf(Dictor,Polititian);
+  //
+  //
+  // //create new dictor
+  // var dorenko = Object.create(Dictor);
+  //
+  //
+  //
+  // dorenko.talk='Der grosser cake';
+  // dorenko.agitation='Conservator';
+  //
+  // Object.setPrototypeOf(dorenko,Dictor);
+  //
+  // dorenko.dictorDo();
+  // dorenko.polititianDo();
+  //
+  //
+  // //without creation of object
+  //
+  // Dictor.talk = 'news';
+  // Dictor.dictorDo();
+  //
 
     </script>
 <!--//=====================higher-order functions=================-->
