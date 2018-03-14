@@ -270,102 +270,122 @@
         // oldIncrease.dance();
 
         //========================object.create vs new Object==================
-  var vObj={
-      prop1: 'this is Object',
-      func: function (action) {
-          this.action=action;
-          console.log(action);
-          console.log(this.action);
-          console.log('fn1 of Vfunc initialized in ', this)
-      }
+
+  var Call = {numbr: '1234', from: 'outside'};
+
+  var mycall = {};
+  console.log(mycall.__proto__);
+  Object.setPrototypeOf(mycall, Call);
+
+  console.log(mycall.numbr);
+  console.log(Call.isPrototypeOf(mycall));
+  console.log(Call.isPrototypeOf(mycall));
+  function Fcall() {
+
   };
+  Fcall.prototype.numbr='1234';
+  Fcall.prototype.from = 'outside';
+  var fcall= new Fcall();
+  console.log(fcall.numbr)
 
 
 
-  var tobj = Object.create(vObj);
-  tobj.func('do'); //this and prototype doesn't work i.e. tobj  inherits directly from prototype
-  vObj.func2= function (action) {
-      console.log(action)  };
-  tobj.func2('do2');
-
-  //trying with function constructor
-
-  function Vfunc1 (tr,lr) {
-      this.tr = tr;
-      this.fn1 = function () {
-          console.log(lr, this.tr)
-      };
-      //some nice counter based on local constructor variable
-
-      var counter=0;
-      this.count = function () {
-          counter++;
-      };
-      this.getcountr = function () {
-          console.log(counter)
-      };
-  };
-
-  function Vfunc2(tr2) {
-      this.trr2 = tr2;
-  };
-
-  Vfunc2.prototype.fn2= function (tr2) {
-       console.log('fn2 of Vfunc2 initialized in ', this.trr2, tr2)
-   };
-  Vfunc2.prototype.counterinit= function (){
-      this.counter =0;
-  };
-
-
-  Vfunc2.prototype.count = function () {
-       //some nice counter based on local constructor variable
-           this.counter++;
-       };
-
-  Vfunc2.prototype.getcountr = function () {
-           console.log('vf2 counter equals',this.counter)
-       };
-
-
-
-   var vf2= new Vfunc2('assigned during instance creation');
-   //vf2.fn2('assigned during function call');
-  vf2.counterinit();
-  vf2.count();
-  vf2.count();
-  vf2.count();
-  vf2.getcountr();
-
-  var vf3= new Vfunc2('assigned during instance creation');
-  //vf2.fn2('assigned during function call');
-  vf3.counterinit();
-  vf3.count();
-  vf3.count();
-  vf3.count();
-  vf3.getcountr();
-
-
-//example shows that in case of constructor-based functions
-// for each  created object counter works separately
-
-  var vf1= new Vfunc1('halabuda1', 'halabuda2');
-  vf1.fn1();
-  vf1.count();
-  vf1.count();
-  vf1.count();
-  vf1.getcountr();
-
-  var vf11= new Vfunc1('halabuda11', 'halabuda12');
-  vf11.fn1();
-  vf11.count();
-  vf11.count();
-  vf11.count();
-  vf11.getcountr();
-
-
-  console.log('small set of functions due to prototype declaration usage',vf11);
-  console.log('whole set of functions due to contructor vars usage',vf2);
+//   var vObj={
+//       prop1: 'this is Object',
+//       func: function (action) {
+//           this.action=action;
+//           console.log(action);
+//           console.log(this.action);
+//           console.log('fn1 of Vfunc initialized in ', this)
+//       }
+//   };
+//
+//
+//
+//   var tobj = Object.create(vObj);
+//   tobj.func('do'); //this and prototype doesn't work i.e. tobj  inherits directly from prototype
+//   vObj.func2= function (action) {
+//       console.log(action)  };
+//   tobj.func2('do2');
+//
+//   //trying with function constructor
+//
+//   function Vfunc1 (tr,lr) {
+//       this.tr = tr;
+//       this.fn1 = function () {
+//           console.log(lr, this.tr)
+//       };
+//       //some nice counter based on local constructor variable
+//
+//       var counter=0;
+//       this.count = function () {
+//           counter++;
+//       };
+//       this.getcountr = function () {
+//           console.log(counter)
+//       };
+//   };
+//
+//   function Vfunc2(tr2) {
+//       this.trr2 = tr2;
+//   };
+//
+//   Vfunc2.prototype.fn2= function (tr2) {
+//        console.log('fn2 of Vfunc2 initialized in ', this.trr2, tr2)
+//    };
+//   Vfunc2.prototype.counterinit= function (){
+//       this.counter =0;
+//   };
+//
+//
+//   Vfunc2.prototype.count = function () {
+//        //some nice counter based on local constructor variable
+//            this.counter++;
+//        };
+//
+//   Vfunc2.prototype.getcountr = function () {
+//            console.log('vf2 counter equals',this.counter)
+//        };
+//
+//
+//
+//    var vf2= new Vfunc2('assigned during instance creation');
+//    //vf2.fn2('assigned during function call');
+//   vf2.counterinit();
+//   vf2.count();
+//   vf2.count();
+//   vf2.count();
+//   vf2.getcountr();
+//
+//   var vf3= new Vfunc2('assigned during instance creation');
+//   //vf2.fn2('assigned during function call');
+//   vf3.counterinit();
+//   vf3.count();
+//   vf3.count();
+//   vf3.count();
+//   vf3.getcountr();
+//
+//
+// //example shows that in case of constructor-based functions
+// // for each  created object counter works separately
+//
+//   var vf1= new Vfunc1('halabuda1', 'halabuda2');
+//   vf1.fn1();
+//   vf1.count();
+//   vf1.count();
+//   vf1.count();
+//   vf1.getcountr();
+//
+//   var vf11= new Vfunc1('halabuda11', 'halabuda12');
+//   vf11.fn1();
+//   vf11.count();
+//   vf11.count();
+//   vf11.count();
+//   vf11.getcountr();
+//
+//
+//   console.log('small set of functions due to prototype declaration usage',vf11);
+//   console.log('whole set of functions due to contructor vars usage',vf2);
 
 
 
@@ -463,6 +483,14 @@
        //  hungryRabbit.scream('Walla!');
        //  speak.apply(whiteRabbit, ['tttttrrrrr']);
        //  speak.call({type:'oiled'},'Hi, oil');
+var phone =  { action: 'bzzzzzz',
+    calling: function () {
+    console.log(this.action)
+
+    }
+    };
+  var poppinsphone= phone.calling;
+  poppinsphone()
        // //====================apply=========================
        //  function cons(f) {
        //      return function(){
