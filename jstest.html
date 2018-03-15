@@ -271,22 +271,22 @@
 
         //========================object.create vs new Object==================
 
-  var Call = {numbr: '1234', from: 'outside'};
-
-  var mycall = {};
-  console.log(mycall.__proto__);
-  Object.setPrototypeOf(mycall, Call);
-
-  console.log(mycall.numbr);
-  console.log(Call.isPrototypeOf(mycall));
-  console.log(Call.isPrototypeOf(mycall));
-  function Fcall() {
-
-  };
-  Fcall.prototype.numbr='1234';
-  Fcall.prototype.from = 'outside';
-  var fcall= new Fcall();
-  console.log(fcall.numbr)
+  // var Call = {numbr: '1234', from: 'outside'};
+  //
+  // var mycall = {};
+  // console.log(mycall.__proto__);
+  // Object.setPrototypeOf(mycall, Call);
+  //
+  // console.log(mycall.numbr);
+  // console.log(Call.isPrototypeOf(mycall));
+  // console.log(Call.isPrototypeOf(mycall));
+  // function Fcall() {
+  //
+  // };
+  // Fcall.prototype.numbr='1234';
+  // Fcall.prototype.from = 'outside';
+  // var fcall= new Fcall();
+  // console.log(fcall.numbr);
 
 
 
@@ -483,14 +483,63 @@
        //  hungryRabbit.scream('Walla!');
        //  speak.apply(whiteRabbit, ['tttttrrrrr']);
        //  speak.call({type:'oiled'},'Hi, oil');
-var phone =  { action: 'bzzzzzz',
-    calling: function () {
-    console.log(this.action)
 
+
+  //====================================this=============================
+  var phone =  { action: 'bzzzzzz',
+    calling: function () {
+    console.log(this.action || this.action2 || 'no actions defined' )
     }
     };
+
+  //poppins calling
+
   var poppinsphone= phone.calling;
-  poppinsphone()
+  poppinsphone.action='Poppins calling';
+
+  var pp=phone.calling.bind(poppinsphone);
+  pp();
+//poppins2 calling
+  var poppinsphone2= phone.calling;
+  poppinsphone2.action='Poppins2 calling';
+
+  var pp2=phone.calling.bind(poppinsphone2);
+  pp2();
+
+  //this lives in bounded functions poppinsphone and poppinsphone2, in case of attribute clashing
+  //they will be shadowed in declaration order, but via implemented earlier bounded function only action
+  //attribute will be invoked (action2 will seat as  this. property)
+
+  console.dir(pp2);
+  //[[BoundThis]]
+  // :
+  // ƒ ()
+  // action
+  //     :
+  //     "Poppins calling"
+  // action2
+  //     :
+  //     "Poppins2 calling"
+
+  var defcall= phone.calling.bind(phone);
+  defcall();
+  //bzzzzz
+  //trying to overwrite .action property
+
+  defcall();
+  //bzzzz - its binded to this of phone  and overwriting of this property does not successful
+
+  defcall= pp2.bind(phone);
+  defcall();
+  //rebounded function printed Poppins2 calling
+
+  //simple this example with method pulling from other function
+  defcall.calling=phone.calling.bind(phone);
+  defcall.action = 'zzzzzz';
+  defcall.calling();
+  console.log(this);
+
+
        // //====================apply=========================
        //  function cons(f) {
        //      return function(){
