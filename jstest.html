@@ -486,31 +486,31 @@
 
 
   //====================================this=============================
-  var phone =  { action: 'bzzzzzz',
-    calling: function () {
-    console.log(this.action || this.action2 || 'no actions defined' )
-    }
-    };
-
-  //poppins calling
-
-  var poppinsphone= phone.calling;
-  poppinsphone.action='Poppins calling';
-
-  var pp=phone.calling.bind(poppinsphone);
-  pp();
-//poppins2 calling
-  var poppinsphone2= phone.calling;
-  poppinsphone2.action='Poppins2 calling';
-
-  var pp2=phone.calling.bind(poppinsphone2);
-  pp2();
-
-  //this lives in bounded functions poppinsphone and poppinsphone2, in case of attribute clashing
-  //they will be shadowed in declaration order, but via implemented earlier bounded function only action
-  //attribute will be invoked (action2 will seat as  this. property)
-
-  console.dir(pp2);
+//   var phone =  { action: 'bzzzzzz',
+//     calling: function () {
+//     console.log(this.action || this.action2 || 'no actions defined' )
+//     }
+//     };
+//
+//   //poppins calling
+//
+//   var poppinsphone= phone.calling;
+//   poppinsphone.action='Poppins calling';
+//
+//   var pp=phone.calling.bind(poppinsphone);
+//   pp();
+// //poppins2 calling
+//   var poppinsphone2= phone.calling;
+//   poppinsphone2.action='Poppins2 calling';
+//
+//   var pp2=phone.calling.bind(poppinsphone2);
+//   pp2();
+//
+//   //this lives in bounded functions poppinsphone and poppinsphone2, in case of attribute clashing
+//   //they will be shadowed in declaration order, but via implemented earlier bounded function only action
+//   //attribute will be invoked (action2 will seat as  this. property)
+//
+//   console.dir(pp2);
   //[[BoundThis]]
   // :
   // ƒ ()
@@ -520,25 +520,42 @@
   // action2
   //     :
   //     "Poppins2 calling"
-
-  var defcall= phone.calling.bind(phone);
-  defcall();
-  //bzzzzz
-  //trying to overwrite .action property
-
-  defcall();
-  //bzzzz - its binded to this of phone  and overwriting of this property does not successful
-
-  defcall= pp2.bind(phone);
-  defcall();
-  //rebounded function printed Poppins2 calling
-
-  //simple this example with method pulling from other function
-  defcall.calling=phone.calling.bind(phone);
-  defcall.action = 'zzzzzz';
-  defcall.calling();
-  console.log(this);
-
+  //
+  // var defcall= phone.calling.bind(phone);
+  // defcall();
+  // //bzzzzz
+  // //trying to overwrite .action property
+  //
+  // defcall();
+  // //bzzzz - its binded to this of phone  and overwriting of this property does not successful
+  //
+  // defcall= pp2.bind(phone);
+  // defcall();
+  // //rebounded function printed Poppins2 calling
+  //
+  // //simple this example with method pulling from other function
+  // defcall.calling=phone.calling.bind(phone);
+  // defcall.action = 'zzzzzz';
+  // defcall.calling();
+  // console.log(this);
+  //
+  // var name = {Gooobye:[1,2,3]};
+  // ['Hello', 'Goodbye'].forEach(function (value) {
+  //     console.log(value +''+name+'<br />') });
+  //
+  // let aff=[4,5,7,2,3];
+  // let rt=aff.map(function (value) { return(value+56) });
+  // rt.map(function (_, i) { console.log(rt[i],'summ')});
+  //
+  // const players=[{name:'zelda', score:500},{name:'vik', score:3400},{name:'robin', score:40}];
+  // let names=players.map(function (value) { return [value.name,value.score]});
+  // console.log(names);
+  // let aeronames = players.map(vanue => [vanue.name, vanue.score]);
+  // console.log(aeronames);
+  // let strr=['abcdefg'];
+  // let tty = strr.map(function (value) { return value.toUpperCase() });
+  // console.log(tty.join(''))
+  //
 
        // //====================apply=========================
        //  function cons(f) {
@@ -919,15 +936,140 @@
 <!--// }-->
 <!--// console.log(flatts(ara))-->
 
+    <script>
+
+//=========================just usage training========================
+//higher order functions
+
+let arr= [{name:'Pukeman', bld:1, street: 'Weitzmann', appart:'12', status:'done',account:432},
+    {name:'Folk', bld:4, street: 'Weitzmann', appart:'12', status:'done',account:132},
+    {name:'Crust', bld:23, street: 'HaTayas', appart:'12', status:'done',account:632},
+    {name:'Robin', bld:2, street: 'Lenina', appart:'12', status:'pending',account:32}];
+
+    //reduce
+    let summacc=arr.reduce(function (sum,cur) {
+        sum+=cur.account;
+        return sum},0);
+    console.log(summacc);
+    //map transforming via map
+    let transform=arr.map(function (value) {
+        value.building=value.bld;
+        value.bld=0;
+    return value.status
+   });
+    console.log(transform);
+    console.log(arr)
+
+    //filter
+let filteredStreet=arr.filter(function (value) {
+
+    let resultob=value.street == 'Weitzmann';
+
+    return resultob; });
+    //foreach action
+    filteredStreet.forEach(function (value2) { console.log(value2.street) });
+    //map return names
+    let weitzmannNames=filteredStreet.map(function (value) { return value.name });
+
+    console.log(weitzmannNames);
+
+
+//arrow functions
+
+//constructors
+// function Cat() { this.cattype= 'cat type';
+//                     this.catProfession = 'default cat profession' ;
+//                     this.getcatProf = function () {
+//                         return this.catProfession || 'no profession';
+//
+//                    }
+// };
+// var junkcat=new Cat();
+// junkcat.cattype = 'junkcat';
+// //console.log(junkcat.cattype);
+// console.log(junkcat.getcatProf.bind(Cat)());
+// console.log(junkcat.getcatProf());
+//========================================================================
+// //bind - this  - binding function to other object properties
+//     //creating object with desired properties
+//     var defaultcat = {live: 'default place', eating: 'food'
+//     };
+//
+//     var brat = { live: 'in backyard', eating: 'junk'
+//     };
+//
+//     var kotya = {live: 'in our yard', eating: 'meat'
+//     };
+//
+//     var  whereliving = {};
+//     whereliving.whereCatLiving=function() { console.log(this.live)
+//     };
+//     whereliving.live=defaultcat.live;
+//     whereliving.eating=defaultcat.eating;
+//
+//
+//     var bratliving=whereliving.whereCatLiving.bind(brat);
+//
+//     bratliving();
+//
+//     var kotyaliving = whereliving.whereCatLiving.bind(kotya);
+//     kotyaliving();
+//
+//     whereliving.whereCatLiving();
 
 
 
-    <!--<script>-->
-        <!--function average(array) {-->
-            <!--function plus(a, b) { return a + b; }-->
-            <!--return array.reduce(plus) / array.length;-->
-        <!--}-->
-        <!--}-->
+
+
+//object crreation via prototype and Object.create
+//         var Cup ={material: 'default material', purpose: 'default purpose'};
+//         var teacup=Object.create(Cup);
+//
+//         teacup.material='steel';
+//         console.log(teacup.material);
+//
+//         Cup.material='wood';
+//
+//
+//         var mycup={};
+//         Object.setPrototypeOf(mycup,Cup);
+//         mycup.material='steel';
+//         console.log(mycup.material);
+//         console.log(Cup.material)
+
+// //==============================functors============================
+// function strDecode(value,fun) {
+//     let chars=value.split('');
+//     console.log(chars);
+//
+//     return chars.map(function(char) {
+//
+//        return fun(char.charCodeAt(0))
+//     })
+// }
+// function root (val) {
+//     return val*val
+// }
+// console.log(strDecode('gty',root));
+// //============================recursion========================================
+// let arr = [78,[[[[[]]]]],[12,[32,[56]]],[234,[234,[34,[234,[234]]]]],[[23],[2323]],34,[[[]]]];
+// let len=0;
+// function unpack(arr) {
+//     function inner(arr) {
+//         len+=arr.length;
+//         return arr.forEach(function (value) {
+//             return unpack(value)})}
+//
+//             if (typeof(arr) == 'object')
+//         return inner(arr);
+//
+// }
+// unpack(arr);
+// console.log(len)
+
+//
+
+        </script>
         <!--var ANCESTRY_FILE = JSON.stringify([-->
             <!--{"name": "Carolus Haverbeke", "sex": "m", "born": 1832, "died": 1905, "father": "Carel Haverbeke", "mother": "Maria van Brussel"},-->
             <!--{"name": "Emma de Milliano", "sex": "f", "born": 1876, "died": 1956, "father": "Petrus de Milliano", "mother": "Sophia van Damme"},-->
@@ -1196,7 +1338,7 @@
         <!--console.log(longLivingPercentage(byName["Emile Haverbeke"]));-->
         <!--// → 0.129-->
 
-    <!--</script>-->
+
 
     <!--<script>-->
         <!--// function unless(tst, then) {-->
@@ -1260,7 +1402,20 @@
         <!--//     //console.log(obct);-->
         <!--// }-->
 
+    <!--//===================hoisted vars=========================
+
+      <!--var g = 8;-->
+      <!--for (g; g<80; g++){-->
+          <!--console.log(g)-->
+      <!--};-->
+    <!---->
+      <!--console.log('g is', g)-->
+
+    <!--//===============semicolons======================-->
+
+
         <!--//===============base datatypes======================-->
+
     <!--function double(f) {-->
     <!--return function (arg) {-->
     <!--for (var a=0 ; a<arg.length; a++ )-->
