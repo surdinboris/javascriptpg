@@ -937,44 +937,170 @@
 <!--// console.log(flatts(ara))-->
 
     <script>
-
 //=========================just usage training========================
-//higher order functions
+//Inheritance - prototype assigning
+// function doit() {
+//     console.log(this.consid);
+//     console.log(arguments || '');
+// }
 
-let arr= [{name:'Pukeman', bld:1, street: 'Weitzmann', appart:'12', status:'done',account:432},
-    {name:'Folk', bld:4, street: 'Weitzmann', appart:'12', status:'done',account:132},
-    {name:'Crust', bld:23, street: 'HaTayas', appart:'12', status:'done',account:632},
-    {name:'Robin', bld:2, street: 'Lenina', appart:'12', status:'pending',account:32}];
+function CatTinking(consid) {
+    this.consid=consid
+};
 
-    //reduce
-    let summacc=arr.reduce(function (sum,cur) {
-        sum+=cur.account;
-        return sum},0);
-    console.log(summacc);
-    //map transforming via map
-    let transform=arr.map(function (value) {
-        value.building=value.bld;
-        value.bld=0;
-    return value.status
-   });
-    console.log(transform);
-    console.log(arr)
+CatTinking.prototype.action=function () {
+    if(this.consid == 'hungry')
+        return 'hrm-hrm';
+    else if (this.consid == 'tired')
+        return 'Zzzzzz';
+    else return 'Confused'
+};
 
-    //filter
-let filteredStreet=arr.filter(function (value) {
+let lazyCat=new CatTinking('hungry');
+console.log(lazyCat.action());
+lazyCat.consid='tired';
+console.log(lazyCat.action());
 
-    let resultob=value.street == 'Weitzmann';
+function CatPatchAction(patch) {
+    CatTinking(this, patch);
+};
+   CatPatchAction.prototype=Object.create(CatTinking.prototype);
+   let nCat= new  CatPatchAction('tired');
+    console.log(nCat)
 
-    return resultob; });
-    //foreach action
-    filteredStreet.forEach(function (value2) { console.log(value2.street) });
-    //map return names
-    let weitzmannNames=filteredStreet.map(function (value) { return value.name });
-
-    console.log(weitzmannNames);
+// //Call training
+// doit.apply(lazyCat, ['kaka','paka']);
+// doit.call(lazyCat,'kaka','pukka')
 
 
-//arrow functions
+
+// //==============================object with request  function====================
+//
+// let PityParty={puddels:'shtrudels',
+//     clown_:'sad clown',
+//     instruments_:['piano', 'royal', 'sax'],
+//     persData:'Next cocert of Sad clown next saturday morning in Radisson S. music hall',
+//     objinfo:function (req) {
+//         switch(req) {
+//             case "data":
+//                 return this.persData;
+//
+//             case 'dataL':
+//                 return this.persData.length;
+//
+//             default:
+//                 return 'unrecognized request'
+//         }
+//     }
+// };
+// console.log(PityParty.objinfo('dataL'))
+
+
+// //getters/setters
+// let PityParty={puddels:'shtrudels',
+//     clown_:'sad clown',
+//     instruments_:['piano', 'royal', 'sax'],
+// get clown(){return this.clown_},
+// get instruments(){return this.instruments_},
+// set instruments(instr) {this.instruments_=instr}
+// };
+// console.log(PityParty.instruments);
+// PityParty.instruments='no instruments for PityParty today';
+// console.log(PityParty.instruments);
+// console.log(PityParty.clown, 'before changing');
+// PityParty.clown='Brave clown';
+// console.log(PityParty.clown, 'after changing');
+//
+
+
+
+// //higher order functions
+//     let arr= [{
+//     name:'Pukkeman', bld:1, street: 'Weitzmann', appart:'12', status:'done',account:432, message:
+//             ['explain to you how all',
+//                 ' this mistaken idea of denouncing',
+//                 'pleasure and praising pain',
+//                 'was born and I will give you',
+//                 'a complete account of the system']},
+//
+//     {name:'Folk', bld:40, street: 'Weitzmann', appart:'12', status:'done',account:132,message:['ex plain to you how all',
+//             ' this mistaken idea of denouncing',
+//             'pleasure and prai sing pain',
+//             'was born and I w ill give you',
+//             'a complete accou nt of the system']},
+//     {name:'Crust', bld:23, street: 'HaTayas', appart:'12', status:'done',account:632, message:['explain to you how all',
+//             ' this mistaken idea of denouncing',
+//             'pleasure and pra ising pain',
+//             'was  born and I will give you',
+//             'a com plete account of the system']},
+//     {name:'Robin', bld:2, street: 'Lenina', appart:'12', status:'pending',account:32,message:['explain to you how all',
+//             ' this mistaken idea of denouncing',
+//             'plea ure a nd praising pain',
+//             'was born and I will give you',
+//             'a com plete account of the system']
+//     }];
+//
+// //some factory object training
+//    let persObj=arr.filter(a => a.name == 'Robin');
+//    let newarrObj=persObj.map(o => {
+//        console.log(o);
+//    let newObj=Object.create(o);
+//    newObj.ident='created by map at row 974';
+//    return newObj
+//    });
+//    console.log(newarrObj[0].name, '- is name of factoried object '+ newarrObj[0].ident);
+//
+//     //chaining with arrow functions
+//     let arrmapfilter= arr.filter(a=>a.bld>20).map(a=> {
+//     a.account=a.account*20;
+//     return a });
+//     console.log(arrmapfilter, 'arrmapfilter');
+//
+//     //foreach arrow usage
+//     arr.forEach(a=> console.log(a.message.join('#')));
+//
+//
+//     //reduce - arrow
+//     let arredu= arr.reduce(((sum,cur) => sum+=cur.account),0);
+//     console.log(arredu, 'arrow reduce');
+//
+//     //reduce
+//     let summacc=arr.reduce(function (sum,cur) {
+//     sum+=cur.account;
+//     return sum},0);
+//     console.log(summacc);
+//     //map transforming via map
+//     let transform=arr.map(function (value) {
+//         value.building=value.bld;
+//         value.bld=0;
+//         return value.status
+//     });
+//     console.log(transform);
+//     console.log(arr);
+//     //arrow - map
+//     let arrowmap=arr.map((a,i) => {
+//         let vtr=a.status;
+//         return a.building+'/1'+vtr+i});
+//     console.log(arrowmap);
+//
+//     //filrer - arrow
+//     let arrowfilter = arr.filter((e)=> e.street=='HaTayas');
+//
+//     arrowfilter.forEach((a)=>console.log(a.name,'filtered by arrowfilter'));
+//
+//     //filter
+//     let filteredStreet=arr.filter(function (value) {
+//     let resultob=value.street == 'Weitzmann';
+//     return resultob; });
+//
+//     //foreach action
+//     filteredStreet.forEach(function (pers) {
+//         console.log(pers.street) });
+//
+//     //map return names
+//     let weitzmannNames=filteredStreet.map(function (pers) {
+//         return pers.name });
+//     console.log(weitzmannNames);
 
 //constructors
 // function Cat() { this.cattype= 'cat type';
