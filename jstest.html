@@ -939,34 +939,116 @@
     <script>
 //=========================just usage training========================
 //Inheritance - prototype assigning
+//function.prototype describes what will be a __proto__ of a new object
+// created based on this function
+
+function elfTree(gh){
+
+this.ghlen=gh.split("");
+    this.gh=this.ghlen.map(function (g) {
+        return  g*40
+    })
+
+};
+
+
+elfTree.prototype.magic=function () {
+    console.log( this.ghlen,'magic dwarf')
+
+};
+
+let oldElf = new elfTree('elfing');
+
+//console.dir(elfTree);
+
+
+function GandElf(el) {
+
+elfTree.call(this,el) //when creating object, passing this to elfTree function with some data for calculations
+
+
+};
+
+
+
+GandElf.prototype=Object.create(elfTree.prototype); //creating new prototype property with a
+// copied unlinked elfTree
+
+GandElf.prototype.wish=function () { console.log('GandElf wishing')
+
+};
+
+console.log(GandElf.prototype);
+console.log(elfTree.prototype);
+
+function ZupElf (el){
+    elfTree.call(this,el)
+};
+ZupElf.prototype=Object.create(GandElf.prototype);
+
+ZupElf.prototype.woosh=function () { console.log('ZupElf wishing')};
+
+elfTree.prototype.sharedWork=function () {
+    console.log('shared work for elfs')
+
+};
+
+console.log(ZupElf.prototype);
+let zuppelelf=new ZupElf('6 90 6700'); //feeding data when creating new ZupElf object, using calculation logic from elfTree
+
+console.log(zuppelelf.gh); //retrieving data
+console.log(zuppelelf.ghlen);
+
+zuppelelf.sharedWork();
+
+let ultaelf= new GandElf('7');
+console.log(ultaelf.magic())
+
+
+//ultaelf.woosh(); //not working because prototype assigned via new object (inherited) in case of direct
+//assignment adding a function via prototype propery will affect on all derived objects
+
+
+// console.dir(oldlf.__proto__);
+// console.dir(grandelf.__proto__);
+//
+// grandelf.magic();
+// grandelf.magic2();
+
+//console.dir(elfTree.prototype);
+//console.log(oldElf.__proto__ ===elfTree.prototype)
+
+
+//=====================================================
+
 // function doit() {
 //     console.log(this.consid);
 //     console.log(arguments || '');
 // }
 
-function CatTinking(consid) {
-    this.consid=consid
-};
-
-CatTinking.prototype.action=function () {
-    if(this.consid == 'hungry')
-        return 'hrm-hrm';
-    else if (this.consid == 'tired')
-        return 'Zzzzzz';
-    else return 'Confused'
-};
-
-let lazyCat=new CatTinking('hungry');
-console.log(lazyCat.action());
-lazyCat.consid='tired';
-console.log(lazyCat.action());
-
-function CatPatchAction(patch) {
-    CatTinking(this, patch);
-};
-   CatPatchAction.prototype=Object.create(CatTinking.prototype);
-   let nCat= new  CatPatchAction('tired');
-    console.log(nCat)
+// function CatTinking(consid) {
+//     this.consid=consid
+// };
+//
+// CatTinking.prototype.action=function () {
+//     if(this.consid == 'hungry')
+//         return 'hrm-hrm';
+//     else if (this.consid == 'tired')
+//         return 'Zzzzzz';
+//     else return 'Confused'
+// };
+//
+// let lazyCat=new CatTinking('hungry');
+// console.log(lazyCat.action());
+// lazyCat.consid='tired';
+// console.log(lazyCat.action());
+//
+// function CatPatchAction(patch) {
+//     CatTinking(this, patch);
+// };
+//    CatPatchAction.prototype=Object.create(CatTinking.prototype);
+//    let nCat= new  CatPatchAction('tired');
+//     console.log(nCat)
 
 // //Call training
 // doit.apply(lazyCat, ['kaka','paka']);
