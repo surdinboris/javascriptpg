@@ -937,83 +937,119 @@
 <!--// console.log(flatts(ara))-->
 
     <script>
+        // ======================exercises ===================
+
+        //vector
+function Vectr(x, y) {
+    this.x = x;
+    this.y = y;
+
+};
+
+Vectr.prototype.plus=function (vector) {
+    return new Vectr(vector.x+this.x, vector.y+this.y);
+};
+
+Vectr.prototype.minus=function (vector) {
+    return new Vectr(this.x-vector.x, this.y-vector.y);
+};
+
+let nvectr = new Vectr(67,45);
+console.log(nvectr);
+
+
+let nvectrs = new Vectr(66,44);
+console.log(nvectrs);
+console.log(nvectr.minus(nvectrs));
+
+
+
+        //another cell
+
+        //sequence interface
+
+
+
 //=========================just usage training========================
 //Inheritance - prototype assigning
 //function.prototype describes what will be a __proto__ of a new object
 // created based on this function
 
-function elfTree(gh) {
-this.ghlen=gh.split("");
-    this.gh=this.ghlen.map(function (g) {
-        return  g*40}
 
-    )};
-
-elfTree.colorr=90000;
-
-elfTree.prototype.magic=function () {
-    console.log( this.ghlen,'magic dwarf')
-
-};
-
-function oldElf() {
-
-}
-
-oldElf.prototype=Object.create(elfTree.prototype);
-
-oldElf.prototype.retcol=function () {
-    this.colorr=this.__proto__.constructor.colorr; //trying to brake up the system and get
-                        //value of main constructor's color
-    console.log(this.colorr)
-
-};
-let retelf= new oldElf();
-retelf.retcol();
-
-function GandElf(el) {
-
-elfTree.call(this,el) //when creating object, passing this to elfTree function with some data for calculations
-
-
-};
-
-
-
-GandElf.prototype=Object.create(elfTree.prototype); //creating new prototype property with a
-// copied unlinked elfTree
-
-GandElf.prototype.wish=function () {
-
-    console.log('GandElf wishing')
-
-};
-
-console.log(GandElf.prototype);
-console.log(elfTree.prototype);
-
-function ZupElf (el){
-    elfTree.call(this,el)
-};
-ZupElf.prototype=Object.create(GandElf.prototype);
-
-ZupElf.prototype.woosh=function () { console.log('ZupElf wishing')};
-
-elfTree.prototype.sharedWork=function () {
-    console.log('shared work for elfs')
-
-};
-
-console.log(ZupElf.prototype);
-let zuppelelf=new ZupElf('6 90 6700'); //feeding data when creating new ZupElf object, using calculation logic from elfTree
-
-console.log(zuppelelf.gh); //retrieving data
-console.log(zuppelelf.ghlen);
-
-zuppelelf.sharedWork();
-
-let ultaelf= new GandElf('7');
-ultaelf.magic();
+// function elfTree(gh) {
+// this.ghlen=gh.split("");
+//     this.gh=this.ghlen.map(function (g) {
+//         return  g*40}
+//
+//     )};
+//
+// elfTree.colorr=90000;
+//
+// elfTree.prototype.magic=function () {
+//     console.log( this.ghlen,'magic dwarf')
+//
+// };
+//
+// function oldElf() {
+//
+// }
+//
+// oldElf.prototype=Object.create(elfTree.prototype);
+//
+// oldElf.prototype.retcol=function () {
+//     this.colorr=this.__proto__.constructor.colorr; //trying to brake up the system and get
+//                         //value of main constructor's color
+//     console.log(this.colorr)
+//
+// };
+// let retelf= new oldElf();
+//
+// console.log(retelf instanceof elfTree);
+// retelf.retcol();
+//
+// function GandElf(el) {
+//
+// elfTree.call(this,el) //when creating object, passing this to elfTree function with some data for calculations
+//
+//
+// };
+//
+//
+//
+// GandElf.prototype=Object.create(elfTree.prototype); //creating new prototype property with a
+// // copied unlinked elfTree
+//
+// GandElf.prototype.wish=function () {
+//
+//     console.log('GandElf wishing')
+//
+// };
+//
+// console.log(GandElf.prototype);
+// console.log(elfTree.prototype);
+//
+// function ZupElf (el){
+//     elfTree.call(this,el)
+// };
+// ZupElf.prototype=Object.create(GandElf.prototype);
+//
+// ZupElf.prototype.woosh=function () { console.log('ZupElf wishing')};
+//
+// elfTree.prototype.sharedWork=function () {
+//     console.log('shared work for elfs')
+//
+// };
+//
+// console.log(ZupElf.prototype);
+// let zuppelelf=new ZupElf('6 90 6700'); //feeding data when creating new ZupElf object, using calculation logic from elfTree
+//
+// console.log(zuppelelf.gh); //retrieving data
+// console.log(zuppelelf.ghlen);
+//
+// zuppelelf.sharedWork();
+//
+// let ultaelf= new GandElf('7');
+// ultaelf.magic();
 
 
 //ultaelf.woosh(); //not working because prototype assigned via new object (inherited) in case of direct
