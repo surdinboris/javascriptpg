@@ -1119,20 +1119,25 @@ RTextCell.prototype.draw = function(width, height) {
 
 
 //+++++++++++++++++++++++++sequence interface+++++++++++++++++++++++++
-let collection=[{1:'454'},
-    {2:'yrty'},{3:'23423'},
-    {4:234234},{5:33},{6:'iopui'},{7:'df'}];
+let collection=[{568:'dgf'},
+    {'hhhh':'543'},{687:'23423'},{687:'23423'},{687:'23423'}];
+
+
 
 let scollection=[{568:'dgf'},
     {'hhhh':'543'},{687:'23423'}];
 
-//iterating over a collection by index
 
-function Sequence(seq) {
+let arrray={1:'454',
+    2:'yrty',3:'23423',
+    4:234234,5:33,6:'iopui',7:'df'};
+
+//iterating over a array by index
+function ArrrayIt(seq) {
     this.seq=seq;
 };
 
-Sequence.prototype.getByIndex = function (ind) {
+ArrrayIt.prototype.getByIndex = function (ind) {
     //verifying that asked data lays in our object
     if (this.seq.length > ind && this.seq.length >= 0 )
     return this.seq.filter(function (elem, i) {
@@ -1143,30 +1148,20 @@ Sequence.prototype.getByIndex = function (ind) {
     else return 'Requested index is out of range'
 };
 
-Sequence.prototype.getFirstFive = function () {
+ArrrayIt.prototype.getFirstFive = function () {
     let ind=this.seq.length >= 5? 5:this.seq.length;
     return this.seq.filter(function (cur, i) {
         if(i <ind) return cur;
     })
 };
 //creating object and loading data
-let seqObj = new Sequence(collection);
+let arrObj = new ArrrayIt(collection);
+console.log(arrObj.getByIndex(3));
+let sarr= new ArrrayIt(scollection);
+console.log(sarr.getFirstFive());
 
-console.log(seqObj.getByIndex(3));
 
-let sObj= new Sequence(scollection);
 
-console.log(sObj.getFirstFive());
-//
-// function logFive(colval) {
-//     colval.forEach(console.log(function(a) {
-//
-//     }));
-//
-//
-// }
-//
-// logFive(colval);
 
 //=========================just usage training========================
 //Inheritance - prototype assigning
