@@ -1119,48 +1119,65 @@ RTextCell.prototype.draw = function(width, height) {
 
 
 //+++++++++++++++++++++++++sequence interface+++++++++++++++++++++++++
-let collection=[{568:'dgf'},
-    {'hhhh':'543'},{687:'23423'},{687:'23423'},{687:'23423'}];
+let collection={568:'dgf',
+    'hhhh':'543',687:'23423',6867:'23423',6807:'23423'};
 
+let scollection={5608:'dgf',
+    'hhhh':'543',687:'23423'};
 
-
-let scollection=[{568:'dgf'},
-    {'hhhh':'543'},{687:'23423'}];
-
-
-let arrray={1:'454',
-    2:'yrty',3:'23423',
-    4:234234,5:33,6:'iopui',7:'df'};
+let arrray=['454',
+    'yrty','23423',
+    234234,33,'iopui','df'];
 
 //iterating over a array by index
-function ArrrayIt(seq) {
-    this.seq=seq;
+function SequenceIt(seq) {
+    let objtoarr=function (seq) {
+        let arr=[];
+        for(let s in seq)
+             arr.push({s:seq[s]})
+        return arr};
+
+    Array.isArray(seq)? this.seq=seq:this.seq=objtoarr(seq)
 };
 
-ArrrayIt.prototype.getByIndex = function (ind) {
+SequenceIt.prototype.getByIndex = function (ind) {
     //verifying that asked data lays in our object
     if (this.seq.length > ind && this.seq.length >= 0 )
     return this.seq.filter(function (elem, i) {
             if (i == ind)
-                return typeof elem
+                return elem
         });
     //in case of invalid range
     else return 'Requested index is out of range'
 };
 
-ArrrayIt.prototype.getFirstFive = function () {
+SequenceIt.prototype.getFirstFive = function () {
     let ind=this.seq.length >= 5? 5:this.seq.length;
     return this.seq.filter(function (cur, i) {
         if(i <ind) return cur;
     })
 };
 //creating object and loading data
-let arrObj = new ArrrayIt(collection);
+let arrObj = new SequenceIt(arrray);
 console.log(arrObj.getByIndex(3));
-let sarr= new ArrrayIt(scollection);
-console.log(sarr.getFirstFive());
+console.log(arrObj.getFirstFive());
 
+//object section
+let objObj = new SequenceIt(scollection);
+console.log(objObj.getByIndex(2));
+console.log(objObj.getFirstFive());
 
+//new type that calls Sequence it with prebuiited array from-to range
+function RangeToSeq(fro, to) {
+   let seq=[];
+   for (let i=fro;i<to;i++)
+       seq.push(i)
+    SequenceIt.call(this,seq)
+}
+RangeToSeq.prototype=Object.create(SequenceIt.prototype);
+
+let rts= new RangeToSeq(45,90);
+console.log(rts.getFirstFive())
 
 
 //=========================just usage training========================
