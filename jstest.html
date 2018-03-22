@@ -939,7 +939,7 @@
     <script>
 //===================world======================
 
-var plan =
+let plan =
     ["############################",
         "# # # o ##",
         "# #",
@@ -970,9 +970,20 @@ Grid.prototype.get=function (vector) {
     return this.space[vector.x+this.width*vector.y];
     };
 
-Grid.prototype.set=function (vector, value) {
+Grid.prototype.set=function (vector, value) { //assigning coordinates and according object
     this.space[vector.x+this.width*vector.y]=value;
     };
+
+
+Grid.prototype.forEach = function(f, context) {
+    for (let y = 0; y < this.height; y++) {
+        for (let x = 0; x < this.width; x++) {
+            let value = this.space[x + y * this.width];
+            if (value != null)
+                f.call(context, value, new Vector(x, y));
+        }
+    }
+};
 
 function Vector(x,y) {
     this.x=x;
@@ -991,7 +1002,7 @@ return new Vector(this.x+other.x, this.y+other.y);
 // grd.set(new Vector(5,9),'hjk');
 // console.log(grd.space);
 // console.log(grd.get(new Vector(3,4)));
-var directions= {
+let directions= {
     "n" : new Vector(0,-1),
     "ne" : new Vector(1,-1),
     "e" : new Vector(1,0),
@@ -1026,16 +1037,50 @@ function elementFromChar(legend, ch) {
     return element;
 }
 
+
 function World(map, legend) {
-    var grid = new Grid(map[0].length, map.length); //retrieving dimensions of passed plan and building a Grid object
+    let grid = new Grid(map[0].length, map.length); //retrieving dimensions of passed plan(map) and building a Grid object
     this.grid = grid;
+
     this.legend = legend;
-    map.forEach(function(line, y) {
-        for (var x = 0; x < line.length; x++)
-            grid.set(new Vector(x, y),
-                elementFromChar(legend, line[x]));
+    map.forEach(function(line, y) { //disassembling map's rows and iterating over each line
+        for (let x = 0; x < line.length; x++)
+            grid.set(new Vector(x, y), //building vectors for each character in row with object
+                elementFromChar(legend, line[x])); //passed via legend-function elementFromChar
     });
+    //this.grid.forEach(console.log,this);
+};
+
+function charFromElement(element) {
+    if (element == null)
+        return " ";
+    else
+        return element.originChar;
 }
+
+
+World.prototype.toString = function() {
+    let output = "";
+    for (let y = 0; y < this.grid.height; y++) {
+        for (let x = 0; x < this.grid.width; x++) {
+            let element = this.grid.get(new Vector(x, y));
+            output += charFromElement(element); //looping with two loops over world's rows and characterss
+                                                //and adding them to output string with eol
+        }
+        output += "\n";
+    }
+    return output;
+};
+
+function Wall() {
+
+};
+
+let world= new World(plan, {'#': Wall, 'o': BouncingCritter});
+// console.log(world.toString());
+
+
+
 
 // ======================exercises ===================
 //vector
