@@ -937,247 +937,353 @@
 <!--// console.log(flatts(ara))-->
 
     <script>
+//===================world======================
+
+var plan =
+    ["############################",
+        "# # # o ##",
+        "# #",
+        "# ##### #",
+        "## # # ## #",
+        "### ## # #",
+        "# ### # #",
+        "# #### #",
+        "# ## o #",
+        "# o # o ### #",
+        "# # #",
+        "############################"];
+
+
+function Grid(width,heigth) {
+    this.width = width;
+    this.height = heigth;
+    this.space=Array(width*heigth)
+
+};
+
+Grid.prototype.isInside = function(vector) {
+    return vector.x >=0&& vector.x < this.width &&
+            vector.y >=0 && vector.y <this.height
+};
+
+Grid.prototype.get=function (vector) {
+    return this.space[vector.x+this.width*vector.y];
+    };
+
+Grid.prototype.set=function (vector, value) {
+    this.space[vector.x+this.width*vector.y]=value;
+    };
+
+function Vector(x,y) {
+    this.x=x;
+    this.y=y;
+    }
+Vector.prototype.plus=function (other) {
+return new Vector(this.x+other.x, this.y+other.y);
+};
+
+//testing
+// let vec= new Vector(3,9);
+// let grd= new Grid(30,40);
+// grd.set(vec,'poop -> vector');
+// console.log(grd.isInside(vec));
+// grd.set(new Vector(1,2),'yada');
+// grd.set(new Vector(5,9),'hjk');
+// console.log(grd.space);
+// console.log(grd.get(new Vector(3,4)));
+var directions= {
+    "n" : new Vector(0,-1),
+    "ne" : new Vector(1,-1),
+    "e" : new Vector(1,0),
+    "se" : new Vector(1,1),
+    "s" : new Vector(0,1),
+    "sw" : new Vector(-1,1),
+    "w" : new Vector(-1,0),
+    "nw" : new Vector(-1,-1),
+};
+
+function randomElement(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+let directionNames = "n ne e se s sw w nw".split(" ");
+
+
+function BouncingCritter() {
+    this.direction = randomElement(directionNames); //every critter mooves in random direction
+};
+BouncingCritter.prototype.act = function(view) {
+    if (view.look(this.direction) != " ")
+        this.direction = view.find(" ") || "s";
+    return {type: "move", direction: this.direction};
+};
+
+
+function elementFromChar(legend, ch) {
+    if (ch == " ")
+        return null;
+    let element = new legend[ch]();
+    element.originChar = ch;
+    return element;
+}
+
+function World(map, legend) {
+    var grid = new Grid(map[0].length, map.length);
+    this.grid = grid;
+    this.legend = legend;
+    map.forEach(function(line, y) {
+        for (var x = 0; x < line.length; x++)
+            grid.set(new Vector(x, y),
+                elementFromChar(legend, line[x]));
+    });
+}
+
 // ======================exercises ===================
 //vector
-function Vectr(x, y) {
-    this.x = x;
-    this.y = y;
-
-};
-
-Vectr.prototype.plus=function (vector) {
-    return new Vectr(vector.x+this.x, vector.y+this.y);
-};
-
-Vectr.prototype.minus=function (vector) {
-    return new Vectr(this.x-vector.x, this.y-vector.y);
-};
-
-Vectr.prototype.length=function () {
-    return Math.sqrt(this.x^2+this.y^2)
-    
-};
-
-//creating objects
-let nvectr = new Vectr(67,45);
-let nvectrs = new Vectr(7,44);
-
-//calculating summ or diffrence - passing one vector to other's vector function
-console.log(nvectr.minus(nvectrs));
-console.log(nvectr.plus(nvectrs));
-//calculating vector's lengt
-console.log(nvectr.length());
-console.log(nvectrs.length());
-
-//another cell++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-var MOUNTAINS = [
-    {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
-    {name: "Everest", height: 8848, country: "Nepal"},
-    {name: "Mount Fuji", height: 3776, country: "Japan"},
-    {name: "Mont Blanc", height: 4808, country: "Italy/France"},
-    {name: "Vaalserberg", height: 323, country: "Netherlands"},
-    {name: "Denali", height: 6168, country: "United States"},
-    {name: "Popocatepetl", height: 5465, country: "Mexico"}
-];
-function rowHeights(rows) {
-    return rows.map(function(row) {
-        return row.reduce(function(max, cell) {
-            return Math.max(max, cell.minHeight());
-        }, 0);
-    });
-}
-
-function colWidths(rows) {
-    return rows[0].map(function(_, i) {
-        return rows.reduce(function(max, row) {
-            return Math.max(max, row[i].minWidth());
-        }, 0);
-    });
-}
-
-function drawTable(rows) {
-    var heights = rowHeights(rows);
-    var widths = colWidths(rows);
-    function drawLine(blocks, lineNo) {
-        return blocks.map(function(block) {
-            return block[lineNo];
-        }).join(" ");
-    }
-
-    function drawRow(row, rowNum) {
-        var blocks = row.map(function(cell, colNum) {
-            return cell.draw(widths[colNum], heights[rowNum]);
-        });
-        return blocks[0].map(function(_, lineNo) {
-            return drawLine(blocks, lineNo);
-        }).join("\n");
-    }
-
-    return rows.map(drawRow).join("\n");
-}
-
-function repeat(string, times) {
-    var result = "";
-    for (var i = 0; i < times; i++)
-        result += string;
-    return result;
-}
-
-function TextCell(text) {
-    this.text = text.split("\n");
-}
-
-TextCell.prototype.minWidth = function() {
-    return this.text.reduce(function(width, line) {
-        return Math.max(width, line.length);
-    }, 0);
-};
-
-TextCell.prototype.minHeight = function() {
-    return this.text.length;
-};
-
-TextCell.prototype.draw = function(width, height) {
-    var result = [];
-    for (var i = 0; i < height; i++) {
-        var line = this.text[i] || "";
-        result.push(line + repeat(" ", width - line.length));
-    }
-    return result;
-};
-// my cell implementation
-//---------------------------------------------------------------------------
-function StretchCell(inner, width, height) {
-    this.mwidth=width;
-    this.mheight=height;
-    this.inner = inner;
-}
-
-StretchCell.prototype.minWidth = function() {
-    return this.inner.minWidth();
-};
-
-StretchCell.prototype.minHeight = function() {
-    return this.inner.minHeight() + 1;
-};
-
-StretchCell.prototype.draw = function(width, height) {
-    width = width < this.mwidth ? this.mwidth : width;
-    height = height < this.mheight ? this.mheight : height;
-    return this.inner.draw(width, height);
-};
-
-
-//---------------------------------------------------------------------------
-function UnderlinedCell(inner) {
-    this.inner = inner;
-}
-
-UnderlinedCell.prototype.minWidth = function() {
-    return this.inner.minWidth();
-};
-
-UnderlinedCell.prototype.minHeight = function() {
-    return this.inner.minHeight() + 1;
-};
-
-UnderlinedCell.prototype.draw = function(width, height) {
-    return this.inner.draw(width, height - 1).concat([repeat("-", width)]);
-};
-
-function dataTable(data) {
-    var keys = Object.keys(data[0]);
-    var headers = keys.map(function(name) {
-        return new UnderlinedCell(new TextCell(String(name)));
-    });
-    var body = data.map(function(row) {
-        return keys.map(function(name) {
-            var value = row[name];
-            return new StretchCell(new RTextCell(String(value)),20,7);
-
-        });
-    });
-    return [headers].concat(body);
-}
-
-function RTextCell(text) {
-    TextCell.call(this, text);
-}
-
-RTextCell.prototype = Object.create(TextCell.prototype);
-
-RTextCell.prototype.draw = function(width, height) {
-    var result = [];
-    for (var i = 0; i < height; i++) {
-        var line = this.text[i] || "";
-        result.push(repeat(" ", width - line.length) + line);
-    }
-    return result;
-};
+// function Vectr(x, y) {
+//     this.x = x;
+//     this.y = y;
+//
+// };
+//
+// Vectr.prototype.plus=function (vector) {
+//     return new Vectr(vector.x+this.x, vector.y+this.y);
+// };
+//
+// Vectr.prototype.minus=function (vector) {
+//     return new Vectr(this.x-vector.x, this.y-vector.y);
+// };
+//
+// Vectr.prototype.length=function () {
+//     return Math.sqrt(this.x^2+this.y^2)
+//
+// };
+//
+// //creating objects
+// let nvectr = new Vectr(67,45);
+// let nvectrs = new Vectr(7,44);
+//
+// //calculating summ or diffrence - passing one vector to other's vector function
+// console.log(nvectr.minus(nvectrs));
+// console.log(nvectr.plus(nvectrs));
+// //calculating vector's lengt
+// console.log(nvectr.length());
+// console.log(nvectrs.length());
+//
+// //another cell++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// var MOUNTAINS = [
+//     {name: "Kilimanjaro", height: 5895, country: "Tanzania"},
+//     {name: "Everest", height: 8848, country: "Nepal"},
+//     {name: "Mount Fuji", height: 3776, country: "Japan"},
+//     {name: "Mont Blanc", height: 4808, country: "Italy/France"},
+//     {name: "Vaalserberg", height: 323, country: "Netherlands"},
+//     {name: "Denali", height: 6168, country: "United States"},
+//     {name: "Popocatepetl", height: 5465, country: "Mexico"}
+// ];
+// function rowHeights(rows) {
+//     return rows.map(function(row) {
+//         return row.reduce(function(max, cell) {
+//             return Math.max(max, cell.minHeight());
+//         }, 0);
+//     });
+// }
+//
+// function colWidths(rows) {
+//     return rows[0].map(function(_, i) {
+//         return rows.reduce(function(max, row) {
+//             return Math.max(max, row[i].minWidth());
+//         }, 0);
+//     });
+// }
+//
+// function drawTable(rows) {
+//     var heights = rowHeights(rows);
+//     var widths = colWidths(rows);
+//     function drawLine(blocks, lineNo) {
+//         return blocks.map(function(block) {
+//             return block[lineNo];
+//         }).join(" ");
+//     }
+//
+//     function drawRow(row, rowNum) {
+//         var blocks = row.map(function(cell, colNum) {
+//             return cell.draw(widths[colNum], heights[rowNum]);
+//         });
+//         return blocks[0].map(function(_, lineNo) {
+//             return drawLine(blocks, lineNo);
+//         }).join("\n");
+//     }
+//
+//     return rows.map(drawRow).join("\n");
+// }
+//
+// function repeat(string, times) {
+//     var result = "";
+//     for (var i = 0; i < times; i++)
+//         result += string;
+//     return result;
+// }
+//
+// function TextCell(text) {
+//     this.text = text.split("\n");
+// }
+//
+// TextCell.prototype.minWidth = function() {
+//     return this.text.reduce(function(width, line) {
+//         return Math.max(width, line.length);
+//     }, 0);
+// };
+//
+// TextCell.prototype.minHeight = function() {
+//     return this.text.length;
+// };
+//
+// TextCell.prototype.draw = function(width, height) {
+//     var result = [];
+//     for (var i = 0; i < height; i++) {
+//         var line = this.text[i] || "";
+//         result.push(line + repeat(" ", width - line.length));
+//     }
+//     return result;
+// };
+// // my cell implementation
+// //---------------------------------------------------------------------------
+// function StretchCell(inner, width, height) {
+//     this.mwidth=width;
+//     this.mheight=height;
+//     this.inner = inner;
+// }
+//
+// StretchCell.prototype.minWidth = function() {
+//     return this.inner.minWidth();
+// };
+//
+// StretchCell.prototype.minHeight = function() {
+//     return this.inner.minHeight() + 1;
+// };
+//
+// StretchCell.prototype.draw = function(width, height) {
+//     width = width < this.mwidth ? this.mwidth : width;
+//     height = height < this.mheight ? this.mheight : height;
+//     return this.inner.draw(width, height);
+// };
+//
+//
+// //---------------------------------------------------------------------------
+// function UnderlinedCell(inner) {
+//     this.inner = inner;
+// }
+//
+// UnderlinedCell.prototype.minWidth = function() {
+//     return this.inner.minWidth();
+// };
+//
+// UnderlinedCell.prototype.minHeight = function() {
+//     return this.inner.minHeight() + 1;
+// };
+//
+// UnderlinedCell.prototype.draw = function(width, height) {
+//     return this.inner.draw(width, height - 1).concat([repeat("-", width)]);
+// };
+//
+// function dataTable(data) {
+//     var keys = Object.keys(data[0]);
+//     var headers = keys.map(function(name) {
+//         return new UnderlinedCell(new TextCell(String(name)));
+//     });
+//     var body = data.map(function(row) {
+//         return keys.map(function(name) {
+//             var value = row[name];
+//             return new StretchCell(new RTextCell(String(value)),20,7);
+//
+//         });
+//     });
+//     return [headers].concat(body);
+// }
+//
+// function RTextCell(text) {
+//     TextCell.call(this, text);
+// }
+//
+// RTextCell.prototype = Object.create(TextCell.prototype);
+//
+// RTextCell.prototype.draw = function(width, height) {
+//     var result = [];
+//     for (var i = 0; i < height; i++) {
+//         var line = this.text[i] || "";
+//         result.push(repeat(" ", width - line.length) + line);
+//     }
+//     return result;
+// };
 
 //console.log(drawTable(dataTable(MOUNTAINS)));
 
 
 //+++++++++++++++++++++++++sequence interface+++++++++++++++++++++++++
-let collection={568:'dgf',
-    'hhhh':'543',687:'23423',6867:'23423',6807:'23423'};
-
-let scollection={5608:'dgf',
-    'hhhh':'543',687:'23423'};
-
-let arrray=['454',
-    'yrty','23423',
-    234234,33,'iopui','df'];
-
-//iterating over a array by index
-function SequenceIt(seq) {
-    let objtoarr=function (seq) {
-        let arr=[];
-        for(let s in seq)
-             arr.push({s:seq[s]})
-        return arr};
-
-    Array.isArray(seq)? this.seq=seq:this.seq=objtoarr(seq)
-};
-
-SequenceIt.prototype.getByIndex = function (ind) {
-    //verifying that asked data lays in our object
-    if (this.seq.length > ind && this.seq.length >= 0 )
-    return this.seq.filter(function (elem, i) {
-            if (i == ind)
-                return elem
-        });
-    //in case of invalid range
-    else return 'Requested index is out of range'
-};
-
-SequenceIt.prototype.getFirstFive = function () {
-    let ind=this.seq.length >= 5? 5:this.seq.length;
-    return this.seq.filter(function (cur, i) {
-        if(i <ind) return cur;
-    })
-};
-//creating object and loading data
-let arrObj = new SequenceIt(arrray);
-console.log(arrObj.getByIndex(3));
-console.log(arrObj.getFirstFive());
-
-//object section
-let objObj = new SequenceIt(scollection);
-console.log(objObj.getByIndex(2));
-console.log(objObj.getFirstFive());
-
-//new type that calls Sequence it with prebuiited array from-to range
-function RangeToSeq(fro, to) {
-   let seq=[];
-   for (let i=fro;i<to;i++)
-       seq.push(i)
-    SequenceIt.call(this,seq)
-}
-RangeToSeq.prototype=Object.create(SequenceIt.prototype);
-
-let rts= new RangeToSeq(45,90);
-console.log(rts.getFirstFive())
+// let collection={568:'dgf',
+//     'hhhh':'543',687:'23423',6867:'23423',6807:'23423'};
+//
+// let scollection={5608:'dgf',
+//     'hhhh':'543',687:'23423'};
+//
+// let arrray=['454',
+//     'yrty','23423',
+//     234234,33,'iopui','df'];
+//
+// //iterating over a array by index
+// function SequenceIt(seq) {
+//     let objtoarr=function (seq) {
+//         let arr=[];
+//         for(let s in seq)
+//              arr.push({s:seq[s]})
+//         return arr};
+//
+//     //deciding is thia an array or object
+//     Array.isArray(seq)? this.seq=seq:this.seq=objtoarr(seq)
+//
+// };
+//
+// SequenceIt.prototype.getByIndex = function (ind) {
+//     //verifying that asked data lays in our object
+//     if (this.seq.length > ind && this.seq.length >= 0 )
+//     return this.seq.filter(function (elem, i) {
+//             if (i == ind)
+//                 return elem
+//         });
+//     //in case of invalid range
+//     else return 'Requested index is out of range'
+// };
+//
+// SequenceIt.prototype.getFirstFive = function () {
+//     let ind=this.seq.length >= 5? 5:this.seq.length;
+//     return this.seq.filter(function (cur, i) {
+//         if(i <ind) return cur;
+//     })
+// };
+// //creating object and loading data
+// let arrObj = new SequenceIt(arrray);
+// console.log(arrObj.getByIndex(3));
+// console.log(arrObj.getFirstFive());
+//
+// //object section
+// let objObj = new SequenceIt(scollection);
+// console.log(objObj.getByIndex(2));
+// console.log(objObj.getFirstFive());
+//
+// //new type that calls Sequence it with prebuilt array from-to range
+//
+// function RangeToSeq(fro, to) {
+//    let seq=[];
+//    for (let i=fro;i<to;i++)
+//        seq.push(i)
+//     SequenceIt.call(this,seq)
+// }
+//
+// //inherit prototype, no additional functions needed for this type - generating only specific object type
+// RangeToSeq.prototype=SequenceIt.prototype;
+//
+// let rts= new RangeToSeq(45,90);
+// console.log(rts.getFirstFive());
+// console.log(rts.getByIndex(3));
 
 
 //=========================just usage training========================
