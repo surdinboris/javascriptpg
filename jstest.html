@@ -1027,7 +1027,7 @@ function elementFromChar(legend, ch) {
 }
 
 function World(map, legend) {
-    var grid = new Grid(map[0].length, map.length);
+    var grid = new Grid(map[0].length, map.length); //retrieving dimensions of passed plan and building a Grid object
     this.grid = grid;
     this.legend = legend;
     map.forEach(function(line, y) {
