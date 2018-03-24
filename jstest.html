@@ -1075,29 +1075,78 @@ Grid.prototype.forach = function(f, context) {
     for (let y = 0; y < this.height; y++) {      //custom forEach that iterates over grid structure
         for (let x = 0; x < this.width; x++) {   //and calls passed function  in passed context for each value of grid
             //(first part of code iterates over grid's rows and characters and calculates value
-            let value = this.space[x + y * this.width];
+            let value = this.space[x + y * this.width]; //core thing of the forach function - retrieving an iterated value
             if (value != null)
-                f.call(context, value, new Vector(x, y)); //context- this for called function, value - critter, new Vector - vector
+                f.call(context, value, new Vector(x, y)); //context- .this for called function f, value - critter, new Vector - with calculated by loops x and y
         }
     }
 };
 
 World.prototype.turn = function () {
     let acted=[];
-
     this.grid.forach(function (critter,vector) {
-        console.log(critter);
-        console.log(vector);
+        //console.log(critter);
+        //console.log(vector);
         if (critter.act && acted.indexOf(critter) == -1){
             acted.push(critter);
             //console.log(critter,vector);
-            //this.letAct(critter,vector);
+            this.letAct(critter,vector);
         }
     },this);
 };
 
+//internal World's method
+World.prototype.letAct=function (critter,vector) {
+    let action = critter.act(new View (this, vector));
+    if (action && action.type == 'move'){
+        let dest = this.checkDestination(action, vector);
+        if (dest && this.grid.get(dest) == null) {
+            this.grid.set (dest,critter)
+        }
+    }
+
+};
+//internal World's method
+World.prototype.checkDestination=function (action,vector) {
+    if (directionNames.hasOwnProperty(action.direction)){
+        let dest= vector.plus(directions[action.direction]);
+        if (this.grid.isInside(dest))
+            return dest;
+    }
+
+};
+function View (world, vector) {
+    this.world = world;
+    this.vector = vector;
+    }
+
+
+//searching part
+View.prototype.look = function (dir) {
+    let target = this.vector.plus(directions[dir]);
+    if (this.world.grid.isInside(target))
+        return charFromElement(this.world.grid.get(target));
+    else return "#";
+
+};
+
+View.prototype.findAll = function (ch) {
+    let found = [];
+    for (var dir in directions)
+        if (this.look(dir) == ch)
+            found.push(dir);
+    return found;
+};
+
+View.prototype.find = function (ch) {
+    let found = this.findAll(ch);
+    if (found.length == 0) return null;
+    return randomElement(found);
+};
+
 let world= new World(plan, {'#': Wall, 'o': BouncingCritter});
 world.turn();
+
 
 //console.log(world.toString());
 
