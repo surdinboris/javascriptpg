@@ -975,15 +975,7 @@ Grid.prototype.set=function (vector, value) { //assigning coordinates and accord
     };
 
 
-Grid.prototype.forEach = function(f, context) {
-    for (let y = 0; y < this.height; y++) {
-        for (let x = 0; x < this.width; x++) {
-            let value = this.space[x + y * this.width];
-            if (value != null)
-                f.call(context, value, new Vector(x, y));
-        }
-    }
-};
+
 
 function Vector(x,y) {
     this.x=x;
@@ -1038,12 +1030,12 @@ function elementFromChar(legend, ch) {
 }
 
 
-function World(map, legend) {
-    let grid = new Grid(map[0].length, map.length); //retrieving dimensions of passed plan(map) and building a Grid object
+function World(plan, legend) {
+    let grid = new Grid(plan[0].length, plan.length); //retrieving dimensions of passed plan(map) and building a Grid object
     this.grid = grid;
 
     this.legend = legend;
-    map.forEach(function(line, y) { //disassembling map's rows and iterating over each line
+    plan.forEach(function(line, y) { //disassembling map's rows and iterating over each line
         for (let x = 0; x < line.length; x++)
             grid.set(new Vector(x, y), //building vectors for each character in row with object
                 elementFromChar(legend, line[x])); //passed via legend-function elementFromChar
@@ -1058,6 +1050,10 @@ function charFromElement(element) {
         return element.originChar;
 }
 
+World.prototype.gridcustom=function () {
+    this.grid.forEach(console.log, this)
+
+}
 
 World.prototype.toString = function() {
     let output = "";
@@ -1075,11 +1071,37 @@ World.prototype.toString = function() {
 function Wall() {
 
 };
+Grid.prototype.forach = function(f, context) {
+    for (let y = 0; y < this.height; y++) {      //custom forEach that iterates over grid structure
+        for (let x = 0; x < this.width; x++) {   //and calls passed function  in passed context for each value of grid
+            //(first part of code iterates over grid's rows and characters and calculates value
+            let value = this.space[x + y * this.width];
+            if (value != null)
+                f.call(context, value, new Vector(x, y)); //context- this for called function, value - critter, new Vector - vector
+        }
+    }
+};
+
+World.prototype.turn = function () {
+    let acted=[];
+
+    this.grid.forach(function (critter,vector) {
+        console.log(critter);
+        console.log(vector);
+        if (critter.act && acted.indexOf(critter) == -1){
+            acted.push(critter);
+            //console.log(critter,vector);
+            //this.letAct(critter,vector);
+        }
+    },this);
+};
 
 let world= new World(plan, {'#': Wall, 'o': BouncingCritter});
-// console.log(world.toString());
+world.turn();
 
+//console.log(world.toString());
 
+//world.gridcustom();
 
 
 // ======================exercises ===================
@@ -1428,16 +1450,19 @@ let world= new World(plan, {'#': Wall, 'o': BouncingCritter});
 
 
 //=====================================================
-
+//
 // function doit() {
 //     console.log(this.consid);
 //     console.log(arguments || '');
 // }
-
+//
 // function CatTinking(consid) {
 //     this.consid=consid
 // };
 //
+// let nccat = new CatTinking('43');
+// doit.call(nccat)
+// //
 // CatTinking.prototype.action=function () {
 //     if(this.consid == 'hungry')
 //         return 'hrm-hrm';
@@ -1451,13 +1476,15 @@ let world= new World(plan, {'#': Wall, 'o': BouncingCritter});
 // lazyCat.consid='tired';
 // console.log(lazyCat.action());
 //
+//
+//
 // function CatPatchAction(patch) {
 //     CatTinking(this, patch);
 // };
 //    CatPatchAction.prototype=Object.create(CatTinking.prototype);
 //    let nCat= new  CatPatchAction('tired');
-//     console.log(nCat)
-
+//     console.log(nCat);
+//
 // //Call training
 // doit.apply(lazyCat, ['kaka','paka']);
 // doit.call(lazyCat,'kaka','pukka')
