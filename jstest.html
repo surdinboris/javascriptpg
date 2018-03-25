@@ -1007,7 +1007,8 @@ let directions= {
 
 function randomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
-}
+};
+
 let directionNames = "n ne e se s sw w nw".split(" ");
 
 //specific critter with its movement logic
@@ -1074,14 +1075,14 @@ World.prototype.toString = function() {
 function Wall() {};
 
 Grid.prototype.forach = function(f, context) { //custom forEach that iterates over grid structure and calculating value(critter) and vector
-    console.log('grid this - no world', this);
+    //console.log('grid this - no world', this);
     for (let y = 0; y < this.height; y++) {
         for (let x = 0; x < this.width; x++) {   //and calls passed function  in passed context for each value of grid
             //(first part of code iterates over grid's rows and characters and calculates value
             let value = this.space[x + y * this.width]; //core thing of the forach function - retrieving a value by custom shift y * this.width
             if (value != null) {
-                //f.call(context, value, new Vector(x, y));
-                f(value, new Vector(x, y));//context - .this for called function f, value - critter, new Vector - with calculated by loops x and y
+                f.call(context, value, new Vector(x, y));
+                //f(value, new Vector(x, y));//context - .this for called function f, value - critter, new Vector - with calculated by loops x and y
             }}}
 
 };
@@ -1091,8 +1092,8 @@ World.prototype.turn = function () { //World acting an objects
                 //f, context to passing in forach (f.call - function, context will be passed as this, critter -value, new Vector - vector)
                 //calling grid's forach with a function below
     this.grid.forach(function (critter,vector) { //critter and vector will be populated with function call in forach
-        console.log('this from World',this);
-        console.log(critter,vector);
+        //console.log('this from World',this);
+        //console.log(critter,vector);
         if (critter.act && acted.indexOf(critter) == -1){
             acted.push(critter); //after manipulations above critter and vector will be calculated and available in this context
             this.letAct(critter,vector); //so passing critter, vector //arguments passed fine, but f without .call affects that tis .Act method could not be retrieved in this that now is a global object...
@@ -1114,7 +1115,7 @@ World.prototype.letAct=function (critter,vector) {
 
 //internal World's method
 World.prototype.checkDestination=function (action,vector) {
-    if (directionNames.hasOwnProperty(action.direction)){
+    if (directions.hasOwnProperty(action.direction)){
         let dest= vector.plus(directions[action.direction]);
         if (this.grid.isInside(dest))
             return dest;
@@ -1132,11 +1133,11 @@ View.prototype.look = function (dir) {
     let target = this.vector.plus(directions[dir]);
     if (this.world.grid.isInside(target))
         return charFromElement(this.world.grid.get(target));
-    else return "#";
+else return "#";
 
 };
 
-View.prototype.findAll = function (ch) {
+View.prototype.findAll = function (ch) { //cpllects all looked ch into array with directions
     let found = [];
     for (var dir in directions)
         if (this.look(dir) == ch)
@@ -1147,16 +1148,54 @@ View.prototype.findAll = function (ch) {
 View.prototype.find = function (ch) {
     let found = this.findAll(ch);
     if (found.length == 0) return null;
-    return randomElement(found);
+    return randomElement(found); //retrieving a random element from found directions
 };
 
 let world = new World(plan, {'#': Wall, 'o': BouncingCritter});
-world.turn();
+for (let i=0; i<5; i++){
+    world.turn();
+    console.log(world.toString())
+}
 
 
 //console.log(world.toString());
 
 //world.gridcustom();
+
+//==============object-this- call to other object function======
+//
+// function Pronka (name) {
+//     this.name=name;
+// }
+// function Americanin(name) {
+//     this.name = name;
+//     this.pronka = new Pronka('Greznoy', 'selling Inostranny Tovary, god damnit! from ' + this.name);
+//
+// };
+// Pronka.prototype.sell=function (context,f) {
+//
+//     f.call(context, this.home); //just dumb function call with given context - passing value to context obj. function scope
+// };
+// Americanin.prototype.res=function () {
+//     console.log(this.pronk, 'from Americanin obj')
+// };
+//
+// Americanin.prototype.start=function()
+// {
+//     //
+//     this.pronka.sell(this, function (pronkan) {
+//
+//         this.pronk=pronkan;
+//     });
+// };
+//
+// let amer= new Americanin('John');
+// amer.start();
+// amer.res();
+
+//Output:
+//Greznoy
+//Greznoy from Americanin obj
 
 
 // ======================exercises ===================
