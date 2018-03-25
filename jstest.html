@@ -1010,17 +1010,18 @@ function randomElement(array) {
 }
 let directionNames = "n ne e se s sw w nw".split(" ");
 
+//specific critter with its movement logic
+function BouncingCritter() {
+    this.direction = randomElement(directionNames); //every critter mooves in random direction
+};
 
-// function BouncingCritter() {
-//     this.direction = randomElement(directionNames); //every critter mooves in random direction
-// };
-//
-//
-// BouncingCritter.prototype.act = function(view) {
-//     if (view.look(this.direction) != " ")
-//         this.direction = view.find(" ") || "s";
-//     return {type: "move", direction: this.direction};
-// };
+
+BouncingCritter.prototype.act = function(view) {
+    if (view.look(this.direction) != " ")
+        this.direction = view.find(" ") || "s";
+    return {type: "move", direction: this.direction};
+};
+
 
 function charFromElement(element) {
     if (element == null)
@@ -1064,52 +1065,54 @@ World.prototype.toString = function() {
         for (let x = 0; x < this.grid.width; x++) {
             let element = this.grid.get(new Vector(x, y)); // passing newly created 'query' Vector with x and y calculated based on grid's geometry props
             output += charFromElement(element); //looping with two loops over world's rows and characterss
-
         }
         output += "\n"; //and adding them to output string with eol
     }
     return output;
 };
 
-function Wall() {
-
-};
+function Wall() {};
 
 Grid.prototype.forach = function(f, context) {
     for (let y = 0; y < this.height; y++) {      //custom forEach that iterates over grid structure
         for (let x = 0; x < this.width; x++) {   //and calls passed function  in passed context for each value of grid
             //(first part of code iterates over grid's rows and characters and calculates value
-            let value = this.space[x + y * this.width]; //core thing of the forach function - retrieving an iterated value
+            let value = this.space[x + y * this.width]; //core thing of the forach function - retrieving a value by custom shift y * this.width
             if (value != null)
-                f.call(context, value, new Vector(x, y)); //context- .this for called function f, value - critter, new Vector - with calculated by loops x and y
+            f.call(context, value, new Vector(x, y)); //context - .this for called function f, value - critter, new Vector - with calculated by loops x and y
         }
     }
 };
 
 World.prototype.turn = function () {
     let acted=[];
-    this.grid.forach(function (critter,vector) {
-        //console.log(critter);
-        //console.log(vector);
+    //f, context to passing in forach (f.call - function, context will be passed as this, critter -value, new Vector - vector)
+    //calling grid's forach with a function below
+    this.grid.forach(function (critter,vector) { //critter and vector will be populated with function call in forach
         if (critter.act && acted.indexOf(critter) == -1){
             acted.push(critter);
-            //console.log(critter,vector);
-            this.letAct(critter,vector);
+            //after manipulations above critter and vector will be calculated and available in this context
+            //so passing critter, vector
+           console.dir(vector);
+
+           this.letAct(critter,vector);
         }
     },this);
+
 };
 
 //internal World's method
 World.prototype.letAct=function (critter,vector) {
-    let action = critter.act(new View (this, vector));
+    let action = critter.act(new View (this, vector)); //critter get a View object and a vector  andr eturns its action
+
     if (action && action.type == 'move'){
         let dest = this.checkDestination(action, vector);
         if (dest && this.grid.get(dest) == null) {
             this.grid.set (dest,critter)
         }
     }
-
 };
+
 //internal World's method
 World.prototype.checkDestination=function (action,vector) {
     if (directionNames.hasOwnProperty(action.direction)){
@@ -1148,8 +1151,8 @@ View.prototype.find = function (ch) {
     return randomElement(found);
 };
 
-//let world = new World(plan, {'#': Wall, 'o': BouncingCritter});
-//world.turn();
+let world = new World(plan, {'#': Wall, 'o': BouncingCritter});
+world.turn();
 
 
 //console.log(world.toString());
