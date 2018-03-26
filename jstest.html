@@ -1017,11 +1017,7 @@ function BouncingCritter() {
 };
 
 
-BouncingCritter.prototype.act = function(view) {
-    if (view.look(this.direction) != " ")
-        this.direction = view.find(" ") || "s";
-    return {type: "move", direction: this.direction};
-};
+
 
 
 function charFromElement(element) {
@@ -1137,10 +1133,10 @@ View.prototype.look = function (dir) {
     if (this.world.grid.isInside(target))
         return charFromElement(this.world.grid.get(target));
 else return "#";
-
 };
 
 View.prototype.findAll = function (ch) { //cpllects all looked ch into array with directions
+
     let found = [];
     for (var dir in directions)
         if (this.look(dir) == ch)
@@ -1154,39 +1150,48 @@ View.prototype.find = function (ch) {
     return randomElement(found); //retrieving a random element from found directions
 };
 
-
-
 function dirPlus(dir, n) {
-    let index = directionNames.indexOf(dir); //calculating position
+    console.log('dirPlus', dir,n);
+    let index = directionNames.indexOf(dir); //calculating position index in directions
  //"n ne e se s sw w nw"
     return directionNames[(index + n + 8) % 8]; //(position+coeff+8) %8
 };
 
+BouncingCritter.prototype.act = function(view) {
+    if (view.look(this.direction) != " ")
+        this.direction = view.find(" ") || "s";
+    return {type: "move", direction: this.direction};
+};
+
 function WallFollwer() {
     this.dir='s';
+
 };
 
 WallFollwer.prototype.act=function (view) {
-    let start=this.dir;
+    let start=this.dir; // normally this.dir is s
+
     if (view.look(dirPlus(this.dir, -3)) != ' ')
-        start = this.dir = dirPlus(this.dir, -2);
+          start = this.dir = dirPlus(this.dir, -2);
+
     while (view.look(this.dir) != ' '){
-        //console.log('view look',view.look(this.dir));
-        this.dir = dirPlus(this.dir, 1);
-        //console.log('creature:',this.dir,);
-        if (this.dir == start) break;
+        this.dir = dirPlus(this.dir, 1); //trying to stick to the wall
+        console.log('trying with another direction:',this.dir,);
+        if (this.dir == start){console.log('dir==start, braking'); break}; //emergency exit if it stuck
+        ;
             }
     return {type:'move', direction: this.dir};
 };
 
+
 let world = new World(plan, {'#': Wall, 'o': WallFollwer});
-for (let i=0; i<10; i++){
+for (let i=0; i<500; i++){
     world.turn();
-//    console.log(world.toString())
+    console.log(world.toString())
 };
 
-console.log(view.look(dirPlus(, -3))))
-console.log(dirPlus('n',-3))
+//console.log(view.look(dirPlus('n', -3)));
+console.log(dirPlus('n',1))
 //console.log(world.toString());
 
 //world.gridcustom();
