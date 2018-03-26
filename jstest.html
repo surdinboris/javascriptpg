@@ -948,8 +948,8 @@ let plan =
         "### ## # #",
         "# ### # #",
         "# #### #",
-        "# ## o #",
-        "# o # o ### #",
+        "# ##  #",
+        "#  #  ### #",
         "# # #",
         "############################"];
 
@@ -1108,6 +1108,7 @@ World.prototype.letAct=function (critter,vector) {
     if (action && action.type == 'move'){
         let dest = this.checkDestination(action, vector);
         if (dest && this.grid.get(dest) == null) {
+            this.grid.set(vector,null);
             this.grid.set (dest,critter)
         }
     }
@@ -1129,6 +1130,8 @@ function View (world, vector) {
 
 
 //searching part
+
+// returning element that on the way of creature
 View.prototype.look = function (dir) {
     let target = this.vector.plus(directions[dir]);
     if (this.world.grid.isInside(target))
@@ -1151,13 +1154,39 @@ View.prototype.find = function (ch) {
     return randomElement(found); //retrieving a random element from found directions
 };
 
-let world = new World(plan, {'#': Wall, 'o': BouncingCritter});
-for (let i=0; i<5; i++){
+
+
+function dirPlus(dir, n) {
+    let index = directionNames.indexOf(dir); //calculating position
+ //"n ne e se s sw w nw"
+    return directionNames[(index + n + 8) % 8]; //(position+coeff+8) %8
+};
+
+function WallFollwer() {
+    this.dir='s';
+};
+
+WallFollwer.prototype.act=function (view) {
+    let start=this.dir;
+    if (view.look(dirPlus(this.dir, -3)) != ' ')
+        start = this.dir = dirPlus(this.dir, -2);
+    while (view.look(this.dir) != ' '){
+        //console.log('view look',view.look(this.dir));
+        this.dir = dirPlus(this.dir, 1);
+        //console.log('creature:',this.dir,);
+        if (this.dir == start) break;
+            }
+    return {type:'move', direction: this.dir};
+};
+
+let world = new World(plan, {'#': Wall, 'o': WallFollwer});
+for (let i=0; i<10; i++){
     world.turn();
-    console.log(world.toString())
-}
+//    console.log(world.toString())
+};
 
-
+console.log(view.look(dirPlus(, -3))))
+console.log(dirPlus('n',-3))
 //console.log(world.toString());
 
 //world.gridcustom();
