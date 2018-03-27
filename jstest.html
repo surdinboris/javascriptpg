@@ -1174,17 +1174,18 @@ WallFollwer.prototype.act=function (view) {
     let start=this.dir; // normally this.dir is s
 
     console.log('looking at this',view.look(dirPlus(this.dir, -3)), 'if this not empty - proceed');
+
+    //stucking part - looking forward to -3, and if it occupied - going to neighbor direction cell -2
     if (view.look(dirPlus(this.dir, -3)) != ' ') {
-        console.log('assigning -2', view.look(dirPlus(this.dir, -2)));
-    };
-
-    start = this.dir = dirPlus(this.dir, -2);
-    console.log('start',start);
-
+        console.log('assigning -2', view.look(dirPlus(this.dir, -2))); //putting to -2
+        start = this.dir = dirPlus(this.dir, -2);
+        console.log('start',start);
+};
+    //in any case (if this -2 location is ocuupied or not - no sense)
     while (view.look(this.dir) != ' '){
 
-        this.dir = dirPlus(this.dir, 1); //trying to stick to the wall
-        console.log('trying with another direction:',this.dir);
+        this.dir = dirPlus(this.dir, 1); //trying to find something free there
+        console.log('got', view.look(this.dir),'trying with another direction:',this.dir);
         if (this.dir == start){console.log('dir==start, braking'); break}; //emergency exit if it stuck
         ;
             }
