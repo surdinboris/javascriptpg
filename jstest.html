@@ -941,8 +941,10 @@
 
 let plan =
     ["############################",
-        "# # # o ##",
-        "# #",
+        "# # # # ##",
+        "","",
+        " o ",
+        " ","",
         "# ##### #",
         "## # # ## #",
         "### ## # #",
@@ -1122,11 +1124,9 @@ World.prototype.checkDestination=function (action,vector) {
 function View (world, vector) {
     this.world = world;
     this.vector = vector;
-    }
-
+    };
 
 //searching part
-
 // returning element that on the way of creature
 View.prototype.look = function (dir) {
     let target = this.vector.plus(directions[dir]);
@@ -1144,6 +1144,7 @@ View.prototype.findAll = function (ch) { //cpllects all looked ch into array wit
     return found;
 };
 
+
 View.prototype.find = function (ch) {
     let found = this.findAll(ch);
     if (found.length == 0) return null;
@@ -1151,32 +1152,39 @@ View.prototype.find = function (ch) {
 };
 
 function dirPlus(dir, n) {
-    console.log('dirPlus', dir,n);
+    console.log('dirPlus called', dir,n);
     let index = directionNames.indexOf(dir); //calculating position index in directions
- //"n ne e se s sw w nw"
+    //"n ne e se s sw w nw"
+    console.log('dirPlus returned',directionNames[(index + n + 8) % 8]);
     return directionNames[(index + n + 8) % 8]; //(position+coeff+8) %8
 };
-
-BouncingCritter.prototype.act = function(view) {
-    if (view.look(this.direction) != " ")
-        this.direction = view.find(" ") || "s";
-    return {type: "move", direction: this.direction};
-};
+//
+// BouncingCritter.prototype.act = function(view) {
+//     if (view.look(this.direction) != " ")
+//         this.direction = view.find(" ") || "s";
+//     return {type: "move", direction: this.direction};
+// };
+//
 
 function WallFollwer() {
     this.dir='s';
-
 };
 
 WallFollwer.prototype.act=function (view) {
     let start=this.dir; // normally this.dir is s
 
-    if (view.look(dirPlus(this.dir, -3)) != ' ')
-          start = this.dir = dirPlus(this.dir, -2);
+    console.log('looking at this',view.look(dirPlus(this.dir, -3)), 'if this not empty - proceed');
+    if (view.look(dirPlus(this.dir, -3)) != ' ') {
+        console.log('assigning -2', view.look(dirPlus(this.dir, -2)));
+    };
+
+    start = this.dir = dirPlus(this.dir, -2);
+    console.log('start',start);
 
     while (view.look(this.dir) != ' '){
+
         this.dir = dirPlus(this.dir, 1); //trying to stick to the wall
-        console.log('trying with another direction:',this.dir,);
+        console.log('trying with another direction:',this.dir);
         if (this.dir == start){console.log('dir==start, braking'); break}; //emergency exit if it stuck
         ;
             }
