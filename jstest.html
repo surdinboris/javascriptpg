@@ -1121,6 +1121,9 @@ World.prototype.checkDestination=function (action,vector) {
     }
 
 };
+//View - middle object for creatures interaction with world -passing such an object to creature.act function
+//usage: critter.act(new View (this, vector))
+
 function View (world, vector) {
     this.world = world;
     this.vector = vector;
@@ -1194,18 +1197,87 @@ while (view.look(this.dir) != ' '){
     return {type:'move', direction: this.dir};
 };
 
+//-----------------------------------------new world
+function LifelikeWorld(map, legend) {
+    World.call(this, map, legend);
+}
+
+LifelikeWorld.prototype = Object.create(World.prototype);
+
+let actionTypes = Object.create(null);
+
+LifelikeWorld.prototype.letAct = function(critter, vector) {
+    let action = critter.act(new View(this, vector));
+    //new handled part
+    console.log(action.type,action.type in actionTypes, actionTypes[action.type].call(this, critter,
+        vector, action));
+    let handled = action &&
+        action.type in actionTypes &&
+        actionTypes[action.type].call(this, critter,
+            vector, action);
+    if (!handled) {
+        critter.energy -= 0.2;
+        if (critter.energy <= 0)
+            this.grid.set(vector, null);
+    }
+};
+
+actionTypes.grow = function(critter) {
+    critter.energy += 0.5;
+    return true;
+};
+
+actionTypes.move = function(critter, vector, action) {
+    let dest = this.checkDestination(action, vector);
+    if (dest == null ||
+        critter.energy <= 1 ||
+        this.grid.get(dest) != null)
+        return false;
+    critter.energy -= 1;
+    this.grid.set(vector, null);
+    this.grid.set(dest, critter);
+    return true;
+};
+
+actionTypes.eat = function(critter, vector, action) {
+    let dest = this.checkDestination(action, vector);
+    let atDest = dest != null && this.grid.get(dest);
+    if (!atDest || atDest.energy == null)
+        return false;
+    critter.energy += atDest.energy;
+    this.grid.set(dest, null);
+    return true;
+};
+
+actionTypes.reproduce = function(critter, vector, action) {
+    let baby = elementFromChar(this.legend,
+        critter.originChar);
+    let dest = this.checkDestination(action, vector);
+    if (dest == null ||
+        critter.energy <= 2 * baby.energy ||
+        this.grid.get(dest) != null)
+        return false;
+    critter.energy -= 2 * baby.energy;
+    this.grid.set(dest, baby);
+    return true;
+};
+
+
+
+//creating world
 
 let world = new World(plan, {'#': Wall, 'o': WallFollwer});
 for (let i=0; i<500; i++){
-    world.turn();
-    console.log(world.toString())
+    //world.turn();
+    //console.log(world.toString())
 };
 
 //console.log(view.look(dirPlus('n', -3)));
-console.log(dirPlus('n',1))
+console.log(dirPlus('n',1));
 //console.log(world.toString());
 
 //world.gridcustom();
+
 
 //==============object-this- call to other object function======
 //
@@ -1237,10 +1309,10 @@ console.log(dirPlus('n',1))
 // let amer= new Americanin('John');
 // amer.start();
 // amer.res();
-
-//Output:
-//Greznoy
-//Greznoy from Americanin obj
+//
+// //Output:
+// //Greznoy
+// //Greznoy from Americanin obj
 
 
 // ======================exercises ===================
