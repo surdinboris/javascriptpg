@@ -942,16 +942,16 @@
 let plan =
     ["############################",
         "# # # # ##",
-        "o","o",
-        " o ",
-        " o","",
-        "# o##### #",
-        "## o# # ## #",
-        "### o## # #",
-        "# o### #o #",
+        "o","o*",
+        '',
+        "****",
+        "# *##### #",
+        "## *# # P## #",
+        "### P*## # #",
+        "# *### #** #",
         "# #### #",
-        "# o##o  #",
-        "#  o#  o### #",
+        "# o##*  #",
+        "#  *#  *### #",
         "# #o #",
         "############################"];
 
@@ -1012,14 +1012,6 @@ function randomElement(array) {
 };
 
 let directionNames = "n ne e se s sw w nw".split(" ");
-
-//specific critter with its movement logic
-function BouncingCritter() {
-    this.direction = randomElement(directionNames); //every critter mooves in random direction
-};
-
-
-
 
 
 function charFromElement(element) {
@@ -1116,7 +1108,7 @@ World.prototype.letAct=function (critter,vector) {
 World.prototype.checkDestination=function (action,vector) {
     console.log('action, vector(cur position) passed to checkDestination',action,vector);
     if (directions.hasOwnProperty(action.direction)){
-        let dest= vector.plus(directions[action.direction]);
+        let dest = vector.plus(directions[action.direction]);
         if (this.grid.isInside(dest)){
             console.log(dest);
             return dest};
@@ -1213,16 +1205,16 @@ let actionTypes = Object.create(null);
 LifelikeWorld.prototype.letAct = function(critter, vector) {
     let action = critter.act(new View(this, vector));
     //new handled part
-    console.log(action.type,action.type in actionTypes, actionTypes[action.type].call(this, critter,
-        vector, action));
+   // console.log(action.type,action.type in actionTypes, actionTypes[action.type].call(this, critter,
+    //    vector, action));
     let handled = action &&
         action.type in actionTypes &&
         actionTypes[action.type].call(this, critter,
             vector, action);
     if (!handled) {
         critter.energy -= 0.2;
-        if (critter.energy <= 0)
-            this.grid.set(vector, null);
+        // if (critter.energy <= 0)
+        //     this.grid.set(vector, null);
     }
 };
 
@@ -1232,11 +1224,15 @@ actionTypes.grow = function(critter) {
 };
 
 actionTypes.move = function(critter, vector, action) {
+    console.log(critter == 'Predator');
     let dest = this.checkDestination(action, vector);
     if (dest == null ||
         critter.energy <= 1 ||
         this.grid.get(dest) != null)
         return false;
+
+    if (critter.prototype =='')
+        critter.energy -= 3;
     critter.energy -= 1;
     this.grid.set(vector, null);
     this.grid.set(dest, critter);
@@ -1245,9 +1241,11 @@ actionTypes.move = function(critter, vector, action) {
 
 actionTypes.eat = function(critter, vector, action) {
     let dest = this.checkDestination(action, vector);
-    let atDest = dest != null && this.grid.get(dest);
-    if (!atDest || atDest.energy == null)
+    let atDest = (dest != null) && this.grid.get(dest); //something eatable -if dest != null, getting
+
+    if (!atDest || atDest.energy == null) // atDest inverted because we deciding to return false - if true or true return false
         return false;
+
     critter.energy += atDest.energy;
     this.grid.set(dest, null);
     return true;
@@ -1266,19 +1264,57 @@ actionTypes.reproduce = function(critter, vector, action) {
     return true;
 };
 
+function Plant() {
+    this.energy = 3 + Math.random() * 4;
+}
+Plant.prototype.act = function(view) {
+    if (this.energy > 40) {
+        var space = view.find(" ");
+        if (space)
+            return {type: "reproduce", direction: space};
+    }
+    if (this.energy < 20)
+        return {type: "grow"};
+};
+function PlantEater() {
+    this.energy = 20;
+}
+PlantEater.prototype.act = function(view) {
+    var space = view.find(" ");
+    if (this.energy > 60 && space)
+        return {type: "reproduce", direction: space};
+    var plant = view.find("*");
+    var planteater = view.find("o");
+    if (planteater)
+        return {type: "eat", direction: planteater};
+    if (plant )
+        return {type: "eat", direction: plant};
+    if (space)
+        return {type: "move", direction: space};
 
+};
+function Predator() {
+    this.energy = 20;
+}
+Predator.prototype.act = function(view) {
+    var space = view.find(" ");
+    if (this.energy > 60 && space)
+        return {type: "reproduce", direction: space};
+    var planteater = view.find("o");
+    if (planteater)
+        return {type: "eat", direction: planteater};
+    if (space)
+        return {type: "move", direction: space};
 
+};
 //creating world
 
-let world = new World(plan, {'#': Wall, 'o': WallFollwer});
-for (let i=0; i<500; i++){
+let world = new LifelikeWorld(plan, {'#': Wall, 'o': PlantEater, '*': Plant, 'P':Predator});
+for (let i=0; i<5000; i++){
     world.turn();
     console.log(world.toString())
 };
 
-//console.log(view.look(dirPlus('n', -3)));
-console.log(dirPlus('n',1));
-//console.log(world.toString());
 
 //world.gridcustom();
 
