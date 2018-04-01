@@ -942,7 +942,7 @@
 let plan =
     ["############################",
         "# # # # ##",
-        "o","o*",
+        "o","**",
         '',
         "****",
         "# *##### #",
@@ -950,9 +950,9 @@ let plan =
         "### P*## # #",
         "# *### #** #",
         "# #### #",
-        "# o##*  #",
+        "# ##*  #",
         "#  *#  *### #",
-        "# #o #",
+        "# # #",
         "############################"];
 
 
@@ -1095,7 +1095,7 @@ World.prototype.turn = function () { //World acting an objects
 
 //internal World's method
 World.prototype.letAct=function (critter,vector) {
-    let action = critter.act(new View (this, vector)); //critter get a View object and a vector  andr eturns its action
+    let action = critter.act(new View (this, vector)); //critter gets a View object and a vector  and returns its action
     if (action && action.type == 'move'){
         let dest = this.checkDestination(action, vector);
         if (dest && this.grid.get(dest) == null) {
@@ -1106,12 +1106,13 @@ World.prototype.letAct=function (critter,vector) {
 };
 
 //internal World's method
+//checks possibility of moving to given location
 World.prototype.checkDestination=function (action,vector) {
-    //console.log('action, vector(cur position) passed to checkDestination',action,vector);
+    //action exmpl {type: "move", direction: "n"}
+    //Vector exmpl {x: 0, y: 2}
     if (directions.hasOwnProperty(action.direction)){
         let dest = vector.plus(directions[action.direction]);
         if (this.grid.isInside(dest)){
-            console.log(dest);
             return dest};
     }
 
@@ -1134,12 +1135,12 @@ else return "#";
 };
 
 View.prototype.findAll = function (ch) { //collects all looked ch into array with directions
-    console.log('findal called with ', ch);
+    //console.log('findal called with ', ch);
     let found = [];
     for (var dir in directions)
         if (this.look(dir) == ch)
             found.push(dir);
-    console.log('found all',found);
+    //console.log('found all',found);
     return found;
 };
 
@@ -1151,10 +1152,10 @@ View.prototype.find = function (ch) {
 };
 
 function dirPlus(dir, n) {
-    console.log('dirPlus called', dir,n);
+    //console.log('dirPlus called', dir,n);
     let index = directionNames.indexOf(dir); //calculating position index in directions
     //"n ne e se s sw w nw"
-    console.log('dirPlus returned',directionNames[(index + n + 8) % 8]);
+    //console.log('dirPlus returned',directionNames[(index + n + 8) % 8]);
     return directionNames[(index + n + 8) % 8]; //(position+coeff+8) %8
 };
 
@@ -1229,8 +1230,9 @@ actionTypes.move = function(critter, vector, action) {
     let dest = this.checkDestination(action, vector);
     if (dest == null ||
         critter.energy <= 1 ||
-        this.grid.get(dest) != null)
-        return false;
+        this.grid.get(dest) != null){
+        console.log('critter doesnt move',critter, 'dest',dest, action);
+        return false;}
 
     if (critter.constructor==Predator) //for predator movement is harder
         critter.energy -= 2;
@@ -1282,55 +1284,64 @@ Plant.prototype.act = function(view) {
 
 function PlantEater() {
     this.energy = 30;
-    this.dir='s';
+    this.dir='e';
 }
 PlantEater.prototype.act = function(view) {
     var start = this.dir;
+    var space = view.find(" ");
+
     //------------
     //console.log('looking at this ->',view.look(dirPlus(this.dir, -3)), '<-if this not empty - start and this.dir to -2');
     //stucking part - looking forward to -3, and if it occupied - going to neighbor direction cell -2
-    if (view.look(dirPlus(this.dir, -3)) != ' ')
-           start=this.dir = dirPlus(this.dir, -2);
-        while (view.look(this.dir) != ' ') {
-            this.dir = dirPlus(this.dir, 1); //trying to find something free there
-            if (this.dir == start) {
-                console.log('dir==start, breaking');
-                break
-            }; //emergency exit if it stuck
-        };
+    if (view.look(dirPlus(this.dir, -3)) != ' ') {
+        this.dir = dirPlus(this.dir, -2)
+    }
 
+    while (view.look(this.dir) != ' ') {
+        this.dir = dirPlus(this.dir, 1); //trying to find something free there
+        if (this.dir == start) {
+            //console.log('dir==start, breaking');
+            break
+        }
+        ; //emergency exit if it stuck
+    }
+    ;
+    if (this.dir != start)
+        space = start;
+    //console.log('space',space)}
     //------------
     if (this.energy > 60 && space)
         return {type: "reproduce", direction: space};
 
     var plant = view.find("*");
-    if (plant )
+    if (plant)
         return {type: "eat", direction: plant};
-    if (this.dir != start)
-        return {type: "move", direction: this.dir};
-
-};
-function Predator() {
-    this.energy = 20;
-}
-Predator.prototype.act = function(view) {
-    var space = view.find(" ");
-    if (this.energy > 30 && space)
-        return {type: "reproduce", direction: space};
-    var planteater = view.find("o");
-    if (planteater)
-        return {type: "eat", direction: planteater};
     if (space)
         return {type: "move", direction: space};
 
 };
+    function Predator() {
+        this.energy = 20;
+    }
+
+    Predator.prototype.act = function (view) {
+        var space = view.find(" ");
+        if (this.energy > 900 && space)
+            return {type: "reproduce", direction: space};
+        var planteater = view.find("o");
+        if (planteater)
+            return {type: "eat", direction: planteater};
+        if (space)
+            return {type: "move", direction: space};
+
+    };
 //creating world
 
 let world = new LifelikeWorld(plan, {'#': Wall, 'o': PlantEater, '*': Plant, 'P':Predator});
 for (let i=0; i<5000; i++){
     world.turn();
     console.log(world.toString())
-};
+}
 
 
 //world.gridcustom();
