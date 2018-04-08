@@ -5,8 +5,14 @@
     <script>
 //
         //console.log(/[0345678]/.exec("in 1992"));
-        var cartoonCrying = /^(\w+ [^e]+|[^e ]+ \w+)$/;
-        console.log(cartoonCrying.exec("abcx e"));
+var text = "'I'm the cook,' he said, 'it's my job.'";
+// Change this call.
+console.log(text.replace(/^'|(\W)'|'(\W)/g, "\"$1$2"));
+// → "I'm the cook," he said, "it's my job."
+
+        var cartoonCrying = /\w*[^-]/g;
+        console.log(("VRYJR-NT2FW-YMWVM-YB72V-8HVF3".match(cartoonCrying))[0]);
+        console.log()
 // ////////////////////////////////////////////////////////////
 //         function stripComments(code) {
 //             return code.replace(/\/\/.*|\/\*[^]*\*\//g, "");
