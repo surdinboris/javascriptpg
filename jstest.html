@@ -3,16 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <script>
-//
-        //console.log(/[0345678]/.exec("in 1992"));
-var text = "'I'm the cook,' he said, 'it's my job.'";
-// Change this call.
-console.log(text.replace(/^'|(\W)'|'(\W)/g, "\"$1$2"));
-// → "I'm the cook," he said, "it's my job."
+        //objects wrapping - hidden namespaces
+        let readFileSimpl=function(data) {return data.concat(String("passed to readFile obj returns"))};
+        readFileSimpl('546ghb4');
 
-        var cartoonCrying = /\w*[^-]/g;
-        console.log(("VRYJR-8HVF3".match(cartoonCrying))[0]);
-        console.log()
+        let readFile="return n.concat(String(\" passed to readFile obj returns\"))";
+        function require(somefile){  // instead readFile("weekDay")
+            let code=new Function("n", somefile);
+            // let exports= {};
+            // code(exports);
+            return(code('456'));
+            //return code(567);
+        }
+
+        console.log(require(readFile));
+        //
+        // // //
+//         //console.log(/[0345678]/.exec("in 1992"));
+// var text = "'I'm the cook,' he said, 'it's my job.'";
+// // Change this call.
+// console.log(text.replace(/^'|(\W)'|'(\W)/g, "\"$1$2"));
+// // → "I'm the cook," he said, "it's my job."
+//
+//         var cartoonCrying = /\w*[^-]/g;
+//         console.log(("VRYJR-8HVF3".match(cartoonCrying))[0]);
+//         console.log()
 // ////////////////////////////////////////////////////////////
 //         function stripComments(code) {
 //             return code.replace(/\/\/.*|\/\*[^]*\*\//g, "");
