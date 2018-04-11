@@ -3,20 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <script>
-        //objects wrapping - hidden namespaces
-        let readFileSimpl=function(data) {return data.concat(String("passed to readFile obj returns"))};
-        readFileSimpl('546ghb4');
+//============exchanging via object passed to module when creating===============
+        (function(exports) {
+            var names = ["Sunday", "Monday", "Tuesday", "Wednesday",
+                "Thursday", "Friday", "Saturday"];
+            exports.daybynum= function (number) {
+                   return names[number];
+            };
+        })(this.expr={});
+        console.log(expr.daybynum(5));
 
-        let readFile="return n.concat(String(\" passed to readFile obj returns\"))";
-        function require(somefile){  // instead readFile("weekDay")
-            let code=new Function("n", somefile);
-            // let exports= {};
-            // code(exports);
-            return(code('456'));
-            //return code(567);
-        }
+//=============require solves a global expr={} need ==============================
+        let readFile=function(){return "{exports.n='data generated in in loaded from string function';return exports}"};
 
-        console.log(require(readFile));
+        function require(name) {
+            var code = new Function("exports", readFile(name)); // readFile - pseudo function
+            //code prebuilded with an exports argument, so in the code string is stored only function variables
+            // and body (see code.toString() output below. As result of require code execution - we have an exports object
+            //with essential number an name functions and variable environment packed into exports object - ready to use.
+            var exports = {};
+            code(exports);
+            return exports;
+            }
+
+        //code.toString() output:
+            //function anonymous(exports/*``*/) {
+        //var names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        // exports.name = function(number) {
+        // return names[number]; };
+
+        // exports.number = function(name) {
+        // return names.indexOf(name); };
+        //}
+
+
+        console.log(require("weekDay").n);
+
+
+// → Monday
+
+        // let readFileSimpl=function(data) {return data.concat(String("passed to readFile obj returns"))};
+        // readFileSimpl('546ghb4');
+        //
+        // let readFile="return n.concat(String(\" passed to readFile obj returns\"))";
+        // function require(somefile){  // instead readFile("weekDay")
+        //     let code=new Function("n", somefile);
+        //     // let exports= {};
+        //     // code(exports);
+        //     return(code('456'));
+        //     //return code(567);
+        // }
+        // console.log(require(readFile));
+
         //
         // // //
 //         //console.log(/[0345678]/.exec("in 1992"));
@@ -2034,8 +2072,6 @@
 // console.log(PityParty.clown, 'before changing');
 // PityParty.clown='Brave clown';
 // console.log(PityParty.clown, 'after changing');
-//
-
 
 
 // //higher order functions
@@ -2219,7 +2255,7 @@
 
 //
 
-        </script>
+
         <!--var ANCESTRY_FILE = JSON.stringify([-->
             <!--{"name": "Carolus Haverbeke", "sex": "m", "born": 1832, "died": 1905, "father": "Carel Haverbeke", "mother": "Maria van Brussel"},-->
             <!--{"name": "Emma de Milliano", "sex": "f", "born": 1876, "died": 1956, "father": "Petrus de Milliano", "mother": "Sophia van Damme"},-->
@@ -2266,15 +2302,19 @@
 
         <!--var theSet = ["Carel Haverbeke", "Maria van Brussel",-->
             <!--"Donald Duck"];-->
-        <!--function isInSet(set, person) {-->
-            <!--return set.indexOf(person.name) > -1;-->
-        <!--}-->
 
-        <!--console.log(isInSet(theSet,"Carel Haverbeke"));-->
+        <!--function isInSet(set, person) {-->
+            <!--return set.indexOf(person) > -1;-->
+       <!--}-->
+
+        <!--&lt;!&ndash;console.log(isInSet(theSet,"Carel Haverbeke"));&ndash;&gt;-->
 
         <!--console.log(ancestry.map(function(person) {-->
-            <!--return isInSet(theSet, person);-->
-        <!--}));-->
+            <!--return isInSet(theSet, person.name);-->
+            <!--}));-->
+
+   </script>
+
         <!--//-->
         <!--console.log(ancestry.filter(isInSet.bind(null, theSet)));-->
 
