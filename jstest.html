@@ -14,7 +14,7 @@
         console.log(expr.daybynum(5));
 
 //=============require solves a global expr={} need ==============================
-        let readFile=function(){return "{exports.n='data generated in in loaded from string function';return exports}"};
+        let readFile=function(){return "{exports.s='in readFile returning string object set training'; exports.fun=function(){return 'test call return'};exports.n='data generated in in loaded from string function'}"};
 
         function require(name) {
             var code = new Function("exports", readFile(name)); // readFile - pseudo function
@@ -38,7 +38,8 @@
 
 
         console.log(require("weekDay").n);
-
+        console.log(require("weekDay").s);
+        console.log(require("weekDay").fun());
 
 // → Monday
 
