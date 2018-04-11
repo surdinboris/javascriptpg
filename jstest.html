@@ -5,41 +5,69 @@
     <script>
 //============exchanging via object passed to module when creating===============
         (function(exports) {
-            var names = ["Sunday", "Monday", "Tuesday", "Wednesday",
+            let names = ["Sunday", "Monday", "Tuesday", "Wednesday",
                 "Thursday", "Friday", "Saturday"];
             exports.daybynum= function (number) {
                    return names[number];
             };
         })(this.expr={});
         console.log(expr.daybynum(5));
+(function() {console.log('today is',expr.daybynum((new Date).getDay())); })(); //
 
 //=============require solves a global expr={} need ==============================
         let readFile=function(){return "{exports.s='in readFile returning string object set training'; exports.fun=function(){return 'test call return'};exports.n='data generated in in loaded from string function'}"};
 
         function require(name) {
-            var code = new Function("exports", readFile(name)); // readFile - pseudo function
+            let code = new Function("exports", readFile(name)); // readFile - pseudo function
             //code prebuilded with an exports argument, so in the code string is stored only function variables
             // and body (see code.toString() output below. As result of require code execution - we have an exports object
             //with essential number an name functions and variable environment packed into exports object - ready to use.
-            var exports = {};
+            let exports = {};
             code(exports);
             return exports;
             }
 
-        //code.toString() output:
-            //function anonymous(exports/*``*/) {
-        //var names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        // exports.name = function(number) {
-        // return names[number]; };
+//code.toString() output:
+//function anonymous(exports/*``*/) {
+//var names = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// exports.name = function(number) {
+// return names[number]; };
 
-        // exports.number = function(name) {
-        // return names.indexOf(name); };
-        //}
+// exports.number = function(name) {
+// return names.indexOf(name); };
+//}
 
 
-        console.log(require("weekDay").n);
-        console.log(require("weekDay").s);
-        console.log(require("weekDay").fun());
+console.log(require("weekDay").n);
+console.log(require("weekDay").s);
+console.log(require("weekDay").fun());
+
+
+//==============today in string================================
+let readFile2=function(exp){return "{return exports.td=(new Date).getDay()}"};
+
+function require2(name) {
+    let code = new Function("exports", readFile2(name));
+    let exports = {};
+    code(exports);
+    return exports;
+}
+console.log(require2('sdfsdf').td);
+console.log('today is', expr.daybynum(require2('sdfsdf').td));
+
+//================conventional usage of exports - inside of module object==================
+
+function require3(name) {
+    if (name in require3.cache)
+        return require3.cache[name];
+    let code = new Function("exports, module", readFile(name));
+    let exports = {}, module = {exports: exports};
+    code(exports, module);
+    require.cache[name] = module.exports;
+    return module.exports;
+}
+require3.cache = Object.create(null);
+
 
 // → Monday
 
