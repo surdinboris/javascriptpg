@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <script>
+
+//==================define=======================================================
+define(["weekDay", "today"], function(weekDay, today) {
+    console.log(weekDay.name(today.dayNumber()));
+});
+
+//weekDay module
+define([], function() {
+    var names = ["Sunday", "Monday", "Tuesday", "Wednesday",
+        "Thursday", "Friday", "Saturday"];
+    return {
+        name: function(number) { return names[number]; },
+        number: function(name) { return names.indexOf(name); }
+    };
+});
+
 //============exchanging via object passed to module when creating===============
         (function(exports) {
             let names = ["Sunday", "Monday", "Tuesday", "Wednesday",
