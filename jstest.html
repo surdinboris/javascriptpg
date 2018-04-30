@@ -5,6 +5,37 @@
     <script>
 
 //=====================module exercises============================================
+function map(array, transform) {
+    let mapped = [];
+    for (let element of array) {
+        mapped.push(transform(element));
+    }
+    return mapped;
+}
+
+function firstTest(testedVal,firstLetters){
+    let conditions=[];
+    let result=true;
+    for(let a in arguments){
+        conditions.push(arguments[a])
+    };
+    conditions.splice(1,0);
+
+    for(let c in conditions){
+        if(conditions[c] == testedVal[0]){
+            result=false;
+        }
+    }
+    return result
+};
+
+//firstTest('caavvv','a','b','c');
+
+let rtlScripts =
+    SCRIPTS.filter(s => s.direction == "rtl").map(s => s.name).filter(s => firstTest(s, "A","I","M","P"));
+console.log(rtlScripts);
+
+// → {x: "10", y: "20"}
 // (function(exports) {
 //     var names = ["Jan", "Feb", "Mar", "Apr",
 //         "May", "Jun", "Jul","Aug", "Sep", "Oct","Nov", "Dec"];
@@ -184,6 +215,20 @@
 //         box.unlock();
 //         console.log(box.content);
 //         // → true
+//
+//
+//
+// const str="x= gold\ny= 20\n\;commented hfghfghf\nrt=6\n65=uy";
+// let rows=str.split(/\r?\n/);
+// let res={};
+// rows.forEach(function (row) {
+//     console.log('parsing row', row);
+//     let mat;
+//     if (mat=row.match(/^(\w+)=(.*)$/)){
+//         res[mat[1]]=mat[2];
+//     }
+// });
+// console.log(res);
         //================debugging=====================================================
 //         function MultiplicatorUnitFailure() {}
 //
