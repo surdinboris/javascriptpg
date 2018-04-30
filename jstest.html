@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <script>
 
+//============require disassembly===============================
+require.cache = Object.create(null);
+
+function require(name) {
+    if (!(name in require.cache)) {
+        //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+        let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+        let module = {exports: {}};
+        //console.log(module);
+        require.cache[name] = module;
+        let wrapper = Function("require, exports, module", code);
+        wrapper(require, module.exports, module);
+        console.log("--------------------");
+        console.log(module);
+    }
+    return require.cache[name].exports;
+}
+const {parse} = require("ini");
 //=====================module exercises============================================
 function map(array, transform) {
     let mapped = [];
@@ -1286,7 +1304,21 @@ console.log(rtlScripts);
 <!--// console.log(flatts(ara))-->
 
     <script>
-//===================world======================
+//         const power = base =>   base*7777777777888;
+//         let from=6;
+//         let to = '45';
+//         let ar2=['34-2','2-3','8-3','9-2'];
+//         for(let [from, to] of ar2.map(r=>r.split('-'))){
+//             console.log(from);
+//             console.log(to);
+//         }
+//         let hi="";
+//
+//         let hh = hi = '90';
+//         console.log(hi);
+//         console.log(hh);
+//
+// //===================world======================
 //
 // let plan =
 //     ["############################",
@@ -1304,37 +1336,34 @@ console.log(rtlScripts);
 //         "# o# #*",
 //         "############################"];
 //
-//
-// function Grid(width,heigth) {
-//     this.width = width;
-//     this.height = heigth;
-//     this.space=Array(width*heigth)
-//
-// };
-//
-// Grid.prototype.isInside = function(vector) {
-//     return vector.x >=0&& vector.x < this.width &&
-//             vector.y >=0 && vector.y <this.height
-// };
-//
-// Grid.prototype.get=function (vector) {
-//     return this.space[vector.x+this.width*vector.y];
+// (function(exports){
+//     exports.Grid=function Grid(width, heigth) {
+//         this.width = width;
+//         this.height = heigth;
+//         this.space = Array(width * heigth)
 //     };
 //
-// Grid.prototype.set=function (vector, value) { //assigning coordinates  according object
-//     this.space[vector.x+this.width*vector.y]=value;
+//     exports.Grid.prototype.isInside = function (vector) {
+//         return vector.x >= 0 && vector.x < this.width &&
+//             vector.y >= 0 && vector.y < this.height
 //     };
 //
+//     exports.Grid.prototype.get = function (vector) {
+//         return this.space[vector.x + this.width * vector.y];
+//     };
 //
+//     exports.Grid.prototype.set = function (vector, value) { //assigning coordinates  according object
+//         this.space[vector.x + this.width * vector.y] = value;
+//     };
 //
 // //creating vector data object
-// function Vector(x,y) {
-//     this.x=x;
-//     this.y=y;
-//     }
-// Vector.prototype.plus=function (other) {
-// return new Vector(this.x+other.x, this.y+other.y);
-// };
+//     exports.Vector=function Vector(x, y) {
+//         this.x = x;
+//         this.y = y;
+//     };
+//     exports.Vector.prototype.plus = function (other) {
+//         return new Vector(this.x + other.x, this.y + other.y);
+//     };
 //
 // //testing
 // // let vec= new Vector(3,9);
@@ -1345,25 +1374,45 @@ console.log(rtlScripts);
 // // grd.set(new Vector(5,9),'hjk');
 // // console.log(grd.space);
 // // console.log(grd.get(new Vector(3,4)));
-// let directions= {
-//     "n" : new Vector(0,-1),
-//     "ne" : new Vector(1,-1),
-//     "e" : new Vector(1,0),
-//     "se" : new Vector(1,1),
-//     "s" : new Vector(0,1),
-//     "sw" : new Vector(-1,1),
-//     "w" : new Vector(-1,0),
-//     "nw" : new Vector(-1,-1),
-// };
+//     exports.directions = {
+//         "n": new exports.Vector(0, -1),
+//         "ne": new exports.Vector(1, -1),
+//         "e": new exports.Vector(1, 0),
+//         "se": new exports.Vector(1, 1),
+//         "s": new exports.Vector(0, 1),
+//         "sw": new exports.Vector(-1, 1),
+//         "w": new exports.Vector(-1, 0),
+//         "nw": new exports.Vector(-1, -1),
+//     };
+//     exports.Grid.prototype.forach = function(f, context) { //custom forEach that iterates over grid structure and calculating value(critter) and vector
+//         //console.log('grid this - no world', this);
+//         for (let y = 0; y < this.height; y++) {
+//             for (let x = 0; x < this.width; x++) {   //and calls passed function  in passed context for each value of grid
+//                 //(first part of code iterates over grid's rows and characters and calculates value
+//                 let value = this.space[x + y * this.width]; //core thing of the forach function - retrieving a value by custom shift y * this.width
+//                 if (value != null) {
+//                     f.call(context, value, new exports.Vector(x, y));
+//                     //f(value, new Vector(x, y));//context - .this for called function f, value - critter, new Vector - with calculated by loops x and y
+//                 }}}
 //
-// function randomElement(array) {
-//     return array[Math.floor(Math.random() * array.length)];
-// };
+//     };
+//     exports.directionNames = "n ne e se s sw w nw".split(" ");
 //
-// let directionNames = "n ne e se s sw w nw".split(" ");
+// })(this.gridm={});
 //
+// let Grid = gridm.Grid;
+// let Vector = gridm.Vector;
+// let directions=gridm.directions;
+// let directionNames=gridm.directionNames;
 //
-// function charFromElement(element) {
+// //======================================================================
+// //=======================world module===================================
+// (function(exports){
+//     let randomElement= function(array){return array[Math.floor(Math.random() * array.length)]};
+//
+// //let randomElement=randomElementmod.re;
+//
+// let charFromElement=function(element) {
 //     if (element == null)
 //         return " ";
 //     else
@@ -1371,119 +1420,112 @@ console.log(rtlScripts);
 // };
 //
 // //retrieving element names from legend passed to World when creating a new World object
-// function elementFromChar(legend, ch) {
+//  exports.elementFromChar=function(legend, ch) {
 //     if (ch == " ")
 //         return null;
 //     let element = new legend[ch]();
-//     element.originChar = ch;
+//      //let World=worldm.World;
+//
+//
+//      element.originChar = ch;
 //     return element;
-// }
+// };
 //
 // // creating world
-// function World(plan, legend) {
+// //     let view=function(world, vector) {
+// //         this.world = world;
+// //         this.vector = vector;
+// //     };
+//
+//    // exports.View =view;
+//
+//     exports.World = function World(plan, legend) {
 //     let grid = new Grid(plan[0].length, plan.length); //retrieving dimensions of passed plan(map) and building a Grid object
 //     this.grid = grid;
 //     this.legend = legend;
+//
+//
 //     plan.forEach(function(line, y) { //disassembling map's rows and iterating over each line - filling grid with proper named objects as described in legend
 //         for (let x = 0; x < line.length; x++)
-//             grid.set(new Vector(x, y),elementFromChar(legend, line[x])); //building vectors for each character in row with object
+//             grid.set(new Vector(x, y),exports.elementFromChar(legend, line[x])); //building vectors for each character in row with object
 //                  //passed via legend-function elementFromChar
 //     });
-//     //this.grid.forEach(console.log,this);
-// };
+//
+//         exports.World.prototype.turn = function () { //World acting an objects
+//
+//             let acted=[];
+//             //f, context to passing in forach (f.call - function, context will be passed as this, critter -value, new Vector - vector)
+//             //calling grid's forach with a function below
+//             this.grid.forach(function (critter,vector) { //critter and vector will be populated with function call in forach
+//                 //console.log('this from World',this);
+//                 //console.log(critter,vector);
+//                 if (critter.act && acted.indexOf(critter) == -1){
+//                     acted.push(critter); //after manipulations above critter and vector will be calculated and available in this context
+//                     this.letAct(critter,vector); //so passing critter, vector //arguments passed fine, but f without .call affects that tis .Act method could not be retrieved in this that now is a global object...
+//                 }
+//             },this);
+//         };
+//
+// //internal World's method
+//         exports.World.prototype.letAct=function (critter,vector) {
+//             let action = critter.act(new View (this, vector)); //critter gets a View object and a vector  and returns its action
+//             if (action && action.type == 'move'){
+//                 let dest = this.checkDestination(action, vector);
+//                 if (dest && this.grid.get(dest) == null) {
+//                     this.grid.set(vector,null);
+//                     this.grid.set (dest,critter)
+//                 }
+//             }
+//         };
+//
+// //internal World's method
+// //checks possibility of moving to given location
+//         exports.World.prototype.checkDestination=function (action,vector) {
+//             //action exmpl {type: "move", direction: "n"}
+//             //Vector exmpl {x: 0, y: 2}
+//             if (directions.hasOwnProperty(action.direction)){
+//                 let dest = vector.plus(gridm.directions[action.direction]);
+//                 if (this.grid.isInside(dest)){
+//                     return dest};
+//             }
+//         };
+//         exports.World.prototype.toString = function() {
+//             let output = "";
+//             for (let y = 0; y < this.grid.height; y++) {
+//                 for (let x = 0; x < this.grid.width; x++) {
+//                     let element = this.grid.get(new Vector(x, y)); // passing newly created 'query' Vector with x and y calculated based on grid's geometry props
+//                     output += charFromElement(element); //looping with two loops over world's rows and characterss
+//                 }
+//                 output += "\n"; //and adding them to output string with eol
+//             }
+//             return output;
+//         };
+//     };
 //
 //
+//         //this.grid.forEach(console.log,this);
 //
 // // World.prototype.gridcustom=function () {
 // //     this.grid.forEach(console.log, this)
 // //
 // // }
-//
-// World.prototype.toString = function() {
-//     let output = "";
-//     for (let y = 0; y < this.grid.height; y++) {
-//         for (let x = 0; x < this.grid.width; x++) {
-//             let element = this.grid.get(new Vector(x, y)); // passing newly created 'query' Vector with x and y calculated based on grid's geometry props
-//             output += charFromElement(element); //looping with two loops over world's rows and characterss
-//         }
-//         output += "\n"; //and adding them to output string with eol
-//     }
-//     return output;
-// };
-//
-// function Wall() {};
-//
-// Grid.prototype.forach = function(f, context) { //custom forEach that iterates over grid structure and calculating value(critter) and vector
-//     //console.log('grid this - no world', this);
-//     for (let y = 0; y < this.height; y++) {
-//         for (let x = 0; x < this.width; x++) {   //and calls passed function  in passed context for each value of grid
-//             //(first part of code iterates over grid's rows and characters and calculates value
-//             let value = this.space[x + y * this.width]; //core thing of the forach function - retrieving a value by custom shift y * this.width
-//             if (value != null) {
-//                 f.call(context, value, new Vector(x, y));
-//                 //f(value, new Vector(x, y));//context - .this for called function f, value - critter, new Vector - with calculated by loops x and y
-//             }}}
-//
-// };
-//
-// World.prototype.turn = function () { //World acting an objects
-//
-//     let acted=[];
-//                 //f, context to passing in forach (f.call - function, context will be passed as this, critter -value, new Vector - vector)
-//                 //calling grid's forach with a function below
-//     this.grid.forach(function (critter,vector) { //critter and vector will be populated with function call in forach
-//         //console.log('this from World',this);
-//         //console.log(critter,vector);
-//         if (critter.act && acted.indexOf(critter) == -1){
-//             acted.push(critter); //after manipulations above critter and vector will be calculated and available in this context
-//             this.letAct(critter,vector); //so passing critter, vector //arguments passed fine, but f without .call affects that tis .Act method could not be retrieved in this that now is a global object...
-//         }
-//     },this);
-//
-// };
-//
-// //internal World's method
-// World.prototype.letAct=function (critter,vector) {
-//     let action = critter.act(new View (this, vector)); //critter gets a View object and a vector  and returns its action
-//     if (action && action.type == 'move'){
-//         let dest = this.checkDestination(action, vector);
-//         if (dest && this.grid.get(dest) == null) {
-//             this.grid.set(vector,null);
-//             this.grid.set (dest,critter)
-//         }
-//     }
-// };
-//
-// //internal World's method
-// //checks possibility of moving to given location
-// World.prototype.checkDestination=function (action,vector) {
-//     //action exmpl {type: "move", direction: "n"}
-//     //Vector exmpl {x: 0, y: 2}
-//     if (directions.hasOwnProperty(action.direction)){
-//         let dest = vector.plus(directions[action.direction]);
-//         if (this.grid.isInside(dest)){
-//             return dest};
-//     }
-//
-// };
 // //View - middle object for creatures interaction with world -passing such an object to creature.act function
 // //usage: critter.act(new View (this, vector))
 //
-// function View (world, vector) {
-//     this.world = world;
-//     this.vector = vector;
-//     };
-//
 // //searching part
 // // returning element that on the way of creature
-// View.prototype.look = function (dir) {
+//     exports.View=function View(world, vector) {
+//         this.world = world;
+//         this.vector = vector;
+//     };
+// exports.View.prototype.look = function (dir) {
 //     let target = this.vector.plus(directions[dir]);
 //     if (this.world.grid.isInside(target))
 //         return charFromElement(this.world.grid.get(target));
 // else return "#";
 // };
 //
-// View.prototype.findAll = function (ch) { //collects all looked ch into array with directions
+//     exports.View.prototype.findAll = function (ch) { //collects all looked ch into array with directions
 //     //console.log('findal called with ', ch);
 //     let found = [];
 //     for (var dir in directions)
@@ -1493,12 +1535,47 @@ console.log(rtlScripts);
 //     return found;
 // };
 //
-//
-// View.prototype.find = function (ch) {
+//     exports.View.prototype.find = function (ch) {
 //     let found = this.findAll(ch);
 //     if (found.length == 0) return null;
 //     return randomElement(found); //retrieving a random element from found directions
 // };
+//
+//
+//     exports.LifelikeWorld=function LifelikeWorld(map, legend) {
+//         World.call(this, map, legend);
+//     };
+//
+//     exports.LifelikeWorld.prototype = Object.create(exports.World.prototype);
+//
+//
+//
+//     exports.LifelikeWorld.prototype.letAct = function(critter, vector) {
+//
+//         let action = critter.act(new View(this, vector));
+//         //////////////////////////console.log(critter,'action',action);
+//         let handled = action &&
+//             action.type in actionTypes &&
+//             actionTypes[action.type].call(this, critter,
+//                 vector, action);
+//         if (!handled) {
+//             critter.energy -= 0.01;
+//             if (critter.energy <= 0)
+//                 this.grid.set(vector, null);
+//         }
+//     };
+//
+//
+// })(this.Worldm={});
+//
+// let World=Worldm.World;
+// let View=Worldm.View;
+// let LifelikeWorld=Worldm.LifelikeWorld;
+//
+// //==================================================================
+//
+//
+// function Wall() {};
 //
 // function dirPlus(dir, n) {
 //     //console.log('dirPlus called', dir,n);
@@ -1507,29 +1584,8 @@ console.log(rtlScripts);
 //     //console.log('dirPlus returned',directionNames[(index + n + 8) % 8]);
 //     return directionNames[(index + n + 8) % 8]; //(position+coeff+8) %8
 // };
-//
-// function LifelikeWorld(map, legend) {
-//     World.call(this, map, legend);
-// }
-//
-// LifelikeWorld.prototype = Object.create(World.prototype);
-//
 // let actionTypes = Object.create(null);
 //
-// LifelikeWorld.prototype.letAct = function(critter, vector) {
-//
-//     let action = critter.act(new View(this, vector));
-//     //////////////////////////console.log(critter,'action',action);
-//     let handled = action &&
-//         action.type in actionTypes &&
-//         actionTypes[action.type].call(this, critter,
-//             vector, action);
-//     if (!handled) {
-//         critter.energy -= 0.01;
-//         if (critter.energy <= 0)
-//             this.grid.set(vector, null);
-//     }
-// };
 //
 // actionTypes.grow = function(critter) {
 //     critter.energy += 0.5;
@@ -1571,7 +1627,7 @@ console.log(rtlScripts);
 // };
 //
 // actionTypes.reproduce = function(critter, vector, action) {
-//     let baby = elementFromChar(this.legend,
+//     let baby = Worldm.elementFromChar(this.legend,
 //         critter.originChar);
 //     let dest = this.checkDestination(action, vector);
 //     if (dest == null ||
@@ -1629,11 +1685,6 @@ console.log(rtlScripts);
 //     }
 //     if (this.dir != start)
 //         return {type: "move", direction: this.dir};
-//
-//
-//
-//
-//
 //     };
 //
 //     function Predator() {
@@ -1654,26 +1705,17 @@ console.log(rtlScripts);
 //     };
 // //creating world
 //
-// let world = new LifelikeWorld(plan, {'#': Wall, 'o': PlantEater, '*': Plant, 'P':Predator});
-// for (let i=0; i<100; i++){
-//     world.turn();
-//     console.log(world.toString())
-// }
-//
-
-
-//
-// BouncingCritter.prototype.act = function(view) {
-//     if (view.look(this.direction) != " ")
-//         this.direction = view.find(" ") || "s";
-//     return {type: "move", direction: this.direction};
-// };
+// // let world = new LifelikeWorld(plan, {'#': Wall, 'o': PlantEater, '*': Plant, 'P':Predator});
+// // for (let i=0; i<100; i++){
+// //     world.turn();
+// //     console.log(world.toString())
+// // }
 //
 //
 // function WallFollwer() {
 //     this.dir='s';
 // };
-
+//
 // WallFollwer.prototype.act=function (view) {
 //
 //         let start=this.dir; // normally this.dir is s
@@ -1698,9 +1740,11 @@ console.log(rtlScripts);
 //     return {type:'move', direction: this.dir};
 // };
 
-//-----------------------------------------new world
-//world.gridcustom();
+//=============================================================================================
 
+//-----------------------------------------new world
+// world.gridcustom();
+//
 // let PooopWorld=function (map, legend) {
 //    this.map=map;
 //    this.legend=legend;
@@ -1714,8 +1758,8 @@ console.log(rtlScripts);
 //     return (this.legend+' and '+ this.map) ;
 //
 // };
-
-
+//
+//
 // let pworld= new PooopWorld('this is a map', 'this is a poop legend');
 // console.log(pworld.run());
 //
