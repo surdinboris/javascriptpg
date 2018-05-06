@@ -4,24 +4,17 @@
     <meta charset="UTF-8">
     <script>
 
-//============require disassembly===============================
-require.cache = Object.create(null);
+//============promises===============================
+//some async action(also by using promise, but not matter)
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+};
+//promise
+let fifteen = Promise.resolve(sleep(10000));
+fifteen.then(value => console.log('kjkjk')).then(value => console.log('kjkjk2'));
+console.log('sdfsdf');
 
-function require(name) {
-    if (!(name in require.cache)) {
-        //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
-        let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
-        let module = {exports: {}};
-        //console.log(module);
-        require.cache[name] = module;
-        let wrapper = Function("require, exports, module", code);
-        wrapper(require, module.exports, module);
-        console.log("--------------------");
-        console.log(module);
-    }
-    return require.cache[name].exports;
-}
-const {parse} = require("ini");
+//first its a console.log sdfsdf, second - two postponed from promise
 //=====================module exercises============================================
 // (function(exports) {
 //     var names = ["Jan", "Feb", "Mar", "Apr",
