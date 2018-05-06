@@ -3,55 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <script>
+//==============big oak async on promises=======================
+import {bigOak} from "./crow-tech";
 
-//============require disassembly===============================
-require.cache = Object.create(null);
 
-function require(name) {
-    if (!(name in require.cache)) {
-        //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
-        let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
-        let module = {exports: {}};
-        //console.log(module);
-        require.cache[name] = module;
-        let wrapper = Function("require, exports, module", code);
-        wrapper(require, module.exports, module);
-        console.log("--------------------");
-        console.log(module);
+let readstor= new Promise (function (resolve,reject) {
+
+    bigOak.readStorage("food caches", caches => {
+        resolve(caches[0])});
+});
+
+readstor.then(function (res) {bigOak.readStorage(res, info => {
+    console.log(info)})});
+
+
+//=================proto ecxercises=============================
+let sym = Symbol("nome");
+console.log(sym.getKey());
+
+let ages = new Map();
+ages.set("Boris", 39);
+ages.set("Liang", 22);
+ages.set("Júlia", 62);
+console.log(ages.keys());
+
+
+function Kot(place) { this.place = place;
     }
-    return require.cache[name].exports;
-}
-const {parse} = require("ini");
-//=====================module exercises============================================
-function map(array, transform) {
-    let mapped = [];
-    for (let element of array) {
-        mapped.push(transform(element));
-    }
-    return mapped;
-}
 
-function firstTest(testedVal,firstLetters){
-    let conditions=[];
-    let result=true;
-    for(let a in arguments){
-        conditions.push(arguments[a])
-    };
-    conditions.splice(1,0);
+Kot.prototype.ReturnPlace=function () { return this.place
 
-    for(let c in conditions){
-        if(conditions[c] == testedVal[0]){
-            result=false;
-        }
-    }
-    return result
 };
 
-//firstTest('caavvv','a','b','c');
+let kotya = new Kot('backyard');
+console.log(kotya.ReturnPlace())
 
-let rtlScripts =
-    SCRIPTS.filter(s => s.direction == "rtl").map(s => s.name).filter(s => firstTest(s, "A","I","M","P"));
-console.log(rtlScripts);
+
+//============require disassembly===============================
+// require.cache = Object.create(null);
+//
+// function require(name) {
+//     if (!(name in require.cache)) {
+//         //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+//         let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+//         let module = {exports: {}};
+//         //console.log(module);
+//         require.cache[name] = module;
+//         let wrapper = Function("require, exports, module", code);
+//         wrapper(require, module.exports, module);
+//         console.log("--------------------");
+//         console.log(module);
+//     }
+//     return require.cache[name].exports;
+// }
+// const {parse} = require("ini");
+//=====================module exercises============================================
+// function map(array, transform) {
+//     let mapped = [];
+//     for (let element of array) {
+//         mapped.push(transform(element));
+//     }
+//     return mapped;
+// }
+//
+// function firstTest(testedVal,firstLetters){
+//     let conditions=[];
+//     let result=true;
+//     for(let a in arguments){
+//         conditions.push(arguments[a])
+//     };
+//     conditions.splice(1,0);
+//
+//     for(let c in conditions){
+//         if(conditions[c] == testedVal[0]){
+//             result=false;
+//         }
+//     }
+//     return result
+// };
+//
+// //firstTest('caavvv','a','b','c');
+//
+// let rtlScripts =
+//     SCRIPTS.filter(s => s.direction == "rtl").map(s => s.name).filter(s => firstTest(s, "A","I","M","P"));
+// console.log(rtlScripts);
 
 // → {x: "10", y: "20"}
 // (function(exports) {
