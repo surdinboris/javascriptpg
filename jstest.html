@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <script>
 
+
 //============promises===============================
 //some async action(also by using promise, but not matter)
 function sleep (time) {
@@ -15,7 +16,115 @@ fifteen.then(value => console.log('kjkjk')).then(value => console.log('kjkjk2'))
 console.log('sdfsdf');
 
 //first its a console.log sdfsdf, second - two postponed from promise
+
+
+//==============promise==========================================
+let Mypromise= new Promise (function(resolve,reject) {
+    bigOak.send("Cow Pasture", "note", "Let's caw loudly at 7PM",
+        () => {console.log('ok, and now try to resolve a promise');
+            resolve("Note delivered.")})});
+Mypromise.then((t) => console.log(t));
+
+//==============big oak async on callbacks=======================
+        import {bigOak} from "./crow-tech";
+
+        bigOak.readStorage("food caches", caches => {
+            let firstCache = caches[0];
+            bigOak.readStorage(firstCache, info => {
+                console.log(info);
+            });
+        });
+
+
+//==============big oak async on promises=======================
+
+
+import {bigOak} from "./crow-tech";
+
+
+let readstor= new Promise (function (resolve,reject) {
+
+    bigOak.readStorage("food caches", caches => {
+        resolve(caches[0])});
+});
+
+readstor.then(function (res) {bigOak.readStorage(res, info => {
+    console.log(info)})});
+
+
+//=================proto ecxercises=============================
+let sym = Symbol("nome");
+console.log(sym.getKey());
+
+let ages = new Map();
+ages.set("Boris", 39);
+ages.set("Liang", 22);
+ages.set("Júlia", 62);
+console.log(ages.keys());
+
+
+function Kot(place) { this.place = place;
+    }
+
+Kot.prototype.ReturnPlace=function () { return this.place
+
+};
+
+let kotya = new Kot('backyard');
+console.log(kotya.ReturnPlace())
+
+
+//============require disassembly===============================
+// require.cache = Object.create(null);
+//
+// function require(name) {
+//     if (!(name in require.cache)) {
+//         //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+//         let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+//         let module = {exports: {}};
+//         //console.log(module);
+//         require.cache[name] = module;
+//         let wrapper = Function("require, exports, module", code);
+//         wrapper(require, module.exports, module);
+//         console.log("--------------------");
+//         console.log(module);
+//     }
+//     return require.cache[name].exports;
+// }
+// const {parse} = require("ini");
+>>>>>>> 0f6e206549a07815a5bf153ee9f0ec4f6934afa9
 //=====================module exercises============================================
+// function map(array, transform) {
+//     let mapped = [];
+//     for (let element of array) {
+//         mapped.push(transform(element));
+//     }
+//     return mapped;
+// }
+//
+// function firstTest(testedVal,firstLetters){
+//     let conditions=[];
+//     let result=true;
+//     for(let a in arguments){
+//         conditions.push(arguments[a])
+//     };
+//     conditions.splice(1,0);
+//
+//     for(let c in conditions){
+//         if(conditions[c] == testedVal[0]){
+//             result=false;
+//         }
+//     }
+//     return result
+// };
+//
+// //firstTest('caavvv','a','b','c');
+//
+// let rtlScripts =
+//     SCRIPTS.filter(s => s.direction == "rtl").map(s => s.name).filter(s => firstTest(s, "A","I","M","P"));
+// console.log(rtlScripts);
+
+// → {x: "10", y: "20"}
 // (function(exports) {
 //     var names = ["Jan", "Feb", "Mar", "Apr",
 //         "May", "Jun", "Jul","Aug", "Sep", "Oct","Nov", "Dec"];
@@ -195,6 +304,20 @@ console.log('sdfsdf');
 //         box.unlock();
 //         console.log(box.content);
 //         // → true
+//
+//
+//
+// const str="x= gold\ny= 20\n\;commented hfghfghf\nrt=6\n65=uy";
+// let rows=str.split(/\r?\n/);
+// let res={};
+// rows.forEach(function (row) {
+//     console.log('parsing row', row);
+//     let mat;
+//     if (mat=row.match(/^(\w+)=(.*)$/)){
+//         res[mat[1]]=mat[2];
+//     }
+// });
+// console.log(res);
         //================debugging=====================================================
 //         function MultiplicatorUnitFailure() {}
 //
