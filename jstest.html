@@ -3,7 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <script>
+
+
+
+//==============big oak async on callbacks=======================
+        import {bigOak} from "./crow-tech";
+
+        bigOak.readStorage("food caches", caches => {
+            let firstCache = caches[0];
+            bigOak.readStorage(firstCache, info => {
+                console.log(info);
+            });
+        });
+       
+
 //==============big oak async on promises=======================
+
+
 import {bigOak} from "./crow-tech";
 
 
