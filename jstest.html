@@ -5,6 +5,12 @@
     <script>
 
 
+//==============promise==========================================
+let Mypromise= new Promise (function(resolve,reject) {
+    bigOak.send("Cow Pasture", "note", "Let's caw loudly at 7PM",
+        () => {console.log('ok, and now try to resolve a promise');
+            resolve("Note delivered.")})});
+Mypromise.then((t) => console.log(t));
 
 //==============big oak async on callbacks=======================
         import {bigOak} from "./crow-tech";
@@ -15,7 +21,7 @@
                 console.log(info);
             });
         });
-       
+
 
 //==============big oak async on promises=======================
 
