@@ -5,6 +5,60 @@
     <script>
 
 
+//====================Promise generator - promise.all=======================================
+function PromGen(v){
+    let prom = new Promise((resolve, reject) => {
+        if(v%2)
+            resolve('resolved:'+v);
+        reject('error:'+v);
+    });
+    return prom
+};
+
+let promlist=[];
+for (i=0; i<10; i++)
+    promlist.push(PromGen(i));
+
+promlist.map((m)=>m.then(
+    (resolve)=>console.log(resolve),
+    (reject)=>console.log(reject)
+));
+
+// error:0
+// resolved:1
+// error:2
+// resolved:3
+// error:4
+// resolved:5
+// error:6
+// resolved:7
+// error:8
+// resolved:9
+//====================define request type+ request type gen+send testing chain==============
+function requestType(name, handler) {
+
+    defineRequestType(name, (nest, content, source,
+                             callback) => {
+
+        try {
+            console.log('init');
+            Promise.resolve(handler(nest, content, source))
+                .then(response => callback(null, response),
+                    failure => callback(failure));
+        } catch (exception) {
+            callback(exception);
+        }
+    });
+}
+
+requestType('notfde', (nest, content, source)=>{console.log('handler started'); return 'handler'})
+
+bigOak.send("Cow Pasture", "notfde", "Lpet's caw loudly at 7PM",
+    (callbackresult) => console.log(callbackresult || 'finished success'));
+//init
+//handler started
+//Note delivered.
+
 //============promises===============================
 //some async action(also by using promise, but not matter)
 function sleep (time) {
