@@ -3,26 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <script>
+//====================path finding==========================================================
 
+function findRoute(graph, from, to) {
+    let work = [{at: from, route: []}];
+//outer iteration
+    for (let i = 0; i < work.length; i++) {
+        // let {at, route} = work[i];
+        let at = work[i].at; //setting previously added at as current step
+        let route = work[i].route; //retrieving previously added route
+        //inner loop - analysing current conditions with current 'at' place of graph
+        for (let place of graph[at]) {
+            if (place == to) return route.concat(place); //return current route plus place if match
+            //else adding inner loop's accessible places to futher work steps
+            work.push({at: place, route: route.concat(place)});
+
+        }
+    }
+}
+console.log(findRoute(roadGraph, "Farm", "Cabin"))
 
 //====================Promise generator - promise.all=======================================
-function PromGen(v){
-    let prom = new Promise((resolve, reject) => {
-        if(v%2)
-            resolve('resolved:'+v);
-        reject('error:'+v);
-    });
-    return prom
-};
+let door={'roott':['5','io']};
+let place='place';
+let ro= door['roott'];
+console.log(ro);
+ro.concat(place);
 
-let promlist=[];
-for (i=0; i<10; i++)
-    promlist.push(PromGen(i));
+console.log(ro)
 
-promlist.map((m)=>m.then(
-    (resolve)=>console.log(resolve),
-    (reject)=>console.log(reject)
-));
+
+
+// function PromGen(v){
+//     let prom = new Promise((resolve, reject) => {
+//         if(v%2)
+//             resolve('resolved:'+v);
+//         reject('error:'+v);
+//     });
+//     return prom
+// };
+//
+// let promlist=[];
+// for (i=0; i<10; i++)
+//     promlist.push(PromGen(i));
+//
+// promlist.map((m)=>m.then(
+//     (resolve)=>console.log(resolve),
+//     (reject)=>console.log(reject)
+// ));
 
 // error:0
 // resolved:1
@@ -34,119 +62,118 @@ promlist.map((m)=>m.then(
 // resolved:7
 // error:8
 // resolved:9
-//====================define request type+ request type gen+send testing chain==============
-function requestType(name, handler) {
-
-    defineRequestType(name, (nest, content, source,
-                             callback) => {
-
-        try {
-            console.log('init');
-            Promise.resolve(handler(nest, content, source))
-                .then(response => callback(null, response),
-                    failure => callback(failure));
-        } catch (exception) {
-            callback(exception);
-        }
-    });
-}
-
-requestType('notfde', (nest, content, source)=>{console.log('handler started'); return 'handler'})
-
-bigOak.send("Cow Pasture", "notfde", "Lpet's caw loudly at 7PM",
-    (callbackresult) => console.log(callbackresult || 'finished success'));
-//init
-//handler started
-//Note delivered.
-
-//============promises===============================
-//some async action(also by using promise, but not matter)
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-};
-//promise
-let fifteen = Promise.resolve(sleep(10000));
-fifteen.then(value => console.log('kjkjk')).then(value => console.log('kjkjk2'));
-console.log('sdfsdf');
-
-//first its a console.log sdfsdf, second - two postponed from promise
-
-
-//==============promise==========================================
-let Mypromise= new Promise (function(resolve,reject) {
-    bigOak.send("Cow Pasture", "note", "Let's caw loudly at 7PM",
-        () => {console.log('ok, and now try to resolve a promise');
-            resolve("Note delivered.")})});
-Mypromise.then((t) => console.log(t));
-
-//==============big oak async on callbacks=======================
-        import {bigOak} from "./crow-tech";
-
-        bigOak.readStorage("food caches", caches => {
-            let firstCache = caches[0];
-            bigOak.readStorage(firstCache, info => {
-                console.log(info);
-            });
-        });
-
-
-//==============big oak async on promises=======================
-
-
-import {bigOak} from "./crow-tech";
-
-
-let readstor= new Promise (function (resolve,reject) {
-
-    bigOak.readStorage("food caches", caches => {
-        resolve(caches[0])});
-});
-
-readstor.then(function (res) {bigOak.readStorage(res, info => {
-    console.log(info)})});
-
-
-//=================proto ecxercises=============================
-let sym = Symbol("nome");
-console.log(sym.getKey());
-
-let ages = new Map();
-ages.set("Boris", 39);
-ages.set("Liang", 22);
-ages.set("Júlia", 62);
-console.log(ages.keys());
-
-
-function Kot(place) { this.place = place;
-    }
-
-Kot.prototype.ReturnPlace=function () { return this.place
-
-};
-
-let kotya = new Kot('backyard');
-console.log(kotya.ReturnPlace())
-
-
-//============require disassembly===============================
-// require.cache = Object.create(null);
+// //====================define request type+ request type gen+send testing chain==============
+// function requestType(name, handler) {
 //
-// function require(name) {
-//     if (!(name in require.cache)) {
-//         //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
-//         let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
-//         let module = {exports: {}};
-//         //console.log(module);
-//         require.cache[name] = module;
-//         let wrapper = Function("require, exports, module", code);
-//         wrapper(require, module.exports, module);
-//         console.log("--------------------");
-//         console.log(module);
-//     }
-//     return require.cache[name].exports;
+//     defineRequestType(name, (nest, content, source,
+//                              callback) => {
+//
+//         try {
+//             console.log('init');
+//             Promise.resolve(handler(nest, content, source))
+//                 .then(response => callback(null, response),
+//                     failure => callback(failure));
+//         } catch (exception) {
+//             callback(exception);
+//         }
+//     });
 // }
-// const {parse} = require("ini");
->>>>>>> 0f6e206549a07815a5bf153ee9f0ec4f6934afa9
+//
+// requestType('notfde', (nest, content, source)=>{console.log('handler started'); return 'handler'})
+//
+// bigOak.send("Cow Pasture", "notfde", "Lpet's caw loudly at 7PM",
+//     (callbackresult) => console.log(callbackresult || 'finished success'));
+// //init
+// //handler started
+// //Note delivered.
+//
+// //============promises===============================
+// //some async action(also by using promise, but not matter)
+// function sleep (time) {
+//     return new Promise((resolve) => setTimeout(resolve, time));
+// };
+// //promise
+// let fifteen = Promise.resolve(sleep(10000));
+// fifteen.then(value => console.log('kjkjk')).then(value => console.log('kjkjk2'));
+// console.log('sdfsdf');
+//
+// //first its a console.log sdfsdf, second - two postponed from promise
+//
+//
+// //==============promise==========================================
+// let Mypromise= new Promise (function(resolve,reject) {
+//     bigOak.send("Cow Pasture", "note", "Let's caw loudly at 7PM",
+//         () => {console.log('ok, and now try to resolve a promise');
+//             resolve("Note delivered.")})});
+// Mypromise.then((t) => console.log(t));
+//
+// //==============big oak async on callbacks=======================
+//         import {bigOak} from "./crow-tech";
+//
+//         bigOak.readStorage("food caches", caches => {
+//             let firstCache = caches[0];
+//             bigOak.readStorage(firstCache, info => {
+//                 console.log(info);
+//             });
+//         });
+//
+//
+// //==============big oak async on promises=======================
+//
+//
+// import {bigOak} from "./crow-tech";
+//
+//
+// let readstor= new Promise (function (resolve,reject) {
+//
+//     bigOak.readStorage("food caches", caches => {
+//         resolve(caches[0])});
+// });
+//
+// readstor.then(function (res) {bigOak.readStorage(res, info => {
+//     console.log(info)})});
+//
+//
+// //=================proto ecxercises=============================
+// let sym = Symbol("nome");
+// console.log(sym.getKey());
+//
+// let ages = new Map();
+// ages.set("Boris", 39);
+// ages.set("Liang", 22);
+// ages.set("Júlia", 62);
+// console.log(ages.keys());
+//
+//
+// function Kot(place) { this.place = place;
+//     }
+//
+// Kot.prototype.ReturnPlace=function () { return this.place
+//
+// };
+//
+// let kotya = new Kot('backyard');
+// console.log(kotya.ReturnPlace())
+//
+//
+// //============require disassembly===============================
+// // require.cache = Object.create(null);
+// //
+// // function require(name) {
+// //     if (!(name in require.cache)) {
+// //         //let code = "exports={};\nexports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+// //         let code = "exports[\"test\"]=\"test\"\nconsole.log(require.toString())\nreturn exports";
+// //         let module = {exports: {}};
+// //         //console.log(module);
+// //         require.cache[name] = module;
+// //         let wrapper = Function("require, exports, module", code);
+// //         wrapper(require, module.exports, module);
+// //         console.log("--------------------");
+// //         console.log(module);
+// //     }
+// //     return require.cache[name].exports;
+// // }
+// // const {parse} = require("ini");
 //=====================module exercises============================================
 // function map(array, transform) {
 //     let mapped = [];
