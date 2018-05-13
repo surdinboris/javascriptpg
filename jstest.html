@@ -3,14 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <script>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+import {defineRequestType} from "./crow-tech";
+
+//just passing name and function to defineRequestType
+defineRequestType("note", (nest, content, source, done) => {
+
+    console.log(`${nest.name} received note: ${content}`);
+    done();
+});
+
+//again,just passing name and handler to requestType that constructs
+//defineRequestType using Promise resolved with handler function
+
+function requestType(name, handler) {
+    defineRequestType(name, (nest, content, source,
+                             callback) => {
+        try {
+            Promise.resolve(handler(nest, content, source))
+                .then(response => callback(null, response),
+                    failure => callback(failure));
+        } catch (exception) {
+            callback(exception);
+        }
+    });
+}
+//defining  of new type itself using handler function below
+requestType("connections", (nest, {name, neighbors},
+                            source) => {
+    let connections = nest.state.connections;
+    if (JSON.stringify(connections.get(name)) ==
+        JSON.stringify(neighbors)) return;
+    connections.set(name, neighbors);
+    broadcastConnections(nest, name, source);
+});
+function broadcastConnections(nest, name, exceptFor = null) {
+    for (let neighbor of nest.neighbors) {
+        if (neighbor == exceptFor) continue;
+        request(nest, neighbor, "connections", {
+            name,
+            neighbors: nest.state.connections.get(name)
+        });
+    }
+}
+
+
+
+//everywhere(nest => {
+//  nest.state.connections = new Map;
+//  nest.state.connections.set(nest.name, nest.neighbors);
+//  broadcastConnections(nest, nest.name);
+//});
+
+
+///===================getting neigbors======================================================
+function availableNeighbors(nest) {
+    let requests = nest.neighbors.map(neighbor => {
+        return request(nest, neighbor, "ping")
+            .then(() => true, () => false);
+    });
+    return Promise.all(requests).then(result => {
+        return nest.neighbors.filter((_, i) => result[i]);
+    });
+}
+
+let aa=availableNeighbors(bigOak);
+aa.then(response=>console.log(response));
 
 //====================Promise generator - promise.all=======================================
 function PromGen(v){
-    let prom = new Promise((resolve, reject) => {
+    let prom = new Promise((resolve, reject, fai) => {
         if(v%2)
             resolve('resolved:'+v);
         reject('error:'+v);
+        fai('fai');
     });
     return prom
 };
@@ -18,6 +86,7 @@ function PromGen(v){
 let promlist=[];
 for (i=0; i<10; i++)
     promlist.push(PromGen(i));
+
 
 promlist.map((m)=>m.then(
     (resolve)=>console.log(resolve),
@@ -34,99 +103,10 @@ promlist.map((m)=>m.then(
 // resolved:7
 // error:8
 // resolved:9
-//====================define request type+ request type gen+send testing chain==============
-function requestType(name, handler) {
 
-    defineRequestType(name, (nest, content, source,
-                             callback) => {
-
-        try {
-            console.log('init');
-            Promise.resolve(handler(nest, content, source))
-                .then(response => callback(null, response),
-                    failure => callback(failure));
-        } catch (exception) {
-            callback(exception);
-        }
-    });
-}
-
-requestType('notfde', (nest, content, source)=>{console.log('handler started'); return 'handler'})
-
-bigOak.send("Cow Pasture", "notfde", "Lpet's caw loudly at 7PM",
-    (callbackresult) => console.log(callbackresult || 'finished success'));
 //init
 //handler started
 //Note delivered.
-
-//============promises===============================
-//some async action(also by using promise, but not matter)
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-};
-//promise
-let fifteen = Promise.resolve(sleep(10000));
-fifteen.then(value => console.log('kjkjk')).then(value => console.log('kjkjk2'));
-console.log('sdfsdf');
-
-//first its a console.log sdfsdf, second - two postponed from promise
-
-
-//==============promise==========================================
-let Mypromise= new Promise (function(resolve,reject) {
-    bigOak.send("Cow Pasture", "note", "Let's caw loudly at 7PM",
-        () => {console.log('ok, and now try to resolve a promise');
-            resolve("Note delivered.")})});
-Mypromise.then((t) => console.log(t));
-
-//==============big oak async on callbacks=======================
-        import {bigOak} from "./crow-tech";
-
-        bigOak.readStorage("food caches", caches => {
-            let firstCache = caches[0];
-            bigOak.readStorage(firstCache, info => {
-                console.log(info);
-            });
-        });
-
-
-//==============big oak async on promises=======================
-
-
-import {bigOak} from "./crow-tech";
-
-
-let readstor= new Promise (function (resolve,reject) {
-
-    bigOak.readStorage("food caches", caches => {
-        resolve(caches[0])});
-});
-
-readstor.then(function (res) {bigOak.readStorage(res, info => {
-    console.log(info)})});
-
-
-//=================proto ecxercises=============================
-let sym = Symbol("nome");
-console.log(sym.getKey());
-
-let ages = new Map();
-ages.set("Boris", 39);
-ages.set("Liang", 22);
-ages.set("Júlia", 62);
-console.log(ages.keys());
-
-
-function Kot(place) { this.place = place;
-    }
-
-Kot.prototype.ReturnPlace=function () { return this.place
-
-};
-
-let kotya = new Kot('backyard');
-console.log(kotya.ReturnPlace())
-
 
 //============require disassembly===============================
 // require.cache = Object.create(null);
@@ -146,7 +126,7 @@ console.log(kotya.ReturnPlace())
 //     return require.cache[name].exports;
 // }
 // const {parse} = require("ini");
->>>>>>> 0f6e206549a07815a5bf153ee9f0ec4f6934afa9
+
 //=====================module exercises============================================
 // function map(array, transform) {
 //     let mapped = [];
