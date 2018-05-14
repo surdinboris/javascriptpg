@@ -3,37 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <script>
+//========================================async function=============================
+function locateScalpel(nest) {
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//=======
-//====================path finding==========================================================
-
-function findRoute(graph, from, to) {
-    let work = [{at: from, route: []}];
-//outer iteration
-    for (let i = 0; i < work.length; i++) {
-        // let {at, route} = work[i];
-        let at = work[i].at; //setting previously added at as current step
-        let route = work[i].route; //retrieving previously added route
-        //inner loop - analysing current conditions with current 'at' place of graph
-        for (let place of graph[at]) {
-            if (place == to) return route.concat(place); //return current route plus place if match
-            //else adding inner loop's accessible places to futher work steps
-            work.push({at: place, route: route.concat(place)});
-
+    async function scsearch(nests){
+        for (let nestname of nests){
+            if (nestname == await anyStorage(nest, nestname, `scalpel`))
+                return nestname
         }
     }
+    return scsearch(network(nest)).then(r => r)
 }
-console.log(findRoute(roadGraph, "Farm", "Cabin"));
 
-import {defineRequestType} from "./crow-tech";
+locateScalpel(bigOak).then(r => console.log(r))
 
-//just passing name and function to defineRequestType
-defineRequestType("note", (nest, content, source, done) => {
-
-    console.log(`${nest.name} received note: ${content}`);
-    done();
-});
+// //====================path finding==========================================================
+//
+// function findRoute(graph, from, to) {
+//     let work = [{at: from, route: []}];
+// //outer iteration
+//     for (let i = 0; i < work.length; i++) {
+//         // let {at, route} = work[i];
+//         let at = work[i].at; //setting previously added at as current step
+//         let route = work[i].route; //retrieving previously added route
+//         //inner loop - analysing current conditions with current 'at' place of graph
+//         for (let place of graph[at]) {
+//             if (place == to) return route.concat(place); //return current route plus place if match
+//             //else adding inner loop's accessible places to futher work steps
+//             work.push({at: place, route: route.concat(place)});
+//
+//         }
+//     }
+// }
+// console.log(findRoute(roadGraph, "Farm", "Cabin"));
+//
+// import {defineRequestType} from "./crow-tech";
+//
+// //just passing name and function to defineRequestType
+// defineRequestType("note", (nest, content, source, done) => {
+//
+//     console.log(`${nest.name} received note: ${content}`);
+//     done();
+// });
 
 //again,just passing name and handler to requestType that constructs
 //defineRequestType using Promise resolved with handler function
