@@ -3,7 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <script>
-//========================================async function=============================
+//==============================plain promise function=====================================
+function locateScalpel2(nest) {
+    return new Promise((resolve,reject) => {
+        function attempt(n) {
+            let curnest= network(nest)[n];
+            anyStorage(nest, curnest, `scalpel`).then(done => {
+                if (done == curnest) {
+                    console.log(done,curnest, "=> ok");
+                    resolve(done)}
+                else {
+                    console.log(done,curnest, "=> mismatch");
+                    attempt(n+1)
+                }
+            })
+        }
+        attempt(0);
+    })
+}
+
+//========================================async await function=============================
 function locateScalpel(nest) {
 
     async function scsearch(nests){
