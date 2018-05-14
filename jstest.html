@@ -12,10 +12,10 @@ function locateScalpel(nest) {
                 return nestname
         }
     }
-    return scsearch(network(nest)).then(r => r)
+    return scsearch(network(nest))
 }
 
-locateScalpel(bigOak).then(r => console.log(r))
+locateScalpel(bigOak).then(console.log)
 
 // //====================path finding==========================================================
 //
