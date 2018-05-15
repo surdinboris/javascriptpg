@@ -3,6 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <script>
+
+//==============================my Promises.all implementation=============================
+function Promise_all(promises) {
+    return new Promise((resolve, reject) => {
+        //console.log(promises.length);
+        let counter = 0;
+        if (promises.length == 0)
+            resolve(promises)
+
+        let result = new Map;
+        let output = [];
+        counter=0;
+
+        for (let i = 0; i < promises.length; i++){
+            promises[i].then(res => {
+                counter+=1;
+                //
+                result.set(i+1,res)
+                if (result.size == promises.length){
+                    for (let i=1; i<= result.size; i++){
+                        output.splice(i, 0, result.get(i));
+                    }
+                    resolve(output);
+                }
+                if (counter == promises.length && counter != result.size)
+                    reject('something went wrong - not all promises were collected to result')
+
+            });
+        }
+
+
+    });
+}
 //==============================plain promise function=====================================
 function locateScalpel2(nest) {
     return new Promise((resolve,reject) => {
