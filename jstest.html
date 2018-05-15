@@ -17,6 +17,7 @@ function Promise_all(promises) {
         counter=0;
 
         for (let i = 0; i < promises.length; i++){
+
             promises[i].then(res => {
                 counter+=1;
                 //
@@ -30,12 +31,14 @@ function Promise_all(promises) {
                 if (counter == promises.length && counter != result.size)
                     reject('something went wrong - not all promises were collected to result')
 
-            });
+            }).catch( e =>{console.log(e);
+                reject(e)})
         }
 
 
     });
 }
+
 //==============================plain promise function=====================================
 function locateScalpel2(nest) {
     return new Promise((resolve,reject) => {
