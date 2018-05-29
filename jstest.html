@@ -3,6 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <script>
+//================================html part ===============================================
+<h1>Mountains</h1>
+
+<div id="mountains"></div>
+
+    <script>
+const LEGEND= [{name:"name",height:"height",place:"place"}]
+const MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+    {name: "Everest", height: 8848, place: "Nepal"},
+    {name: "Mount Fuji", height: 3776, place: "Japan"},
+    {name: "Vaalserberg", height: 323, place: "Netherlands"},
+    {name: "Denali", height: 6168, place: "United States"},
+    {name: "Popocatepetl", height: 5465, place: "Mexico"},
+    {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+];
+
+let papa=document.getElementById("mountains")
+    .appendChild(document.createElement("table"))
+
+let addRow= function(row){
+
+    let tabl = document.querySelector("table");
+    console.log(tabl);
+    let rw= tabl.appendChild(document.createElement("tr"))
+
+    for (let r in row){
+        rw.appendChild(document.createElement("th")).appendChild(
+            document.createTextNode(row[r]))
+    }}
+
+let legend=[{}]
+Object.keys(MOUNTAINS[0]).forEach(mou=>{
+    legend[0][mou] = mou;
+})
+console.log(legend);
+
+legend.forEach(leg=>{
+    addRow(leg);
+})
+
+MOUNTAINS.forEach(mou=>{
+    addRow(mou);
+})
+
+let tabo = Array.from(document.querySelectorAll("tr"))
+tabo.forEach(t=>t.style.textAlign = "left")
+console.log(tabo)
+
+    </script>
+
 
 //==============================Programming language=======================================
 
