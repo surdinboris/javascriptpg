@@ -21,36 +21,29 @@ const MOUNTAINS = [
 ];
 
 let papa=document.getElementById("mountains")
-    .appendChild(document.createElement("table"))
+    .appendChild(document.createElement("table"));
 
-let addRow= function(row){
-
-    let tabl = document.querySelector("table");
-    console.log(tabl);
-    let rw= tabl.appendChild(document.createElement("tr"))
+let addRow= function(row,type){
+    papa.appendChild(document.createElement("tr"));
 
     for (let r in row){
-        rw.appendChild(document.createElement("th")).appendChild(
-            document.createTextNode(row[r]))
-    }}
+        papa.appendChild(document.createElement(type))
+            .appendChild(document.createTextNode(row[r]))
+    }};
 
-let legend=[{}]
+let legend=[{}];
 Object.keys(MOUNTAINS[0]).forEach(mou=>{
     legend[0][mou] = mou;
-})
-console.log(legend);
+});
 
 legend.forEach(leg=>{
-    addRow(leg);
-})
-
+    addRow(leg, "th");
+});
 MOUNTAINS.forEach(mou=>{
-    addRow(mou);
-})
-
-let tabo = Array.from(document.querySelectorAll("tr"))
+    addRow(mou, "td");
+});
+let tabo = Array.from(document.querySelectorAll("th","td"))
 tabo.forEach(t=>t.style.textAlign = "left")
-console.log(tabo)
 
     </script>
 
