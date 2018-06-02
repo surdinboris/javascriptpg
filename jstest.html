@@ -4,6 +4,45 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
+
+<p>🎈</p>
+
+<script>
+let ballo=document.querySelector("p")
+
+let setSize = {balsinit:0,
+    get bal(){return this.balsinit},
+
+    set bal(s){
+        if(s >= 0 && s < 100){
+            ballo.style.fontSize = s+"px";
+            this.balsinit = s;}
+        else if( s == 100){
+            for (n of Array.from(ballo.childNodes)){
+                n.parentNode.replaceChild(document.createTextNode("💥"),n)
+                document.body.removeEventListener("keydown", addEvent)
+            }
+        }
+    }
+}
+
+setSize.bal = 70;
+
+function addEvent(event){
+    if(event.key == "ArrowUp"){
+        event.preventDefault();
+        setSize.bal += 10;
+    }
+
+    else if(event.key == "ArrowDown"){
+        event.preventDefault();
+        setSize.bal -= 10;
+    }
+};
+
+document.body.addEventListener("keydown",addEvent)
+    </script>
+//=========================================================================================
 <button>A</button>
 <button>B</button>
 <button>C</button>
