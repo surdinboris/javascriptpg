@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
+
+
+//========================================tabs====================================================
+<tab-panel>
+<div data-tabname="one">Tab one</div>
+<div data-tabname="two">Tab two</div>
+<div data-tabname="three">Tab three</div>
+</tab-panel>
+
+<script>
+function asTabs(node) {
+    let nodes= Array.from(node.getElementsByTagName("div"))
+    console.log(nodes)
+    for(i=0; i<nodes.length; i++){
+        let butt=document.createElement("button")
+        node.insertBefore(butt, node.firstChild)
+        console.log(nodes.length)
+    }
+
+}
+asTabs(document.querySelector("tab-panel"));
+    </script>
+//========================================traces==============================================
 <style>
 .trail { /* className for the trail elements */
     position: absolute;
