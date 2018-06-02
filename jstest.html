@@ -4,7 +4,37 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
+<style>
+.trail { /* className for the trail elements */
+    position: absolute;
+    height: 6px; width: 6px;
+    border-radius: 3px;
+    background: teal;
+}
+body {
+    height: 300px;
+}
+</style>
 
+<script>
+function moovetr(event){
+    console.log(event.pageX,event.clientY)
+
+    let cur= document.createElement("div")
+    cur.className="trail"
+    cur.style.left = (event.pageX - 4) + "px";
+    cur.style.top = (event.pageY - 4) + "px";
+    document.body.appendChild(cur);
+
+    setTimeout(()=>cur.parentNode.removeChild(cur),200)
+}
+
+
+window.addEventListener("mousemove", moovetr)
+
+    </script>
+
+//=================================trails==================================================
 <p>🎈</p>
 
 <script>
