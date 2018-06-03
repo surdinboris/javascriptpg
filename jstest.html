@@ -5,25 +5,52 @@
     <script>
 //================================html part ===============================================
 
-
 //========================================tabs====================================================
 <tab-panel>
-<div data-tabname="one">Tab one</div>
+<div data-tabname="one"> the child elements of that node.
+    It should insert a list of elements at the top of the node,
+    one for each child element, containing text retrieved from
+the data-tabname attribute of the child. All but one of the
+original children should be hidden (given a display style of none).
+The currently visible node can be selected</div>
 <div data-tabname="two">Tab two</div>
 <div data-tabname="three">Tab three</div>
+<div data-tabname="four">Tab four</div>
 </tab-panel>
 
 <script>
 function asTabs(node) {
-    let nodes= Array.from(node.getElementsByTagName("div"))
-    console.log(nodes)
-    for(i=0; i<nodes.length; i++){
-        let butt=document.createElement("button")
-        node.insertBefore(butt, node.firstChild)
-        console.log(nodes.length)
+    let nodes= Array.from(node.children)
+
+    hideShow("all");
+
+    function hideShow(el){
+        let butts= Array.from(node.getElementsByTagName("button"));
+        butts.forEach((b)=>b.style.color="black")
+        //console.log("init",el)
+        nodes.forEach(n=>{n.style="display:none"})
+        if(el == "all"){
+            nodes[0].style="display:block"
+
+        }
+
+        if(!isNaN(el)){
+
+            nodes[el].style="display:block"
+        }
     }
 
+    for(let i=nodes.length-1; i>=0; i--){
+        let butt=document.createElement("button");
+        butt.onclick = function(){hideShow(i);
+            butt.style.color="red"};
+        let buttext=nodes[i].getAttribute("data-tabname")
+        butt.appendChild(document.createTextNode(buttext));
+        node.insertBefore(butt, node.firstChild);
+        //console.log(nodes.length)
+    }
 }
+
 asTabs(document.querySelector("tab-panel"));
     </script>
 //========================================traces==============================================
