@@ -6,43 +6,76 @@
 //================================html part ===============================================
 <link rel="stylesheet" href="css/game.css">
 
-
     <body>
     <script>
-    // The old runLevel function. Modify this...
-    function runLevel(level, Display) {
-        let display = new Display(document.body, level);
-        let state = State.start(level);
-        let ending = 1;
-        let listn= trackKeys(["Escape"])
-        let active= true;
+    let escape = ["Escape"];
+let arrows = ["ArrowLeft", "ArrowRight", "ArrowUp"];
+let previous = 0;
 
-        return new Promise(resolve => {
+let TrackKeysGen= function(keys) {
+    let down = Object.create(null);
 
-            runAnimation(time => {
-                if(listn.Escape && active == true) active = false;
-                else if (listn.Escape && active == false) active = true;
-
-                if (active) state = state.update(time, arrowKeys);
-
-                display.setState(state);
-                if (state.status == "playing") {
-                    return true;
-                } else if (ending > 0) {
-                    ending -= time;
-                    return true;
-                } else {
-                    display.clear();
-                    resolve(state.status);
-                    return false;
-                }
-            });
-        });
+    function trackgen(keys){
+        return function(event){
+            if (keys.includes(event.key)) {
+                down[event.key] = event.type == "keydown";
+                event.preventDefault();
+            }}
     }
+    console.log(previous)
+    //unregister previous listener
+    if(previous){
+        console.log("remove", previous)
+        window.removeEventListener("keydown", trackgen(previous));
+        window.removeEventListener("keyup" , trackgen(previous));
+    }
+    //register new listener
+
+    previous=keys;
+    console.log("add", previous)
+    window.addEventListener("keydown", trackgen(keys));
+    window.addEventListener("keyup", trackgen(keys));
+    return down
+}
+
+
+
+// The old runLevel function. Modify this...
+
+function runLevel(level, Display) {
+    let display = new Display(document.body, level);
+    let state = State.start(level);
+    let ending = 1;
+
+
+    return new Promise(resolve => {
+
+
+        let handlesc=TrackKeysGen(escape);
+        let handlearr=TrackKeysGen(arrows);
+
+
+        runAnimation(time => {
+            state = state.update(time, handlearr);
+            display.syncState(state);
+
+            if (state.status == "playing") {
+                return true;
+            } else if (ending > 0) {
+                ending -= time;
+                return true;
+            } else {
+                display.clear();
+                resolve(state.status);
+                console.log("fffaaalsee")
+                return false;
+            }
+        });
+    });
+}
 runGame(GAME_LEVELS, DOMDisplay);
     </script>
     </body>
-
 
 //========================================tabs====================================================
 <tab-panel>
