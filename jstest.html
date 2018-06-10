@@ -4,6 +4,97 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
+//================================func factory - returning event handler - passing througth====
+<link rel="stylesheet" href="css/game.css">
+
+    <body>
+    <script>
+    function runAnimation(frameFunc) {
+        let lastTime = null;
+        function frame(time) {
+            if (lastTime != null) {
+                let timeStep = Math.min(time - lastTime, 100) / 1000;
+                if (frameFunc(timeStep) === false) return;
+            }
+            lastTime = time;
+            requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    }
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+let arrows = ["ArrowLeft", "ArrowRight", "ArrowUp","Escape"];
+let escaper = ["Escape"];
+
+let TrackKeysGen= function(keys) {
+    let down = Object.create(null);
+
+    let trackgen =function (keys){
+        let trackg = function(event){
+            if (keys.includes(event.key)) {
+                console.log(event.key);
+                down[event.key] = event.type == "keydown";
+
+                event.preventDefault();
+            }
+            return down // returning an object - passing event handler function to runAnimation code
+        }
+        return trackg
+    }
+    down.trackg = trackgen(keys);
+
+    window.addEventListener("keydown",down.trackg);
+    window.addEventListener("keyup", down.trackg);
+    down.unreg = function(){
+        window.removeEventListener("keydown", down.trackg);
+        window.removeEventListener("keyup" , down.trackg);
+    }
+
+    console.log(down)
+    return down
+}
+
+// The old runLevel function. Modify this...
+
+function runLevel(level, Display) {
+    let display = new Display(document.body, level);
+    let state = State.start(level);
+    let ending = 1;
+
+
+    return new Promise(resolve => {
+
+        let handlearr=TrackKeysGen(arrows);
+
+        runAnimation(time => {
+            while (!handlearr["Escape"]){
+                state = state.update(time, handlearr);
+                display.syncState(state);
+                if (state.status == "playing") {
+                    return true;
+                } else if (ending > 0) {
+                    ending -= time;
+                    return true;
+                } else {
+                    display.clear();
+                    resolve(state.status);
+                    return false;
+                }}
+
+            handlearr.unreg();
+            return false
+        });
+
+
+
+    });
+}
+runGame(GAME_LEVELS, DOMDisplay);
+    </script>
+    </body>
+
+///=================================first try===================================================
 <link rel="stylesheet" href="css/game.css">
 
     <body>
