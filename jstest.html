@@ -38,12 +38,24 @@ class Monster {
     }
 
     collide(state) {
+
         //called when collision detected  in State update
         let thisMonster = state.actors.filter(a => a != this);
-        console.log('player',state.player)
-        console.log('monster',thisMonster)
-        //console.log(thisMonster)
-        return new State(state.level, state.actors, "playing")
+        let thisPlayer = state.player
+
+        function overlap(actor1, actor2) {
+            //console.log(actor1.pos.y + actor1.size.y, "more?", actor2.pos.y );
+            //console.log(actor1.pos.y, "less?", actor2.pos.y + actor2.size.y );
+            return actor1.pos.y + actor1.size.y > actor2.pos.y &&
+                actor1.pos.y-actor1.size.y < actor2.pos.y + actor2.size.y;
+        }
+        let res = overlap(thisPlayer,thisMonster[0])
+        if(res){
+            let filtered = state.actors.filter(a => a != this);
+
+            return new State(state.level, filtered, "playing");
+        }
+        return new State(state.level, state.actors, "lost")
     }
 }
 
@@ -61,7 +73,7 @@ runLevel(new Level(`
 .#..@...........................#.
 .##########..............########.
 ..........#..o..o..o..o..#........
-..........#...........M..#........
+..........#...M.......M..#........
 ..........################........
 ..................................
 `), DOMDisplay);
