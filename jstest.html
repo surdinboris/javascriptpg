@@ -4,6 +4,69 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
+//================================new class of elements( the monster)=====================================
+<link rel="stylesheet" href="css/game.css">
+    <style>.monster { background: purple }</style>
+
+<body>
+<script>
+// Complete the constructor, update, and collide methods
+class Monster {
+    constructor(pos, speed, reset) {
+        this.pos = pos;
+        this.speed = speed;
+        this.reset = reset;
+
+    }
+
+    get type() { return "monster"; }
+
+    static create(pos) {
+        return new Monster(pos.plus(new Vec(0, -1)),new Vec(2, 0));
+    }
+
+    update(time, state) {
+        let newPos = this.pos.plus(this.speed.times(time));
+
+        if (!state.level.touches(newPos, this.size, "wall")) {
+            return new Monster(newPos, this.speed, this.reset);
+        } else if (this.reset) {
+            return new Monster(this.reset, this.speed, this.reset);
+        } else {
+            return new Monster(this.pos, this.speed.times(-1));
+        }
+    }
+
+    collide(state) {
+        //called when collision detected  in State update
+        let thisMonster = state.actors.filter(a => a != this);
+        console.log('player',state.player)
+        console.log('monster',thisMonster)
+        //console.log(thisMonster)
+        return new State(state.level, state.actors, "playing")
+    }
+}
+
+Monster.prototype.size = new Vec(1.2, 2);
+
+levelChars["M"] = Monster;
+
+runLevel(new Level(`
+..................................
+.################################.
+.#..............................#.
+.#..............................#.
+.#..............................#.
+.#...........................o..#.
+.#..@...........................#.
+.##########..............########.
+..........#..o..o..o..o..#........
+..........#...........M..#........
+..........################........
+..................................
+`), DOMDisplay);
+    </script>
+    </body>
 //================================func factory - returning event handler - passing througth====
 <link rel="stylesheet" href="css/game.css">
 
