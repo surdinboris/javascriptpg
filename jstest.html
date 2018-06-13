@@ -4,6 +4,42 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
+<canvas></canvas>
+
+
+
+<script>
+let cx = document.querySelector("canvas").getContext("2d");
+let canvas = document.querySelector("canvas");
+canvas.setAttribute("width", 900)
+canvas.setAttribute("height", 900)
+let lastAngle =0;
+function animate(time){
+
+
+    lastAngle+=time %8;
+    // console.log(lastAngle)
+
+    let x= Math.cos(lastAngle)*600+390;
+    let y= Math.sin(lastAngle)*600+290;
+    cx.moveTo(390,290)
+
+    cx.lineTo(x,y)
+
+    cx.strokeStyle=`rgb(${x %255}, ${y-x %
+    255}, ${y %255}`
+    cx.lineWidth = 0.1;
+
+
+    cx.stroke();
+
+    requestAnimationFrame(animate);
+
+}
+requestAnimationFrame(animate);
+    </script>
+
+
 //================================new class of elements( the monster)=====================================
 <link rel="stylesheet" href="css/game.css">
     <style>.monster { background: purple }</style>
@@ -396,7 +432,9 @@ let angle = Math.PI;
 let lastTime = null;
 
 function animate(time) {
-    if (lastTime != null) angle += (time - lastTime) * 0.001;
+    if (lastTime != null)
+    angle += (time - lastTime) * 0.001;
+
     lastTime = time;
 
     cat.style.top = (Math.cos(angle) * 100+center.top) + "px";
