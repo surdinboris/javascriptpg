@@ -4,7 +4,47 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
-<canvas></canvas>
+//pie chart
+<canvas width="200" height="200"></canvas>
+    <script>
+    let cx = document.querySelector("canvas").getContext("2d");
+let canvas = document.querySelector("canvas")
+canvas.setAttribute("width","5000")
+canvas.setAttribute("height","5000")
+let total = results
+    .reduce((sum, {count}) => sum + count, 0);
+// Start at the top
+let currentAngle = 0.5 * Math.PI;
+for (let result of results) {
+    let sliceAngle = (result.count / total) * 2 * Math.PI;
+    cx.beginPath();
+    // center=500,500, radius=400*dynamic value
+    // from current angle, clockwise by slice's angle
+    cx.arc(500, 500, 400*(result.count/total),
+        currentAngle, currentAngle + sliceAngle);
+
+    currentAngle += sliceAngle;
+
+    let grad=(currentAngle + sliceAngle*3)+500/Math.PI
+
+    console.log(currentAngle, grad)
+    cx.lineTo(500, 500);
+    cx.font = "28px Georgia";
+    // cx.fillStyle = "fuchsia"
+    let gradx=400+200*Math.cos(grad)
+    let grady =500+200*Math.sin(grad)
+
+    cx.fillStyle = result.color;
+    cx.fillText(`${result.name} ${result.count}`, gradx, grady);
+    cx.fill();
+
+}
+    </script>
+
+
+//=========================================================================================
+// lines
+// <canvas></canvas>
 
 
 
@@ -14,6 +54,8 @@ let canvas = document.querySelector("canvas");
 canvas.setAttribute("width", 900)
 canvas.setAttribute("height", 900)
 let lastAngle =0;
+
+
 function animate(time){
 
 
@@ -26,14 +68,13 @@ function animate(time){
 
     cx.lineTo(x,y)
 
-    cx.strokeStyle=`rgb(${x %255}, ${y-x %
-    255}, ${y %255}`
-    cx.lineWidth = 0.1;
+    cx.strokeStyle=`rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}`
+    cx.lineWidth = 0.01;
 
 
     cx.stroke();
 
-    requestAnimationFrame(animate);
+    setTimeout(() => requestAnimationFrame(animate),10);
 
 }
 requestAnimationFrame(animate);
