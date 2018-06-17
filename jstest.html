@@ -18,7 +18,7 @@ function branch(tstmp) {
     if(vals.length != 0){
         length = vals[vals.length-1]}
 
-    else {length = 60;
+    else {length = 90;
         vals.push(length);
     }
     length =length*scale;
@@ -27,7 +27,7 @@ function branch(tstmp) {
 
     function buildtree(length){
         console.log("buildtree called with",length)
-        if (length < 8) return;
+        if (length < 7) return;
         cx.fillRect(0, 0, 1, length);
         cx.save();
         cx.translate(0, length);
@@ -41,7 +41,8 @@ function branch(tstmp) {
 
     buildtree(length);
 
-    requestAnimationFrame(branch)
+    if(vals[vals.length-1] > 2){
+        requestAnimationFrame(branch)}
 
 }
 
