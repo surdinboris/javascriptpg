@@ -7,37 +7,48 @@
 <canvas width="600" height="300"></canvas>
     <script>
     let cx = document.querySelector("canvas").getContext("2d");
-function branch(length, angle, scale) {
-    cx.fillRect(0, 0, 1, length);
-    if (length < 8) return;
-    cx.save();
-    cx.translate(0, length);
-    cx.rotate(-angle);
-    branch(length * scale, angle, scale);
-    cx.rotate(2 * angle);
-    branch(length * scale, angle, scale);
-    cx.restore();
-
-}
-
 cx.translate(300, 0);
+let scale = 0.8;
+let angle = 0.5;
+let vals = [];
 
-function doSetTimeout(i) {
+function branch(tstmp) {
+    //console.log(vals)
 
-    setInterval(function() {
+    if(vals.length != 0){
+        length = vals[vals.length-1]}
 
-        cx.clearRect(-300, 0, 600, 300);
+    else {length = 60;
+        vals.push(length);
+    }
+    length =length*scale;
 
-        branch(i, 0.5, 0.8)
+    vals.push(length*scale);
 
-    }, 100);
+    function buildtree(length){
+        console.log("buildtree called with",length)
+        if (length < 8) return;
+        cx.fillRect(0, 0, 1, length);
+        cx.save();
+        cx.translate(0, length);
+        cx.rotate(-angle);
+        buildtree(length * scale);
+        cx.rotate(2 * angle);
+        buildtree(length * scale);
+        cx.restore();
+        return
+    }
+
+    buildtree(length);
+
+    requestAnimationFrame(branch)
+
 }
 
-
-for (var i = 1; i <= 190; ++i)
-    doSetTimeout(i)
+requestAnimationFrame(branch)
 
     </script>
+
 //pie chart
 <canvas width="200" height="200"></canvas>
     <script>
