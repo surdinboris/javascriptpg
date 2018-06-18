@@ -4,50 +4,38 @@
     <meta charset="UTF-8">
     <script>
 //================================html part ===============================================
-
-<canvas width="600" height="600"></canvas>
+<canvas width="600" height="300"></canvas>
     <script>
     let cx = document.querySelector("canvas").getContext("2d");
-let canvas = document.querySelector("canvas")
-let angle = 0.5;
-let scale = 0.8;
-let vals = [];
-cx.translate(300,0)
-function branch(tstmp) {
-    //console.log(vals)
+cx.translate(300, 0);
 
-    if(vals.length != 0){
-        length = vals[vals.length-1]}
+function branch(length, angle, scale) {
+    cx.fillRect(0, 0, 1, length);
+    if (length < 8) return;
+    cx.save();
+    cx.translate(0, length);
+    cx.rotate(-angle);
+    branch(length * scale, angle, scale);
+    cx.rotate(2 * angle);
+    branch(length * scale, angle, scale);
+    cx.restore();
+}
 
-    else {length = 90;
-        vals.push(length);
+let countr = 0.001;
+function callBranch(){
+
+    if(countr < 0.8){
+        cx.clearRect(0,0,300,300);
+        cx.clearRect(0,0,-300,300);
+        branch(60, 0.5, countr);
+        countr=countr+0.001;
+        requestAnimationFrame(callBranch)
     }
-    length =length*scale;
-
-    vals.push(length*scale);
-
-    function buildtree(length){
-        console.log("buildtree called with",length)
-        if (length < 7) return;
-        cx.fillRect(0, 0, 1, length);
-        cx.save();
-        cx.translate(0, length);
-        cx.rotate(-angle);
-        buildtree(length * scale);
-        cx.rotate(2 * angle);
-        buildtree(length * scale);
-        cx.restore();
-        return
-    }
-
-    buildtree(length);
-
-    if(vals[vals.length-1] > 2){
-        requestAnimationFrame(branch)}
 
 }
 
-requestAnimationFrame(branch)
+requestAnimationFrame(callBranch)
+
 
     </script>
 
