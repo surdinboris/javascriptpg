@@ -58,7 +58,7 @@
 <script>
     let cx = document.querySelector("canvas").getContext("2d");
     cx.translate(400, 150);
-
+    let canvas = document.querySelector("canvas")
     function branch(length, angle, scale) {
         cx.fillRect(0, 0, 1, length);
         if (length < 8) return;
@@ -77,24 +77,23 @@
     function callBranch(){
         if(countr < 0.75){
             cx.rotate(-0.1);
-            cx.clearRect(0,0,600,600);
-            cx.clearRect(0,0,-600,600);
-            branch(len, 0.7, countr)
+            cx.clearRect(0, 0, canvas.width, canvas.height);
+            cx.clearRect(0, 0, -canvas.width, canvas.height);
+            branch(len, 0.7, countr);
             countr=countr+0.0007;
             len=len+0.1;
             requestAnimationFrame(callBranch)
         }
 
         else{
-            cx.clearRect(0,0,600,600);
-            cx.clearRect(0,0,-600,600);
+            cx.clearRect(0, 0, canvas.width, canvas.height);
+            cx.clearRect(0, 0, -canvas.width, canvas.height);
         }
     }
 
     requestAnimationFrame(callBranch)
 
 </script>
-
 
 //pie chart
 <canvas width="200" height="200"></canvas>
