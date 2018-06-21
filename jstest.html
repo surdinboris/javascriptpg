@@ -1,5 +1,5 @@
 //=============================================================
-<canvas width="600" height="600"></canvas>
+<canvas width="1600" height="600"></canvas>
 <script>
     let cx = document.querySelector("canvas").getContext("2d");
     let trapezoid = 0
@@ -43,7 +43,6 @@
             cx.rotate(Math.PI/angle)
             if(i % 2 == 0){
                 leny=-leny
-
             }
         }
         cx.restore()
@@ -51,9 +50,6 @@
     }
 
     ZigZag(20,1)
-
-
-
 
     function drawColorRect(color, side, angle){
         cx.save()
@@ -66,65 +62,27 @@
 
     cx.restore()
 
-    function drawZigZag(zlength, angle){
 
-    }
+    function twirl(rad,rolls,skewx,skewy){
+        if(!skewx) skewx=0;
+        if(!skewy) skewy=0;
+        cx.save()
+        cx.translate(trapezoid+340, 80)
+        cx.beginPath()
+        cx.moveTo(0,0)
+        let last=0
 
-    drawZigZag(70,Math.PI/4)
-
-</script>
-//rotated + hat
-<canvas width="900" height="900"></canvas>
-<script>
-    let cx = document.querySelector("canvas").getContext("2d");
-    let canvas = document.querySelector("canvas")
-    cx.translate(400, 150);
-    cx.save();
-
-    function branch(length, angle, scale) {
-        cx.fillRect(0, 0, 1, length);
-        if (length < 8) return;
-        cx.save();
-        cx.translate(0, length);
-        cx.rotate(-angle);
-        branch(length * scale, angle, scale);
-        cx.rotate(2 * angle);
-        branch(length * scale, angle, scale);
-        cx.restore();
-    }
-
-    let countr = 0.0001;
-    let len=2;
-
-    function callBranch(){
-        if(countr < 0.75){
-
-            cx.save();
-            cx.setTransform(1, 0, 0, 1, 0, 0);
-            cx.clearRect(0, 0, canvas.width, canvas.height);
-            cx.restore();
-
-            cx.rotate(-0.1);
-            branch(len, 0.7, countr)
-            countr=countr+0.0007;
-            len=len+0.1;
-            requestAnimationFrame(callBranch)
+        for(let i=0; i<rolls; i+=0.1){
+            cx.lineTo(Math.cos(i+skewx)*i*rad,Math.sin(i+skewy)*i*rad)
         }
-
-        else{
-            cx.restore();
-            cx.save();
-            cx.setTransform(1, 0, 0, 1, 0, 0);
-            cx.clearRect(0, 0, canvas.width, canvas.height);
-            cx.restore();
-            let img = document.createElement("img");
-            img.src = "img/hat.png";
-
-            img.addEventListener("load", () => cx.drawImage(img, 0, 0))
-        }
+        cx.stroke()
+        cx.restore()
     }
 
-    requestAnimationFrame(callBranch)
+    twirl(3,25,7,9)
+    //usage  twirl(radius,rolls(amount of convolutions), distortX(optional), distortY(optional))
+
+
 
 </script>
 //=====================================================
