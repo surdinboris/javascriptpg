@@ -1,13 +1,37 @@
 //=============================================================
-<canvas width="600" height="900"></canvas>
+<canvas width="600" height="600"></canvas>
 <script>
     let cx = document.querySelector("canvas").getContext("2d");
+    let trapezoid = 0
+
+    function drawTrapezoid(top, base, height)
+    {
+        cx.save()
+        cx.translate(base,50);
+        cx.beginPath();
+        cx.moveTo(0,0)
+        //top
+        cx.lineTo(top,0)
+        //vertical
+        cx.lineTo(base,height)
+        //base
+        cx.moveTo(0,0)
+        cx.lineTo(top-base,height)
+        cx.lineTo(base,height)
+        cx.stroke()
+        cx.restore()
+
+        trapezoid=base+base
+    }
+
+    drawTrapezoid(100, 130, 90)
+
     function ZigZag(len,angle)
 
     {
         let leny=0;
         cx.save()
-        cx.translate(190,190)
+        cx.translate(trapezoid+190, 50);
         cx.beginPath()
 
         for(let i=0; i<20; i++){
@@ -19,16 +43,36 @@
             cx.rotate(Math.PI/angle)
             if(i % 2 == 0){
                 leny=-leny
+
             }
         }
-
+        cx.restore()
         cx.stroke()
     }
 
     ZigZag(20,1)
-    // Your code here.
-</script>
 
+
+
+
+    function drawColorRect(color, side, angle){
+        cx.save()
+        cx.translate(trapezoid+70, 50);
+        cx.fillStyle=color;
+        cx.rotate(angle)
+        cx.fillRect(0,0,side,side);
+    }
+    drawColorRect('red', 60, Math.PI/4)
+
+    cx.restore()
+
+    function drawZigZag(zlength, angle){
+
+    }
+
+    drawZigZag(70,Math.PI/4)
+
+</script>
 //rotated + hat
 <canvas width="900" height="900"></canvas>
 <script>
