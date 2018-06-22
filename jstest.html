@@ -79,9 +79,26 @@
         cx.restore()
     }
 
-    twirl(3,25,7,9)
+    twirl(3,25)
     //usage  twirl(radius,rolls(amount of convolutions), distortX(optional), distortY(optional))
 
+    function Star(rad,rolls){
+        cx.translate(trapezoid+340, 280)
+        cx.beginPath()
+        let last=0
+
+        for(let i=0; i<9; i+=0.3){
+            let xcoord= Math.cos(i)
+            let ycoord= Math.sin(i)
+            cx.quadraticCurveTo(0, 0, xcoord*90, ycoord*90);
+
+        }
+        cx.fillStyle="orange";
+        cx.fill()
+
+    }
+
+    Star(6,25)
 
 
 </script>
