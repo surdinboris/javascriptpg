@@ -1,4 +1,64 @@
 //=============================================================
+<canvas width="400" height="400"></canvas>
+<p style="text-align: center">
+    <img src="https://pp.userapi.com/c308517/v308517588/34cf/tedv9SC-ZjY.jpg" style="position: relative">
+</p>
+<script>
+    let cx = document.querySelector("canvas").getContext("2d");
+    let cat = document.querySelector("img");
+    let lastTime = null;
+    let angle = Math.PI / 2;
+    function frame(time) {
+        if (lastTime != null) {
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    function updateAnimation(step) {
+        angle+=step;
+        cat.style.top = (Math.sin(angle) *70-90) + "px";
+        cat.style.left = (Math.cos(angle) * 90) + "px";
+    }
+</script>
+//pie chart with labels
+<canvas width="600" height="300"></canvas>
+<script>
+    console.log(results)
+    let cx = document.querySelector("canvas").getContext("2d");
+    let total = results
+        .reduce((sum, {count}) => sum + count, 0);
+    let currentAngle = -0.5 * Math.PI;
+    let centerX = 300, centerY = 150;
+
+    // Add code to draw the slice labels in this loop.
+    for (let result of results) {
+        let sliceAngle = (result.count / total) * 2 * Math.PI;
+        console.log(result.name,sliceAngle )
+        let middleAngle = currentAngle + 0.5 * sliceAngle;
+        let textX = Math.cos(middleAngle) * 120 + centerX;
+        let textY = Math.sin(middleAngle) * 120 + centerY;
+        cx.font = "28px Georgia";
+        cx.fillStyle = result.color;
+        if(middleAngle>1.3) cx.textAlign="right"
+
+        else cx.textAlign="left"
+
+        cx.fillText(result.name+" "+result.count,textX, textY)
+
+        cx.beginPath();
+        cx.arc(centerX, centerY, 100,
+            currentAngle, currentAngle + sliceAngle);
+        currentAngle += sliceAngle;
+        cx.lineTo(centerX, centerY);
+
+        cx.fill();
+    }
+</script>
+
+
 <canvas width="1600" height="600"></canvas>
 <script>
     let cx = document.querySelector("canvas").getContext("2d");
