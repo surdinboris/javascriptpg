@@ -1,5 +1,36 @@
 //=============================================================
 <canvas width="400" height="400"></canvas>
+<script>
+    let cx = document.querySelector("canvas").getContext("2d");
+
+    let lastTime = null;
+    function frame(time) {
+
+        if (lastTime != null) {
+            updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+
+    function updateAnimation(step) {
+        let box={width:300,height:300}
+        cx.strokeRect(50,50,box.width,box.height)
+
+        //initial vector
+        let startPos = new Vec(150,150)
+        let curPos=startPos.plus(new Vec(5/lastTime,5/lastTime))
+        cx.beginPath()
+        cx.arc(curPos.x, curPos.y, 5, 0,  7)
+        cx.stroke()
+        console.log(step)
+        //cx.clearRect(rectX+160,rectY+760,100,77)
+    }
+</script>
+
+<canvas width="400" height="400"></canvas>
 <p style="text-align: center">
     <img src="https://pp.userapi.com/c308517/v308517588/34cf/tedv9SC-ZjY.jpg" style="position: relative">
 </p>
@@ -57,7 +88,6 @@
         cx.fill();
     }
 </script>
-
 
 <canvas width="1600" height="600"></canvas>
 <script>
@@ -143,13 +173,16 @@
     //usage  twirl(radius,rolls(amount of convolutions), distortX(optional), distortY(optional))
 
     function Star(rad,rolls){
-        cx.translate(trapezoid+340, 280)
-        cx.beginPath()
-        let last=0
+        cx.translate(trapezoid+340, 280);
+        cx.beginPath();
+        let last=0;
 
-        for(let i=0; i<8; i+=0.5){
-            let xcoord= Math.cos(i*Math.PI/2)
-            let ycoord= Math.sin(i*Math.PI/2)
+        for(let i=0; i<=8; i+=1){
+            //8 rolls
+            // i - points	in each roll
+            let xcoord= Math.cos(i*(2*Math.PI/8));
+            let ycoord= Math.sin(i*(2*Math.PI/8));
+            //cx.lineTo(xcoord*90,ycoord*90)
             cx.quadraticCurveTo(0, 0, xcoord*90, ycoord*90);
 
         }
