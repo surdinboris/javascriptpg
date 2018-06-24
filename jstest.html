@@ -2,8 +2,11 @@
 <canvas width="400" height="400"></canvas>
 <script>
     let cx = document.querySelector("canvas").getContext("2d");
+    let curPos=new Vec(60,60) //base point for ball
+
 
     let lastTime = null;
+
     function frame(time) {
 
         if (lastTime != null) {
@@ -19,14 +22,28 @@
         let box={width:300,height:300}
         cx.strokeRect(50,50,box.width,box.height)
 
-        //initial vector
-        let startPos = new Vec(150,150)
-        let curPos=startPos.plus(new Vec(5/lastTime,5/lastTime))
+        // curPos = curPos.plus(new Vec(5,5))
+        if(curPos.x > 300)
+            curPos = curPos.plus(new Vec(-1,-1))
+
+        else if(curPos.x < 50)
+            curPos = curPos.plus(new Vec(1,1))
+
+        else if(curPos.y > 300)
+            curPos = curPos.plus(new Vec(0,-1))
+        else if(curPos.y < 50)
+            curPos = curPos.plus(new Vec(0,1))
+
+        else curPos = curPos.plus(new Vec(5,5))
+
         cx.beginPath()
+
+        cx.clearRect(50,50, 300,300)
         cx.arc(curPos.x, curPos.y, 5, 0,  7)
-        cx.stroke()
-        console.log(step)
-        //cx.clearRect(rectX+160,rectY+760,100,77)
+
+        cx.fill()
+        console.log(curPos)
+
     }
 </script>
 
