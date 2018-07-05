@@ -8,7 +8,7 @@
     let gridIns = document.getElementById("grid");
     let grid = [];
 
-    class Grid {
+    class Creature {
         constructor(i,j, type) {
             this.type = type;
             this.coord= [i,j]
@@ -21,8 +21,8 @@
     //grid initial generation
     for(i=0; i<=width; i++) {
         for(j=0; j<=heigth; j++){
-            gr = new Grid(i,j,"crea");
-            grid.push(gr)
+            let cr = new Creature(i,j,"crea");
+            grid.push(cr)
 
         }
     }
