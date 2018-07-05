@@ -1,5 +1,35 @@
-//=============================================================
+//=========================Conway's game====================================
+<div id="grid"></div>
+<button id="next">Next generation</button>
 
+<script>
+    let width=50;
+    let heigth=50;
+    let gridIns = document.getElementById("grid");
+    let grid = [];
+
+    class Grid {
+        constructor(i,j, type) {
+            this.type = type;
+            this.coord= [i,j]
+        }
+        type() {
+            console.log(`The ${this.type}`);
+        }
+    }
+
+    //grid initial generation
+    for(i=0; i<=width; i++) {
+        for(j=0; j<=heigth; j++){
+            gr = new Grid(i,j,"crea");
+            grid.push([gr])
+
+        }
+    }
+    console.log(grid)
+    // Your code here.
+</script>
+//===============================================================
 <script>
 Promise.all([fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/html"}}),
 fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/plain"}}),
