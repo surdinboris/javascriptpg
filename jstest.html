@@ -1,33 +1,35 @@
 //=============================================================
 
 <script>
-//==============================================async responcesof diff types======================
-
 Promise.all([fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/html"}}),
 fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/plain"}}),
 fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"application/json"}})])
 .then(resps => resps.forEach(r=>(r.text().then(t=>console.log(r.status,t)))))
 </script>
-//==============================================async responcesof diff types======================
-
-<textarea id="code">console.log("hi")</textarea>
+//==============================================async response of different types======================
+<textarea id="code">return "hi"</textarea>
 <button id="button">Run</button>
 <pre id="output"></pre>
 
 <script>
-    let codeText = document.getElementById("code").textContent
+
     function evalCode(){
         //console.log(codeText.textContent)
-        eval(codeText)
+        let otput= document.getElementById("output");
+        let fun = new Function(codeText.textContent);
+
+        output.appendChild(document.createTextNode(`\n${fun()}`));
     }
 
-    let codeField = document.getElementById("code")
-    codeField.addEventListener('change', (event) => {codeText = event.target.value})
+    let codeText = document.getElementById("code");
+    let codeField = document.getElementById("code");
+    codeField.addEventListener('change', (event) => {codeText.textContent = event.target.value});
 
-    //update content of the field based on
 
-    let execButt = document.getElementById("button")
-    execButt.addEventListener('click', ()=> evalCode())
+
+    let execButt = document.getElementById("button");
+    execButt.addEventListener('click', ()=> evalCode());
+
 
     // Your code here.
 </script>
