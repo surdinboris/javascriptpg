@@ -1,4 +1,17 @@
 //=============================================================
+
+<script>
+//==============================================async responcesof diff types======================
+
+Promise.all([fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/html"}}),
+fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/plain"}}),
+fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"application/json"}})])
+.then(resps => resps.forEach(r=>(r.text().then(t=>console.log(r.status,t)))))
+</script>
+//===================================================================
+
+
+
 <script>
 function getHeaders(resource){
 fetch(resource).then(response => {
