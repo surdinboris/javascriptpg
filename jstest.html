@@ -1,34 +1,136 @@
 //=========================Conway's game====================================
 <div id="grid"></div>
+<div id="gridview"></div>
 <button id="next">Next generation</button>
-
 <script>
-    let width=50;
-    let heigth=50;
+    let width=6;
+    let height=6;
     let gridIns = document.getElementById("grid");
-    let grid = [];
+
+    class Matrix {
+        constructor(width, height, element = (x, y) => undefined) {
+            this.width = width;
+            this.height = height;
+            this.content = [];
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    this.content[y * width + x] = element(x, y);
+                }
+            }
+        }
+        get(x, y) {
+            return this.content[y * this.width + x];
+        }
+        set(x, y, value) {
+            this.content[y * this.width + x] = value;
+        }
+    }
 
     class Creature {
-        constructor(i,j, type) {
-            this.type = type;
-            this.coord= [i,j]
+        constructor() {
+            this.isLive = Math.floor(Math.random()*2)
         }
-        type() {
-            console.log(`The ${this.type}`);
+
+    }
+    //
+    class MatrixIterator {
+        constructor(matrix) {
+            this.x = 0;
+            this.y = 0;
+            this.matrix = matrix;
+        }
+
+        next() {
+            if (this.y == this.matrix.height) return {done: true};
+
+            let value = {x: this.x,
+                y: this.y,
+                value: this.matrix.get(this.x, this.y)};
+            this.x++;
+            if (this.x == this.matrix.width) {
+                this.x = 0;
+                this.y++;
+            }
+            return {value, done: false};
         }
     }
 
-    //grid initial generation
-    for(i=0; i<=width; i++) {
-        for(j=0; j<=heigth; j++){
-            let cr = new Creature(i,j,"crea");
-            grid.push(cr)
-
-        }
+    //adding iterator
+    Matrix.prototype[Symbol.iterator] = function() {
+        return new MatrixIterator(this);
     }
-    console.log(grid)
-    // Your code here.
+
+    // creating grid
+
+    function creaPop(){
+        if (Math.floor(Math.random()*2 ))
+        {
+            return new Creature()
+        }
+        else return 0
+    }
+
+    let grid  = new Matrix(width,height, creaPop)
+
+    //grid to console
+    for(x=0; x<width; x++){
+        row=[];
+        for(y=0; y<height; y++){
+            row.push(grid.get(x,y))
+        }
+        console.log(row)
+
+    }
+
+    let gridTable= document.getElementById("gridview")
+
+    //generating table based on grid
+    function drawTable(){
+        console.log("draw init")
+        let oldT = document.getElementById("drwtable")
+        if (document.getElementById("drwtable")){
+            gridTable.removeChild(oldT)
+        }
+        let newTab = document.createElement("table");
+        newTab.setAttribute("id","drwtable");
+        for(x=0; x<width; x++){
+            row=[];
+            for(y=0; y<height; y++){
+                row.push(grid.get(x,y))
+            }
+
+            newTab.appendChild(document.createElement("tr"));
+            row.forEach(r=>{
+                ch = document.createElement("INPUT");
+                ch.setAttribute("type", "checkbox");
+                r.isLive? ch.checked = true: ch.checked = false;
+                newTab.appendChild(document.createElement("td").appendChild(ch))
+            })
+        }
+        gridTable.appendChild(newTab)
+
+    }
+
+
+    function newTurn(){
+
+//get new checkbox statuses
+//correct grid's contents
+//computations of live/death
+
+//redraw display
+        drawTable()
+    }
+
+
+    //button handling
+    let butt=document.getElementById("next")
+    butt.addEventListener("click",()=> newTurn())
+    //initial drawing
+    drawTable()
 </script>
+
 //===============================================================
 <script>
 Promise.all([fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/html"}}),
