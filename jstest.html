@@ -13,26 +13,24 @@
             this.height = height;
             this.content = [];
 
-            for (let y = 0; y < height; y++) {
-                for (let x = 0; x < width; x++) {
-                    this.content[y * width + x] = element(x, y);
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    this.content[y * this.width + x] = element(x, y);
                 }
             }
         }
         get(x, y) {
             return this.content[y * this.width + x];
         }
+
         set(x, y, value) {
+            console.log("grid set",y,'*', this.width,'+', x,'=', value)
+            console.log("grid set =",y * this.width + x)
             this.content[y * this.width + x] = value;
         }
     }
 
-    class Creature {
-        constructor() {
-            this.isLive = Math.floor(Math.random()*2)
-        }
 
-    }
     //
     class MatrixIterator {
         constructor(matrix) {
@@ -66,26 +64,30 @@
     function creaPop(){
         if (Math.floor(Math.random()*2 ))
         {
-            return new Creature()
+            return Math.floor(Math.random()*2)
         }
-        else return 0
+        else return "space"
     }
 
     let grid  = new Matrix(width,height, creaPop)
 
     //grid to console
-    for(x=0; x<width; x++){
-        row=[];
+    function gridToCons(){
         for(y=0; y<height; y++){
-            row.push(grid.get(x,y))
+            row=[];
+            for(x=0; x<width; x++){
+                row.push(grid.get(x,y))
+            }
+            console.log(row)
         }
-        console.log(row)
-
     }
 
-    let gridTable= document.getElementById("gridview")
+    console.log(grid)
 
+
+    let gridTable= document.getElementById("gridview")
     //generating table based on grid
+
     function drawTable(){
         console.log("draw init")
         let oldT = document.getElementById("drwtable")
@@ -94,28 +96,37 @@
         }
         let newTab = document.createElement("table");
         newTab.setAttribute("id","drwtable");
-        for(x=0; x<width; x++){
-            row=[];
-            for(y=0; y<height; y++){
-                row.push(grid.get(x,y))
-            }
-
+        for(y=0; y<height; y++){
             newTab.appendChild(document.createElement("tr"));
-            row.forEach(r=>{
+            for(x=0; x<width; x++){
                 ch = document.createElement("INPUT");
                 ch.setAttribute("type", "checkbox");
-                r.isLive? ch.checked = true: ch.checked = false;
+                ch.setAttribute("class", "gridChBox")
+                ch.setAttribute("x", x)
+                ch.setAttribute("y", y)
+                grid.get(x,y)? ch.checked = true: ch.checked = false;
+
+                if (grid.get(x,y) == "space"){
+                    ch.setAttribute("disabled","true");
+                    ch.checked = false;
+                }
                 newTab.appendChild(document.createElement("td").appendChild(ch))
-            })
+
+            }
         }
         gridTable.appendChild(newTab)
-
     }
 
-
     function newTurn(){
-
 //get new checkbox statuses
+        let checks=document.getElementsByClassName("gridChBox")
+
+        for(ch of checks){
+            grid.set(Number(ch.getAttribute("x")), Number(ch.getAttribute("y")), ch.checked? 1:0)
+
+
+        }
+        console.log(grid)
 //correct grid's contents
 //computations of live/death
 
@@ -129,8 +140,8 @@
     butt.addEventListener("click",()=> newTurn())
     //initial drawing
     drawTable()
-</script>
 
+</script>
 //===============================================================
 <script>
 Promise.all([fetch("http://eloquentjavascript.net/author",{ headers:{"Accept":"text/html"}}),
