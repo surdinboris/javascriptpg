@@ -12,7 +12,6 @@
             this.width = width;
             this.height = height;
             this.content = [];
-
             for (let y = 0; y < this.height; y++) {
                 for (let x = 0; x < this.width; x++) {
                     this.content[y * this.width + x] = element(x, y);
@@ -22,23 +21,17 @@
         get(x, y) {
             return this.content[y * this.width + x];
         }
-
         set(x, y, value) {
-            console.log("grid set",y,'*', this.width,'+', x,'=', value)
-            console.log("grid set =",y * this.width + x)
             this.content[y * this.width + x] = value;
         }
     }
-
-
-    //
+    //for\of for Matrix
     class MatrixIterator {
         constructor(matrix) {
             this.x = 0;
             this.y = 0;
             this.matrix = matrix;
         }
-
         next() {
             if (this.y == this.matrix.height) return {done: true};
 
@@ -60,7 +53,6 @@
     }
 
     // creating grid
-
     function creaPop(){
         if (Math.floor(Math.random()*2 ))
         {
@@ -70,7 +62,6 @@
     }
 
     let grid  = new Matrix(width,height, creaPop)
-
     //grid to console
     function gridToCons(){
         for(y=0; y<height; y++){
@@ -81,9 +72,6 @@
             console.log(row)
         }
     }
-
-    console.log(grid)
-
 
     let gridTable= document.getElementById("gridview")
     //generating table based on grid
@@ -111,23 +99,23 @@
                     ch.checked = false;
                 }
                 newTab.appendChild(document.createElement("td").appendChild(ch))
-
             }
         }
         gridTable.appendChild(newTab)
     }
 
     function newTurn(){
-//get new checkbox statuses
+//storing new checkbox statuses
         let checks=document.getElementsByClassName("gridChBox")
-
         for(ch of checks){
             grid.set(Number(ch.getAttribute("x")), Number(ch.getAttribute("y")), ch.checked? 1:0)
-
-
+            if (ch.getAttribute("disabled") == "true"){
+                grid.set(Number(ch.getAttribute("x")), Number(ch.getAttribute("y")), "space")
+            }
         }
-        console.log(grid)
+
 //correct grid's contents
+
 //computations of live/death
 
 //redraw display
