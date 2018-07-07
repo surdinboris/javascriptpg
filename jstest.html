@@ -3,10 +3,9 @@
 <div id="gridview"></div>
 <button id="next">Next generation</button>
 <script>
-    let width=6;
-    let height=6;
+    let width=40;
+    let height=40;
     let gridIns = document.getElementById("grid");
-
     class Matrix {
         constructor(width, height, element = (x, y) => undefined) {
             this.width = width;
@@ -19,10 +18,26 @@
             }
         }
         get(x, y) {
+            //checking out of bands
+            if(x>width-1 || x<0 || y>height-1 || y<0)
+                return 'out'
             return this.content[y * this.width + x];
         }
         set(x, y, value) {
             this.content[y * this.width + x] = value;
+        }
+        getNeihbrsCount(cr){
+            let count=0
+            let neihb =[[-1,-1],[0,-1],[1,-1],
+                [-1,0],        [1,0],
+                [-1,1],[0,1],[1,1]	];
+
+            for(let n=0; n<neihb.length; n++){
+                if(this.get(cr.x+neihb[n][0],cr.y+neihb[n][1])==1)
+                    count+=1
+            }
+
+            return count
         }
     }
     //for\of for Matrix
@@ -46,7 +61,6 @@
             return {value, done: false};
         }
     }
-
     //adding iterator
     Matrix.prototype[Symbol.iterator] = function() {
         return new MatrixIterator(this);
@@ -54,15 +68,10 @@
 
     // creating grid
     function creaPop(){
-        if (Math.floor(Math.random()*2 ))
-        {
-            return Math.floor(Math.random()*2)
-        }
-        else return "space"
+        return Math.floor(Math.random()*2)
     }
-
     let grid  = new Matrix(width,height, creaPop)
-    //grid to console
+    //grid to console - not used
     function gridToCons(){
         for(y=0; y<height; y++){
             row=[];
@@ -114,15 +123,31 @@
             }
         }
 
-//correct grid's contents
-
 //computations of live/death
+        let newGrid= new Matrix(width,height)
+        for (cr of grid){
+            //for currently live cell
+            if (grid.get(cr.x,cr.y) == 1){
+                //in case of proper live nreihbors - leaving cell alive
+                if (grid.getNeihbrsCount(cr) < 2 && grid.getNeihbrsCount(cr) > 4)
+                {
+                    newGrid.set(cr.x,cr.y,1)
+                }
+            }
+            //for currently dead cell
+            if (grid.get(cr.x,cr.y) == 0){
+                //in case of 3 live neihbors - healing
+                if (grid.getNeihbrsCount(cr) == 1){
+                    newGrid.set(cr.x,cr.y,1)
+                }
+            }
 
+        }
+
+        grid=newGrid;
 //redraw display
         drawTable()
     }
-
-
     //button handling
     let butt=document.getElementById("next")
     butt.addEventListener("click",()=> newTurn())
