@@ -1,3 +1,83 @@
+
+//=============================pixel editor===================================
+<div></div>
+<script>
+    //-------------------------------------
+    PictureCanvas.prototype.shmouse = function(downEvent, onDown) {
+        if (downEvent.button == 0) return;
+        let pos = pointerPosition(downEvent, this.dom);
+        let onMove = onDown(pos);
+        if (!onMove) return;
+        let move = moveEvent => {
+            if (moveEvent.buttons == 0) {
+                this.dom.removeEventListener("mousemove", move);
+            } else {
+                let newPos = pointerPosition(moveEvent, this.dom);
+                if (newPos.x == pos.x && newPos.y == pos.y) return;
+                pos = newPos;
+                onMove(newPos);
+            }
+        };
+        this.dom.addEventListener("mousemove", move);
+    };
+
+    function pointerPosition(pos, domNode) {
+        let rect = domNode.getBoundingClientRect();
+        return {x: Math.floor((pos.clientX - rect.left) / scale),
+            y: Math.floor((pos.clientY - rect.top) / scale)};
+    }
+
+    //------------------------------------------------------------
+    class PictureCanvas {
+        constructor(picture, pointerDown) {
+            this.dom = elt("canvas", {
+                onmousemove: event => this.shmouse(event, pointerDown),
+                onmousedown: event => this.mouse(event, pointerDown),
+                ontouchstart: event => this.touch(event, pointerDown)
+            });
+            this.syncState(picture);
+        }
+        syncState(picture) {
+            if (this.picture == picture) return;
+            this.picture = picture;
+            drawPicture(this.picture, this.dom, scale);
+        }
+    }
+
+    //--------------------------------
+    function twick(pos, state, dispatch) {
+        x=pos.x
+        y=pos.y
+
+        //let drawn = [{x, y, color: state.picture.pixel(pos.x, pos.y)}];
+        console.log(state.picture.pixel(pos.x, pos.y), x,y);
+
+        // dispatch({color: state.picture.pixel(pos.x, pos.y),picture: state.picture.draw(drawn)});
+    }
+
+
+    let state = {
+        tool: "draw",
+        color: "#000000",
+        picture: Picture.empty(60, 30, "#FFF0FF")
+    };
+    console.log(updateState.toString())
+    let app = new PixelEditor(state, {
+
+        tools: {draw, fill, rectangle, pick, twick},
+        controls: [ToolSelect, ColorSelect],
+
+        dispatch(action) {
+            state = updateState(state, action);
+            app.syncState(state);
+
+        }
+    });
+
+
+
+    document.querySelector("div").appendChild(app.dom);
+</script>
 //=========================Conway's game====================================
 <div id="grid"></div>
 <div id="gridview"></div>
