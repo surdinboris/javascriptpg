@@ -2,12 +2,56 @@
 //=============================pixel editor===================================
 <div></div>
 <script>
+    //------------------------------------------------------------
+    class Coord {
+        constructor(state, {dispatch}) {
+            this.dom = elt("label", {id:"coord"}, "");
+
+        }
+        syncState(state){  }
+
+    }
+
+
+    class PictureCanvas {
+        constructor(picture, pointerDown) {
+
+            this.dom = elt("canvas", {
+                onmousemove: event => this.shmouse(event,pointerDown),
+                onmousedown: event => this.mouse(event, pointerDown),
+                ontouchstart: event => this.touch(event, pointerDown)
+            });
+            this.syncState(picture);
+        }
+        syncState(picture) {
+            if (this.picture == picture) return;
+            this.picture = picture;
+            drawPicture(this.picture, this.dom, scale);
+        }
+    }
+
     //-------------------------------------
     PictureCanvas.prototype.shmouse = function(downEvent, onDown) {
-        if (downEvent.button == 0) return;
+
+        let pos = pointerPosition(downEvent, this.dom)
+
+        let coo= document.getElementById("coord")
+        coo.removeChild(coo.childNodes[0])
+        coo.appendChild(document.createTextNode(`Coord x:${pos.x} : y:${pos.y}`));
+
+        function pointerPosition(pos, domNode) {
+            let rect = domNode.getBoundingClientRect();
+            return {x: Math.floor((pos.clientX - rect.left) / scale),
+                y: Math.floor((pos.clientY - rect.top) / scale)};
+        }
+    }
+    //--------------------------------
+    PictureCanvas.prototype.mouse = function(downEvent, onDown) {
+        if (downEvent.button != 0) return;
         let pos = pointerPosition(downEvent, this.dom);
-        let onMove = onDown(pos);
+        let onMove = onDown(pos);//pointerDown callback giving it the position of the pixel that was clicked
         if (!onMove) return;
+
         let move = moveEvent => {
             if (moveEvent.buttons == 0) {
                 this.dom.removeEventListener("mousemove", move);
@@ -27,35 +71,8 @@
             y: Math.floor((pos.clientY - rect.top) / scale)};
     }
 
-    //------------------------------------------------------------
-    class PictureCanvas {
-        constructor(picture, pointerDown) {
-            this.dom = elt("canvas", {
-                onmousemove: event => this.shmouse(event, pointerDown),
-                onmousedown: event => this.mouse(event, pointerDown),
-                ontouchstart: event => this.touch(event, pointerDown)
-            });
-            this.syncState(picture);
-        }
-        syncState(picture) {
-            if (this.picture == picture) return;
-            this.picture = picture;
-            drawPicture(this.picture, this.dom, scale);
-        }
-    }
 
-    //--------------------------------
-    function twick(pos, state, dispatch) {
-        x=pos.x
-        y=pos.y
-
-        //let drawn = [{x, y, color: state.picture.pixel(pos.x, pos.y)}];
-        console.log(state.picture.pixel(pos.x, pos.y), x,y);
-
-        // dispatch({color: state.picture.pixel(pos.x, pos.y),picture: state.picture.draw(drawn)});
-    }
-
-
+    ///starting!
     let state = {
         tool: "draw",
         color: "#000000",
@@ -64,8 +81,8 @@
     console.log(updateState.toString())
     let app = new PixelEditor(state, {
 
-        tools: {draw, fill, rectangle, pick, twick},
-        controls: [ToolSelect, ColorSelect],
+        tools: {draw, fill, rectangle, pick},
+        controls: [ToolSelect, ColorSelect, Coord],
 
         dispatch(action) {
             state = updateState(state, action);
