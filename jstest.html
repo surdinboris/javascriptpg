@@ -5,8 +5,7 @@
     //------------------------------------------------------------
     class Coord {
         constructor(state, {dispatch}) {
-            this.dom = elt("label", {id:"coord"}, "");
-
+            this.dom = elt("label", {id:"coord"},state.coord);
         }
         syncState(state){  }
 
@@ -32,12 +31,15 @@
 
     //-------------------------------------
     PictureCanvas.prototype.shmouse = function(downEvent, onDown) {
-
+        console.log(onDown)
         let pos = pointerPosition(downEvent, this.dom)
-
+///////
         let coo= document.getElementById("coord")
         coo.removeChild(coo.childNodes[0])
         coo.appendChild(document.createTextNode(`Coord x:${pos.x} : y:${pos.y}`));
+//////
+
+
 
         function pointerPosition(pos, domNode) {
             let rect = domNode.getBoundingClientRect();
@@ -76,9 +78,10 @@
     let state = {
         tool: "draw",
         color: "#000000",
+        coord:'---',
         picture: Picture.empty(60, 30, "#FFF0FF")
     };
-    console.log(updateState.toString())
+
     let app = new PixelEditor(state, {
 
         tools: {draw, fill, rectangle, pick},
