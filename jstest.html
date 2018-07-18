@@ -4,13 +4,20 @@
 <script>
     //------------------------------------------------------------
     class Coord {
-        constructor(state, {dispatch}) {
+        constructor(state, {dispatch}){
             this.dom = elt("label", {id:"coord"},state.coord);
         }
-        syncState(state){  }
+
+        syncState(state){
+            this.dom.removeChild(this.dom.childNodes[0]);
+            this.dom.appendChild(document.createTextNode(state.coord))}
 
     }
 
+    function shwick(pos, state, dispatch) {
+        state.coord = `Coord x:${pos.x} : y:${pos.y}`
+        dispatch({coord: state.coord})
+    }
 
     class PictureCanvas {
         constructor(picture, pointerDown) {
@@ -31,22 +38,16 @@
 
     //-------------------------------------
     PictureCanvas.prototype.shmouse = function(downEvent, onDown) {
-        console.log(onDown)
+
         let pos = pointerPosition(downEvent, this.dom)
-///////
-        let coo= document.getElementById("coord")
-        coo.removeChild(coo.childNodes[0])
-        coo.appendChild(document.createTextNode(`Coord x:${pos.x} : y:${pos.y}`));
-//////
-
-
-
+        onDown(pos)
         function pointerPosition(pos, domNode) {
             let rect = domNode.getBoundingClientRect();
             return {x: Math.floor((pos.clientX - rect.left) / scale),
                 y: Math.floor((pos.clientY - rect.top) / scale)};
         }
     }
+
     //--------------------------------
     PictureCanvas.prototype.mouse = function(downEvent, onDown) {
         if (downEvent.button != 0) return;
@@ -76,7 +77,7 @@
 
     ///starting!
     let state = {
-        tool: "draw",
+        tool: "shwick",
         color: "#000000",
         coord:'---',
         picture: Picture.empty(60, 30, "#FFF0FF")
@@ -84,7 +85,7 @@
 
     let app = new PixelEditor(state, {
 
-        tools: {draw, fill, rectangle, pick},
+        tools: {draw, fill, rectangle, pick,shwick},
         controls: [ToolSelect, ColorSelect, Coord],
 
         dispatch(action) {
