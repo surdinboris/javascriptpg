@@ -1,6 +1,55 @@
 //=============================pixel editor exrsisesw===================================
 <div></div>
 <script>
+    // Change this method
+    PictureCanvas.prototype.syncState = function(picture) {
+        if(this.picture == picture) return;
+        if(this.picture){
+            let updated={}
+            for(let i= 0; i<picture.pixels.length; i++){
+                if(picture.pixels[i] != this.picture.pixels[i]){
+                    updated[i]=picture.pixels[i];
+
+                }
+            }
+            console.log(updated)
+        }
+
+        this.picture = picture;
+
+        drawPicture(this.picture, this.dom, scale,updated);
+    };
+
+    // You may want to use or change this as well
+    function drawPicture(picture, canvas, scale,updated) {
+
+        canvas.width = picture.width * scale;
+        canvas.height = picture.height * scale;
+        let cx = canvas.getContext("2d");
+        if(updated){
+            for (let y = 0; y < picture.height; y++) {
+                for (let x = 0; x < picture.width; x++) {
+
+                    cx.fillStyle = picture.pixel(x, y);
+                    cx.fillRect(x * scale, y * scale, scale, scale);
+                }
+            }
+
+        }
+        for (let y = 0; y < picture.height; y++) {
+            for (let x = 0; x < picture.width; x++) {
+                cx.fillStyle = picture.pixel(x, y);
+                cx.fillRect(x * scale, y * scale, scale, scale);
+            }
+        }
+    }
+
+    document.querySelector("div")
+        .appendChild(startPixelEditor({}));
+</script>
+//++++++++++++++++++++++
+<div></div>
+<script>
     const startState = {
         tool: "draw",
         color: "#000000",
