@@ -39,7 +39,16 @@
     }
 
 
+    function startLoad(dispatch) {
+        let input = elt("input", {
+            type: "file",
+            onchange: () => finishLoad(input.files[0], dispatch)
+        });
+        document.body.appendChild(input);
+        input.click();
+        input.remove();
 
+    }
 
     // The original PixelEditor class. Extend the constructor.
     function save(picture) {
@@ -82,17 +91,17 @@
             this.controls = controls.map(
                 Control => new Control(state, config));
 
-
             this.dom = elt("div", {tabIndex:0}, this.canvas.dom, elt("br"),
                 ...this.controls.reduce(
                     (a, c) => a.concat(" ", c.dom), []));
 
             var map = {17: false, 70: false, 68: false,
                 82: false, 80: false, 90: false, 83: false,76: false };
-            this.dom.addEventListener('keydown', function (e) {
+
+            function mainlistnr(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 console.log(e.keyCode)
-                console.log()
 
                 if (e.keyCode in map) {
                     map[e.keyCode] = true;
@@ -107,12 +116,18 @@
                     }else if (map[17] && map[90]) {
                         dispatch({undo: true});
                     }else if (map[17] && map[76]) {
+                        map[e.keyCode] = false;
                         startLoad(dispatch);
+
                     }else if (map[17] && map[83]) {
                         dispatch('save');
                     }
                 }
-            });
+            }
+
+
+            this.dom.addEventListener('keydown', mainlistnr );
+
             this.dom.addEventListener('keyup', function (e) {
                 if (e.keyCode in map) {
                     map[e.keyCode] = false;
@@ -129,6 +144,7 @@
     document.querySelector("div")
         .appendChild(startPixelEditor({}));
 </script>
+
 //=============================pixel editor===================================
 <div></div>
 <script>
