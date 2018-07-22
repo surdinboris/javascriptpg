@@ -22,15 +22,17 @@
 
     // You may want to use or change this as well
     function drawPicture(picture, canvas, scale, updated) {
-        //console.log(updated !== undefined)
-        canvas.width = picture.width * scale;
-        canvas.height = picture.height * scale;
-        let cx = canvas.getContext("2d");
+        console.log(canvas)
+        //canvas.width = picture.width * scale;
+        // canvas.height = picture.height * scale;
+        // let cx = canvas.getContext("2d");
         if(updated !== undefined){
+
             console.log(updated)
             for (let y = 0; y < picture.height; y++) {
                 for (let x = 0; x < picture.width; x++) {
                     if (updated[x + y * picture.width]) {
+                        cx=document.getElementsByTagName('canvas')[0].getContext("2d");
                         //console.log(Object.keys(updated)[0],updated[Object.keys(updated)[0]])
                         //	console.log('gg',updated[x + y * picture.width])
                         //console.log(
@@ -43,7 +45,9 @@
             }
         }
         else {
-
+            canvas.width = picture.width * scale;
+            canvas.height = picture.height * scale;
+            let cx = canvas.getContext("2d");
             for (let y = 0; y < picture.height; y++) {
                 for (let x = 0; x < picture.width; x++) {
                     //console.log(picture.pixel(x, y))
