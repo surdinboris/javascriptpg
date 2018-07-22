@@ -5,45 +5,54 @@
     PictureCanvas.prototype.syncState = function(picture) {
         if(this.picture == picture) return;
         if(this.picture){
-            let updated={}
+            this.updated={}
             for(let i= 0; i<picture.pixels.length; i++){
                 if(picture.pixels[i] != this.picture.pixels[i]){
-                    updated[i]=picture.pixels[i];
+                    this.updated[i]=picture.pixels[i];
 
                 }
             }
-            console.log(updated)
+
         }
 
         this.picture = picture;
 
-        drawPicture(this.picture, this.dom, scale,updated);
+        drawPicture(this.picture, this.dom, scale,this.updated);
     };
 
     // You may want to use or change this as well
-    function drawPicture(picture, canvas, scale,updated) {
-
+    function drawPicture(picture, canvas, scale, updated) {
+        //console.log(updated !== undefined)
         canvas.width = picture.width * scale;
         canvas.height = picture.height * scale;
         let cx = canvas.getContext("2d");
-        if(updated){
+        if(updated !== undefined){
+            console.log(updated)
             for (let y = 0; y < picture.height; y++) {
                 for (let x = 0; x < picture.width; x++) {
+                    if (updated[x + y * picture.width]) {
+                        //console.log(Object.keys(updated)[0],updated[Object.keys(updated)[0]])
+                        //	console.log('gg',updated[x + y * picture.width])
+                        //console.log(
+                        cx.fillStyle = updated[x + y * picture.width];
+                        cx.fillRect(x * scale, y * scale, scale, scale);
 
+                    }
+
+                }
+            }
+        }
+        else {
+
+            for (let y = 0; y < picture.height; y++) {
+                for (let x = 0; x < picture.width; x++) {
+                    //console.log(picture.pixel(x, y))
                     cx.fillStyle = picture.pixel(x, y);
                     cx.fillRect(x * scale, y * scale, scale, scale);
                 }
             }
-
-        }
-        for (let y = 0; y < picture.height; y++) {
-            for (let x = 0; x < picture.width; x++) {
-                cx.fillStyle = picture.pixel(x, y);
-                cx.fillRect(x * scale, y * scale, scale, scale);
-            }
         }
     }
-
     document.querySelector("div")
         .appendChild(startPixelEditor({}));
 </script>
