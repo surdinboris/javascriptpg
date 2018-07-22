@@ -1,6 +1,40 @@
 //=============================pixel editor exrsisesw===================================
 <div></div>
 <script>
+    function circle(start, state, dispatch) {
+        function drawRectangle(pos) {
+            //console.log(start.x, pos.x)
+            let xStart = Math.min(start.x, pos.x);
+            let yStart = Math.min(start.y, pos.y);
+            let xEnd = Math.max(start.x, pos.x);
+            let yEnd = Math.max(start.y, pos.y);
+            let xyDist=Math.sqrt(Math.pow(xEnd-xStart, 2)+Math.pow(yEnd-yStart, 2));
+            //console.log(xyDist)
+
+            let drawn = [];
+            for (let y = yStart; y <= yEnd; y++) {
+                for (let x = xStart; x <= xEnd; x++) {
+                    if( (Math.sqrt(Math.pow(x*2-xStart, 2)+Math.pow(y*2-yStart, 2))) < xyDist)
+                        drawn.push({x, y, color: state.color});
+                    //dispatch({picture: state.picture.draw(drawn)});
+                }
+            }
+            dispatch({picture: state.picture.draw(drawn)});
+        }
+        //drawRectangle(start);
+        return drawRectangle;
+    }
+
+
+    let dom = startPixelEditor({
+        tools: Object.assign({}, baseTools, {circle})
+    });
+    document.querySelector("div").appendChild(dom);
+</script>
+
+//////////
+<div></div>
+<script>
     // Change this method
     PictureCanvas.prototype.syncState = function(picture) {
         if(this.picture == picture) return;
