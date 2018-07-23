@@ -1,6 +1,57 @@
 //=============================pixel editor exrsisesw===================================
 <div></div>
 <script>
+
+    //runs each mouse movement
+    function circle(start, state, dispatch) {
+
+        function drawRectangle(pos) {
+            //it changes places to get valid ranges
+            let xStart = Math.min(start.x, pos.x);
+            let yStart = Math.min(start.y, pos.y);
+            let xEnd = Math.max(start.x, pos.x);
+            let yEnd = Math.max(start.y, pos.y);
+            let radius=Math.sqrt(Math.pow(xEnd-xStart, 2)+Math.pow(yEnd-yStart, 2));
+            // console.log('radius',radius)
+            console.log(xStart,xEnd,':', yStart,yEnd)
+            console.log(start.x,pos.x,':', start.y,pos.y)
+
+            //around start position
+
+            // console.log(xyDist)
+
+            let drawn = [];
+
+            //range generation
+            for (let y = start.y; y <= pos.y; y++) {
+                for (let x = start.x; x <= pos.x; x++) {
+                    let distanceFromCenter=Math.sqrt(Math.pow(x-xStart, 2)+ Math.pow(x-yStart, 2))
+                    //    console.log('dfc',distanceFromCenter)
+                    // let distanceFromCenter= Pythagorean formula to figure out their distance from the center.
+                    // if relative pixel position not more than drag from center
+                    //if((Math.sqrt(Math.pow(x-xStart, 2)+Math.pow(y-yStart, 2))) < xyDist)
+                    //if (distanceFromCenter*2 < radius)
+                    drawn.push({x, y, color: state.color});
+                }
+            }
+            //console.log(drawn)
+            dispatch({picture: state.picture.draw(drawn)});
+
+        }
+        drawRectangle(start);
+        return drawRectangle;
+    }
+
+
+    let dom = startPixelEditor({
+        tools: Object.assign({}, baseTools, {circle})
+    });
+    document.querySelector("div").appendChild(dom);
+</script>
+
+//+++++++
+<div></div>
+<script>
     function circle(start, state, dispatch) {
         function drawRectangle(pos) {
             //console.log(start.x, pos.x)
