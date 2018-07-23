@@ -1,4 +1,35 @@
 //=============================pixel editor exrsisesw===================================
+
+<div></div>
+<script>
+    // The old draw tool. Rewrite this.
+
+    function draw(pos, state, dispatch) {
+        state.prev ={}
+        function drawPixel({x, y}, state) {
+            console.log(state.prev)
+            console.log(x,y)
+            state.prev.x = x;
+            state.prev.y = y;
+            let drawn = {x, y, color: state.color};
+
+
+            dispatch({picture: state.picture.draw([drawn])});
+        }
+        drawPixel(pos, state);
+        return drawPixel;
+    }
+
+    function line(pos, state, dispatch) {
+        // Your code here
+    }
+
+    let dom = startPixelEditor({
+        tools: {draw, line, fill, rectangle, pick}
+    });
+    document.querySelector("div").appendChild(dom);
+</script>
+//+++++
 <div></div>
 <script>
 
@@ -20,8 +51,8 @@
             let drawn = [];
 
             //range generation
-            for (let y = yStart; y <= yEnd; y++) {
-                for (let x = xStart; x <= xEnd; x++) {
+            for (let y = -yStart; y <= yEnd; y++) {
+                for (let x = -xStart; x <= xEnd; x++) {
                     let distanceFromCenter=(Math.sqrt(Math.pow(x-xStart, 2)+ Math.pow(x-yStart, 2)))*2
                     console.log('dfc',distanceFromCenter, (Math.sqrt(Math.pow(x-xStart, 2)+Math.pow(y-yStart, 2)))*2)
 
