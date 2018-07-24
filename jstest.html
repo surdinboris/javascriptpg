@@ -1,28 +1,40 @@
 //=============================pixel editor exrsisesw===================================
-
 <div></div>
 <script>
     // The old draw tool. Rewrite this.
 
     function draw(pos, state, dispatch) {
         state.prev ={}
+
         function drawPixel({x, y}, state) {
 
-            let  {nx,ny}= state.prev
+            function  isNeighbor(newpos, state, dispatch){
+                if (state.prev.nx == undefined  || state.prev.ny == undefined)
+                    return false
+                if (newpos.x-state.prev.nx >= -1 && newpos.x-state.prev.nx <= 1 &&
+                    newpos.y-state.prev.ny >= -1 && newpos.y-state.prev.ny <= 1)
+                    return false
+                else
+                //console.log('need line')
+                    return	line(newpos, state, dispatch)
 
+            }
 
-            //reassigning previous state
+            //let prevPos = {x:state.prev.nx, y:state.prev.ny}
+            let newPos = {x:x, y:y}
+            let lines= isNeighbor(newPos, state, dispatch)
+
+            let drawn =[{x, y, color: state.color}]
+
+            if (lines)  drawn.push(...lines)
+            console.log(drawn)
+            // console.log(lines)
+
+            dispatch({picture: state.picture.draw(drawn)});
+
+            //reassigning previous coords to state prev container
             state.prev.nx = x;
             state.prev.ny = y;
-
-
-
-            console.log('prev',nx,ny,' | new',x,y)
-            //  nned to calculate and fill gaps and correct
-            let drawn = {x, y, color: state.color};
-
-
-            dispatch({picture: state.picture.draw([drawn])});
         }
         drawPixel(pos, state);
         return drawPixel;
@@ -30,12 +42,22 @@
 
     function line(pos, state, dispatch) {
         // Your code here
+        //console.log('iam line',pos, state.prev )
+        //range building and filling gaps
+        let pixline=[]
+        for (let y = pos.y; y <= state.prev.ny; y++) {
+            for (let x = pos.x; x <= state.prev.nx; x++) {
+                pixline.push({x, y, color: "#ff3e3e"})
+            }
+        }
+        return pixline
     }
 
     let dom = startPixelEditor({
         tools: {draw, line, fill, rectangle, pick}
     });
     document.querySelector("div").appendChild(dom);
+
 </script>
 //+++++
 <div></div>
