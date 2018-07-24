@@ -7,10 +7,18 @@
     function draw(pos, state, dispatch) {
         state.prev ={}
         function drawPixel({x, y}, state) {
-            console.log(state.prev)
-            console.log(x,y)
-            state.prev.x = x;
-            state.prev.y = y;
+
+            let  {nx,ny}= state.prev
+
+
+            //reassigning previous state
+            state.prev.nx = x;
+            state.prev.ny = y;
+
+
+
+            console.log('prev',nx,ny,' | new',x,y)
+            //  nned to calculate and fill gaps and correct
             let drawn = {x, y, color: state.color};
 
 
