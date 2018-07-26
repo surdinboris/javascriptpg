@@ -27,7 +27,7 @@
             let drawn =[{x, y, color: state.color}]
 
             if (lines)  drawn.push(...lines)
-            console.log(drawn)
+            //console.log(drawn)
             // console.log(lines)
 
             dispatch({picture: state.picture.draw(drawn)});
@@ -41,8 +41,17 @@
     }
 
     function line(pos, state, dispatch) {
-        // Your code here
-        //console.log('iam line',pos, state.prev )
+        //    The first thing your line drawing function should
+        //  do is check whether the difference between the
+        //  x-coordinates is larger than the difference between
+        //  the y-coordinates. If it is, this is a horizontal-ish
+        //  line, and if not, a vertical-ish one.
+        let ydiff=Math.abs(pos.y-state.prev.ny)
+        let xdiff=Math.abs(pos.x-state.prev.nx)
+        console.log('y differ',ydiff)
+        console.log('x differ',xdiff)
+        if (ydiff>xdiff) console.log('vertical-ish')
+        else console.log('horizontal-ish')
         //range building and filling gaps
         let pixline=[]
         for (let y = pos.y; y <= state.prev.ny; y++) {
