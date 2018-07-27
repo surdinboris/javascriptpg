@@ -46,22 +46,57 @@
         //  x-coordinates is larger than the difference between
         //  the y-coordinates. If it is, this is a horizontal-ish
         //  line, and if not, a vertical-ish one.
-        let ydiff=Math.abs(pos.y-state.prev.ny)
-        let xdiff=Math.abs(pos.x-state.prev.nx)
-        console.log('y differ',ydiff)
-        console.log('x differ',xdiff)
-        if (ydiff>xdiff) console.log('vertical-ish')
-        else console.log('horizontal-ish')
+
+        // let ydiff=Math.abs(pos.y-state.prev.ny)
+        // let xdiff=Math.abs(pos.x-state.prev.nx)
+
+        //now you can check whether the start point has a higher coordinate along
+        //that axis than the endpoint and swap them if necessary.
+        //console.log('y differ',ydiff)
+        // console.log('x differ',xdiff)
+        let mainAxs='n'
+        let curpos=pos
+        let prevpos=state.prev
+
+        if (Math.abs(curpos.y-prevpos.ny)>Math.abs(curpos.x-prevpos.nx)) {
+            console.log('vertical-ish')
+            mainAxs= 'y'
+            if(curpos.y>prevpos.ny)
+                [curpos.y,prevpos.ny]=[prevpos.ny,curpos.y];
+        }
+        else {
+
+            console.log('horizontal-ish')
+            console.log(curpos.x,prevpos.nx)
+            mainAxs= 'x'
+            if(curpos.x>prevpos.nx)
+                [curpos.x,prevpos.nx]=[prevpos.nx,curpos.x];}
+        console.log(curpos.x,prevpos.nx)
+        //compute the slope of the line which determines the amount the
+        //coordinate on the other axis changes for each step you take
+        //along your main axis.
         //range building and filling gaps
         let pixline=[]
-        for (let y = pos.y; y <= state.prev.ny; y++) {
-            for (let x = pos.x; x <= state.prev.nx; x++) {
+
+        if(mainAxs == 'y'){
+            let x=curpos.x;
+            //dearrange
+
+            for (let y = curpos.y; y <= prevpos.ny; y++) {
+                //for (let x = pos.x; x <= state.prev.nx; x++) {
                 pixline.push({x, y, color: "#ff3e3e"})
+            }
+        }
+        else if(mainAxs == 'x'){
+            let y=curpos.y;
+            for (let x = curpos.x; x <= prevpos.nx; x++) {
+                //for (let x = pos.x; x <= state.prev.nx; x++) {
+                pixline.push({x,y , color: "#ff3e3e"})
+                //}
             }
         }
         return pixline
     }
-
     let dom = startPixelEditor({
         tools: {draw, line, fill, rectangle, pick}
     });
@@ -70,7 +105,6 @@
 </script>
 
 <div></div>
-<script>
     // The old draw tool. Rewrite this.
 
     function draw(pos, state, dispatch) {
