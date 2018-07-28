@@ -1,4 +1,102 @@
 //=============================pixel editor exrsisesw===================================
+
+<div></div>
+<script>
+    // The old draw tool. Rewrite this.
+
+    function draw(pos, state, dispatch) {
+        state.prev ={}
+
+        function drawPixel({x, y}, state) {
+
+            function  isNeighbor(newpos, state, dispatch){
+                if (state.prev.nx == undefined  || state.prev.ny == undefined)
+                    return false
+                if (newpos.x-state.prev.nx >= -1 && newpos.x-state.prev.nx <= 1 &&
+                    newpos.y-state.prev.ny >= -1 && newpos.y-state.prev.ny <= 1)
+                    return false
+                else
+                //console.log('need line')
+                    return	line(newpos, state, dispatch)
+
+            }
+
+            //let prevPos = {x:state.prev.nx, y:state.prev.ny}
+            let newPos = {x:x, y:y}
+            let lines= isNeighbor(newPos, state, dispatch)
+
+            let drawn =[{x, y, color: state.color}]
+
+            if (lines)  drawn.push(...lines)
+            //console.log(drawn)
+            // console.log(lines)
+
+            dispatch({picture: state.picture.draw(drawn)});
+
+            //reassigning previous coords to state prev container
+            state.prev.nx = x;
+            state.prev.ny = y;
+        }
+        drawPixel(pos, state);
+        return drawPixel;
+    }
+
+    function line(pos, state, dispatch) {
+        function drawline(pos) {
+            let mainAxs='n'
+            let curpos=pos
+            let prevpos=state.prev
+
+            if (Math.abs(curpos.y-prevpos.ny)>Math.abs(curpos.x-prevpos.nx)) {
+                console.log('vertical-ish')
+                mainAxs= 'y'
+                if(curpos.y>prevpos.ny)
+                    [curpos.y,prevpos.ny]=[prevpos.ny,curpos.y];
+            }
+            else {
+
+                console.log('horizontal-ish')
+                console.log(curpos.x,prevpos.nx)
+                mainAxs= 'x'
+                if(curpos.x>prevpos.nx)
+                    [curpos.x,prevpos.nx]=[prevpos.nx,curpos.x];}
+            console.log(curpos.x,prevpos.nx)
+            //compute the slope of the line which determines the amount the
+            //coordinate on the other axis changes for each step you take
+            //along your main axis.
+            //range building and filling gaps
+            let pixline=[]
+
+            if(mainAxs == 'y'){
+                let x=curpos.x;
+                //dearrange
+
+                for (let y = curpos.y; y <= prevpos.ny; y++) {
+                    //for (let x = pos.x; x <= state.prev.nx; x++) {
+                    pixline.push({x, y, color: "#ff3e3e"})
+                }
+            }
+            else if(mainAxs == 'x'){
+                let y=curpos.y;
+                for (let x = curpos.x; x <= prevpos.nx; x++) {
+                    //for (let x = pos.x; x <= state.prev.nx; x++) {
+                    pixline.push({x,y , color: "#36ff00"})
+                    //}
+                }
+            }
+            dispatch({picture: state.picture.draw(pixline)});
+            //return pixline
+        }
+        drawline(pos)
+        return drawline
+    }
+    let dom = startPixelEditor({
+        tools: {draw, line, fill, rectangle, pick}
+    });
+    document.querySelector("div").appendChild(dom);
+
+</script>
+
 <div></div>
 <script>
     // The old draw tool. Rewrite this.
@@ -91,7 +189,7 @@
             let y=curpos.y;
             for (let x = curpos.x; x <= prevpos.nx; x++) {
                 //for (let x = pos.x; x <= state.prev.nx; x++) {
-                pixline.push({x,y , color: "#ff3e3e"})
+                pixline.push({x,y , color: "#36ff00"})
                 //}
             }
         }
