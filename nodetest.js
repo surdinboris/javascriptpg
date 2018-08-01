@@ -17,7 +17,16 @@ let myserver= createServer((request,response) => {
         response.end();
     }
 
+    else if (request.url == '/file'){
+        let {readFile}=require("fs");
+        response.writeHead(200,{"Content-Type": "text/html"});
+        readFile('/Gpl',(err,res )=>{
+            let lines = res.toString().split("\n");
+            lines.forEach(l=>response.write(l.concat('<br>')))
+            response.end()
+            })
 
+    }
     //pull    http://www.aquarium.ru/
     else if(request.url == '/aquarium'){
 
