@@ -90,12 +90,14 @@ let cnt =0;
 
 createServer((request, response) => {
     console.log(request.method);
+    console.log('url',request.url);
+
     response.writeHead(200, {"Content-Type": "text/plain"});
     request.on("data", chunk =>{
         console.log(chunk);
-        response.write(chunk.toString().toUpperCase()+78)})
+        response.write(chunk.toString().toUpperCase())});
 
-   request.on("end", () => response.end());
+   request.on("end", () => response.end(78));
 
 }).listen(8001);
 
