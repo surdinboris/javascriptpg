@@ -8,18 +8,18 @@ let filelist=[];
 process.argv.slice(3).forEach(file=>{filelist.push(process.cwd()+sep+file)});
 
 
- function searchrun(filelist) {
+function searchrun(filelist) {
 console.log('filelist',filelist);
-filelist.forEach(async f=> {
+filelist.forEach( f=> {
 
-    await  stat(f, async (err, st) => {
+      stat(f, (err, st) => {
         //console.log(st);
         if (st.isDirectory()) {
             console.log(f, 'is directory,getting content')
             searchrun([f]);
         }
         else {
-            await readFile(f, "utf8", async (error, text) => {
+             readFile(f, "utf8",  (error, text) => {
 
                 if (error) throw error;
 
