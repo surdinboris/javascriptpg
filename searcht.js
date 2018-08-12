@@ -1,5 +1,6 @@
 
 const {sep} = require("path");
+const {basename}=require("path");
 const {readFile} = require("fs");
 let searchxt =  new RegExp(process.argv[2]);
 let filelist=[];
@@ -9,7 +10,7 @@ console.log(filelist);
 filelist.forEach(async f=>{
     await readFile(f, "utf8", (error, text) => {
         if (error) throw error;
-        console.log(`The file ${f} ${searchxt.test(text)? 'contains': 'not contains'} ${process.argv[2]}`);
+        console.log(`The file ${basename(f)} ${searchxt.test(text)? 'contains': 'not contains'} ${process.argv[2]}`);
     })
 
 })
