@@ -107,7 +107,11 @@ methods.PUT = async function(request) {
 methods.MKCOL  = async function(request) {
     let path = urlPath(request.url);
     console.log(path);
-    mkdir(path, error => {if(error) console.log(error)});
-
-    return {status: 200};
+    try {
+       await mkdir(path);
+    } catch (error) {
+        if (error) {
+        return {status: 404, body: "Directory already present"}}
+    }
+    return {status: 200, body: "Directory created sucessfully"};
 };
