@@ -71,7 +71,7 @@ methods.GET = async function(request) {
     }
 };
 
-const {rmdir, unlink} = require("fs").promises;
+const {rmdir,mkdir, unlink} = require("fs").promises;
 
 methods.DELETE = async function(request) {
     let path = urlPath(request.url);
@@ -102,4 +102,12 @@ methods.PUT = async function(request) {
     let path = urlPath(request.url);
     await pipeStream(request, createWriteStream(path));
     return {status: 204};
+};
+
+methods.MKCOL  = async function(request) {
+    let path = urlPath(request.url);
+    console.log(path);
+    mkdir(path, error => {if(error) console.log(error)});
+
+    return {status: 200};
 };
