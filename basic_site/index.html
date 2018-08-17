@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My First HTML</title>
+  <meta charset="UTF-8">
+  <script>
+      document.addEventListener("DOMContentLoaded", function(e) {
+          let doc = document.getElementsByTagName('p');
+          doc=Array.prototype.slice.call(doc);
+          doc.forEach(el =>el.setAttribute("style", "background-color: red;"))
+          
+      })
+  </script>
+</head>
+<body>
+
+<p>Node JS basic site</p>
+<p>Meta data is data about the HTML document.</p>
+
+</body>
+</html>
