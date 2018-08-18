@@ -24,20 +24,16 @@ createServer((request,response)=> {
 
                     return {body: String(error), status: 500};
                 })
-                ///////{body, status = 200, type = "text/plain"} ---unpackingwith fallbacks  for object returned from handler
                 .then(({body, status = 200, type = "text/html"}) => {
 
                     response.writeHead(status, {"Content-Type": type});
-
+                    //sending mime file contents in case of file opening
                     if (body && body.pipe) body.pipe(response);
-
+                    //generating page with dir content
                     else  {
                         response.write(ind);
-                        response.write(body);
                         response.end(body);
                     }
-
-
                 })
 
         })
@@ -67,10 +63,16 @@ let filedir= async function(request) {
         else return {status: 404, body: "File not found"};
     }
     if (stats.isDirectory()) {
-        let urllist=(await readdir(path)).map((c)=>{
-            return `<a href=${request.url}${c}/>${c}</a><br>`});
+        let urllist=await Promise.all((await readdir(path)).map(async (c)=>{
+            let dirfilestat = await stat(c)
+            if(dirfilestat.isDirectory()) return `<a href=${request.url}${c}/>${c}</a><br>`;
+            return `<a href=${request.url}${c}/>${c}</a><button type="submit" value="Submit">Edit</button>  <br> `
+
+    }));
         return {body: urllist.join("\n")};
-    } else {
+    }
+
+    else {
         return {body: createReadStream(path),
             type: mime.getType(path)};
     }

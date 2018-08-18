@@ -7,8 +7,10 @@
       document.addEventListener("DOMContentLoaded", function(e) {
           let doc = document.getElementsByTagName('p');
           doc=Array.prototype.slice.call(doc);
-          doc.forEach(el =>el.setAttribute("style", "background-color: red;"))
-
+          doc.forEach(el =>el.setAttribute("style", "background-color: red;"));
+          console.log(document.getElementsByTagName('button'));
+          //onclick - new window with form + file content, post to server
+          //for dirs - no button in each dir upload field with button
       })
   </script>
 </head>
