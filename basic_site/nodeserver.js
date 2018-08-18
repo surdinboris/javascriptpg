@@ -10,7 +10,6 @@ const index=baseDirectory + sep + 'index.html';
 createServer((request,response)=> {
     if(request.method=='GET') {
         //let bodyp = createReadStream(index);
-
         let type = mime.getType(index);
         response.writeHead(200, {"Content-Type": type});
         //lets try to put files
@@ -39,6 +38,8 @@ createServer((request,response)=> {
         })
     }
 
+    else if(request.method=='put') console.log('put',request)
+
 }).listen(8000);
 
 function urlPath(url) {
@@ -66,9 +67,12 @@ let filedir= async function(request) {
         let urllist=await Promise.all((await readdir(path)).map(async (c)=>{
             console.log('path',path+sep+c)
             let dirfilestat = await stat(path+sep+c)
-            if(dirfilestat.isDirectory()) return `<a href=${request.url}${c}/>${c}</a><br>`;
-            return `<a href=${request.url}${c}/>${c}</a><button type="submit" value="Submit">Edit</button>  <br> `
 
+            if(dirfilestat.isDirectory()) return `<a class="dir" href=${request.url}${c}/>${c}</a><br>`;
+           // return `<a href=${request.url}${c}/>${c}</a><button type="submit" value="${request.url}${c}">Edit</button>  <br> `
+       return `<a href="#" onclick='window.open(${request.url}${c}/)'>${c}</a><br>`;
+
+        //    return `<a  href=${request.url}${c}/>${c}</a><br>`;
     }));
         return {body: urllist.join("\n")};
     }

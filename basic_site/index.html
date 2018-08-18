@@ -5,10 +5,16 @@
   <meta charset="UTF-8">
   <script>
       document.addEventListener("DOMContentLoaded", function(e) {
-          let doc = document.getElementsByTagName('p');
-          doc=Array.prototype.slice.call(doc);
-          doc.forEach(el =>el.setAttribute("style", "background-color: red;"));
-          console.log(document.getElementsByTagName('button'));
+          let header = document.getElementsByTagName('p');
+          Array.prototype.slice.call(header).forEach(el =>el.setAttribute("style", "color: green;"));
+
+
+      //     let buttons= Array.prototype.slice.call(document.getElementsByTagName('button'));
+      //     buttons.forEach(b=>b.addEventListener("click",()=>{
+      //
+      //         window.open(`http://localhost:8000${b.value}`,
+      //         'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=550,height=550'
+      // )}));
           //onclick - new window with form + file content, post to server
           //for dirs - no button in each dir upload field with button
       })
