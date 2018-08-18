@@ -26,8 +26,11 @@ createServer((request,response)=> {
                 .then(({body, status = 200, type = "text/html"}) => {
 
                     response.writeHead(status, {"Content-Type": type});
+                    //response.writeHead(status, {"Content-Type": 'html'})
                     //sending mime file contents in case of file opening
                     if (body && body.pipe) body.pipe(response);
+
+                      //  response.write(`<textarea></textarea>`)
                     //generating page with dir content
                     else  {
                         response.write(ind);
@@ -70,7 +73,7 @@ let filedir= async function(request) {
 
             if(dirfilestat.isDirectory()) return `<a class="dir" href=${request.url}${c}/>${c}</a><br>`;
            // return `<a href=${request.url}${c}/>${c}</a><button type="submit" value="${request.url}${c}">Edit</button>  <br> `
-       return `<a href="#" onclick='window.open(${request.url}${c}/)'>${c}</a><br>`;
+       return `<a href="#" onclick='window.open("${request.url}${c}/");return false;'>${c}</a><br>`;
 
         //    return `<a  href=${request.url}${c}/>${c}</a><br>`;
     }));
