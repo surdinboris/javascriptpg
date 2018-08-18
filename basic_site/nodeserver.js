@@ -64,7 +64,8 @@ let filedir= async function(request) {
     }
     if (stats.isDirectory()) {
         let urllist=await Promise.all((await readdir(path)).map(async (c)=>{
-            let dirfilestat = await stat(c)
+            console.log('path',path+sep+c)
+            let dirfilestat = await stat(path+sep+c)
             if(dirfilestat.isDirectory()) return `<a href=${request.url}${c}/>${c}</a><br>`;
             return `<a href=${request.url}${c}/>${c}</a><button type="submit" value="Submit">Edit</button>  <br> `
 
