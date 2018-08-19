@@ -28,9 +28,12 @@ createServer((request,response)=> {
                     response.writeHead(status, {"Content-Type": type});
                     //response.writeHead(status, {"Content-Type": 'html'})
                     //sending mime file contents in case of file opening
-                    if (body && body.pipe) body.pipe(response);
+                    if (type=='file') {//body.pipe(response);
+                       console.log('bodypath',body);
+                        readFile(body, "utf8").then(b=>{response.write(`<!DOCTYPE html><textarea>${b}</textarea>`);
+                            response.end()
+                    })}
 
-                      //  response.write(`<textarea></textarea>`)
                     //generating page with dir content
                     else  {
                         response.write(ind);
@@ -58,6 +61,7 @@ function urlPath(url) {
 
 let filedir= async function(request) {
     let path = urlPath(request.url);
+
     let stats;
     try {
         stats = await stat(path);
@@ -77,11 +81,13 @@ let filedir= async function(request) {
 
         //    return `<a  href=${request.url}${c}/>${c}</a><br>`;
     }));
-        return {body: urllist.join("\n")};
+        return {body: urllist.join("\n"),
+            type: 'dir'};
     }
 
     else {
-        return {body: createReadStream(path),
-            type: mime.getType(path)};
+        //return {body: createReadStream(path),
+        return {body: path,
+            type: 'file'};
     }
 };
