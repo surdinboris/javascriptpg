@@ -35,7 +35,10 @@ createServer((request,response)=> {
                        console.log('bodypath',body);
                         readFile(body, "utf8").then(b=>{
                             response.write(`<!DOCTYPE html>
-                            <textarea rows="30" cols="50">${b.replaceAll("<","&lt;").replaceAll(">","&gt;")}</textarea>`);
+                            <textarea form="usrform" rows="30" cols="50">${b.replaceAll("<","&lt;").replaceAll(">","&gt;")}</textarea>
+                            <form action="/subm" id="usrform" method="post">
+                            <input type="submit">
+                            </form>`);
                             response.end()
                     })}
 
@@ -49,7 +52,12 @@ createServer((request,response)=> {
         })
     }
 
-    else if(request.method=='put') console.log('put',request)
+    else if(request.method=='POST') {
+        
+        response.write('saved');
+        response.end();
+    }
+
 
 }).listen(8000);
 
