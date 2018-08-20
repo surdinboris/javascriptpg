@@ -5,7 +5,10 @@ const {resolve, sep} = require("path");
 const baseDirectory = process.cwd();
 const mime = require("mime");
 const {parse} = require("url");
-
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 const index=baseDirectory + sep + 'index.html';
 createServer((request,response)=> {
     if(request.method=='GET') {
@@ -30,7 +33,9 @@ createServer((request,response)=> {
                     //sending mime file contents in case of file opening
                     if (type=='file') {//body.pipe(response);
                        console.log('bodypath',body);
-                        readFile(body, "utf8").then(b=>{response.write(`<!DOCTYPE html><textarea>${b}</textarea>`);
+                        readFile(body, "utf8").then(b=>{
+                            response.write(`<!DOCTYPE html>
+                            <textarea rows="30" cols="50">${b.replaceAll("<","&lt;").replaceAll(">","&gt;")}</textarea>`);
                             response.end()
                     })}
 
