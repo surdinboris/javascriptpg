@@ -1,10 +1,11 @@
 const {createServer} = require("http");
-const {createReadStream} = require("fs");
+const {createReadStream, createWriteStream } = require("fs");
 const {stat, readdir,readFile} = require("fs").promises;
 const {resolve, sep} = require("path");
 const baseDirectory = process.cwd();
 const mime = require("mime");
-const {parse} = require("url");
+const querystring = require("querystring").parse;
+const { parse } = require('url');
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
@@ -12,7 +13,6 @@ String.prototype.replaceAll = function(search, replacement) {
 const index=baseDirectory + sep + 'index.html';
 createServer((request,response)=> {
     if(request.method=='GET') {
-        //let bodyp = createReadStream(index);
         let type = mime.getType(index);
         response.writeHead(200, {"Content-Type": type});
         //lets try to put files
@@ -35,10 +35,13 @@ createServer((request,response)=> {
                        console.log('bodypath',body);
                         readFile(body, "utf8").then(b=>{
                             response.write(`<!DOCTYPE html>
-                            <textarea form="usrform" rows="30" cols="50">${b.replaceAll("<","&lt;").replaceAll(">","&gt;")}</textarea>
-                            <form action=\"${request.url}\" id="usrform" method="post">
+                            <textarea name="textar"  form="usrform" rows="30" cols="50">
+                            ${b.replaceAll("<","&lt;")
+                                .replaceAll(">","&gt;")}</textarea>
+                            <form action=\"${request.url}\" id="usrform" method="POST">
                             <input type="submit">
-                            </form>`);
+                            </form>
+`);
                             response.end()
                     })}
 
@@ -53,10 +56,24 @@ createServer((request,response)=> {
     }
 
     else if(request.method=='POST') {
-        console.log(urlPath(request.url))
-        response.write('saved');
-        response.end();
-    }
+
+            filedir(request).catch(error => {
+                if (error.status != null) return error;
+                return {body: String(error), status: 500};
+            }).then(({body, status = 200, type = "text/html"}) =>{
+                let data ='';
+
+                request.on("data", chunk => {
+                    data+=chunk});
+
+                request.on('end', () => {
+                    console.log('data', querystring(data));
+                    let file=createWriteStream(body);
+                    file.write(querystring(data).textar);
+                    response.end('saved')
+        })})}
+
+
 
 
 }).listen(8000);
@@ -72,6 +89,14 @@ function urlPath(url) {
     return path;
 }
 
+function pipeStream(from, to) {
+    return new Promise((resolve, reject) => {
+        from.on("error", reject);
+        to.on("error", reject);
+        to.on("finish", resolve);
+        from.pipe(to);
+    });
+}
 let filedir= async function(request) {
     let path = urlPath(request.url);
 
