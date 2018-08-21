@@ -36,7 +36,7 @@ createServer((request,response)=> {
                         readFile(body, "utf8").then(b=>{
                             response.write(`<!DOCTYPE html>
                             <textarea form="usrform" rows="30" cols="50">${b.replaceAll("<","&lt;").replaceAll(">","&gt;")}</textarea>
-                            <form action="/subm" id="usrform" method="post">
+                            <form action=\"${request.url}\" id="usrform" method="post">
                             <input type="submit">
                             </form>`);
                             response.end()
@@ -53,7 +53,7 @@ createServer((request,response)=> {
     }
 
     else if(request.method=='POST') {
-        
+        console.log(urlPath(request.url))
         response.write('saved');
         response.end();
     }
