@@ -1,1 +1,50 @@
-                  boris      kaka
+
+root@nextra-6099999-module-3:/xiv/conf# parashell.py ls -l /xiv/conf/
+module-1  (OK)
+====================
+total 296
+drwxr-xr-x 2 root root   4096 Aug 15 13:08 backup
+-rw-r--r-- 1 root root      0 Aug 21 12:49 bbu_should_stay_disconnected
+drwxr-xr-x 2 root root   4096 Aug 21 10:53 factory_settings
+-rwxr-xr-x 1 root root 286112 Aug 15 13:29 leia_conf.xml.gz
+-rw-r--r-- 1 root root      0 Aug 21 12:49 only_fetch_version
+-rw-r--r-- 1 root root      0 Aug 21 10:56 prevent_services_invocation
+-rw-r--r-- 1 root root      7 Aug 13 16:30 serial
+
+
+module-2  (OK)
+====================
+total 296
+drwxr-xr-x 2 root root   4096 Aug 15 13:08 backup
+-rw-r--r-- 1 root root      0 Aug 21 12:49 bbu_should_stay_disconnected
+drwxr-xr-x 2 root root   4096 Aug 21 10:53 factory_settings
+-rwxr-xr-x 1 root root 286112 Aug 15 13:29 leia_conf.xml.gz
+-rw-r--r-- 1 root root      0 Aug 21 12:49 only_fetch_version
+-rw-r--r-- 1 root root      0 Aug 21 10:56 prevent_services_invocation
+-rw-r--r-- 1 root root      7 Aug 13 16:30 serial
+
+
+module-4  (OK)
+====================
+total 296
+drwxr-xr-x 2 root root   4096 Aug 15 13:08 backup
+-rw-r--r-- 1 root root      0 Aug 21 12:49 bbu_should_stay_disconnected
+drwxr-xr-x 2 root root   4096 Aug 21 10:53 factory_settings
+-rwxr-xr-x 1 root root 286112 Aug 15 13:29 leia_conf.xml.gz
+-rw-r--r-- 1 root root      0 Aug 21 12:49 only_fetch_version
+-rw-r--r-- 1 root root      0 Aug 21 10:56 prevent_services_invocation
+-rw-r--r-- 1 root root      7 Aug 13 16:30 serial
+
+
+module-3  (OK)
+====================
+total 296
+drwxr-xr-x 2 root root   4096 Aug 15 13:08 backup
+-rw-r--r-- 1 root root      0 Aug 21 12:49 bbu_should_stay_disconnected
+drwxr-xr-x 2 root root   4096 Aug 21 10:53 factory_settings
+-rwxr-xr-x 1 root root 286112 Aug 15 13:29 leia_conf.xml.gz
+-rw-r--r-- 1 root root      0 Aug 21 12:49 only_fetch_version
+-rw-r--r-- 1 root root      0 Aug 21 10:56 prevent_services_invocation
+-rw-r--r-- 1 root root      7 Aug 13 16:30 serial
+
+
