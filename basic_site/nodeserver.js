@@ -74,6 +74,18 @@ createServer((request,response)=> {
         })})}
 
 
+//direct pipe is problematic - post data needs to be processed with querystring
+//     else if(request.method=='POST') {
+//         filedir(request).catch(error => {
+//             if (error.status != null) return error;
+//             return {body: String(error), status: 500};
+//         }).then(async({body, status = 200, type = "text/html"}) => {
+//                console.log(bodyParserrequest)
+//                 await pipeStream(request, createWriteStream(body));
+//             response.end('saved');
+//                 return {status: 204};
+//
+//             })}
 
 
 }).listen(8000);
