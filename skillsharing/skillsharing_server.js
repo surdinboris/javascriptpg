@@ -1,9 +1,14 @@
 var {createServer} = require("http");
+const path =require("path");
 var Router = require("./router");
 var ecstatic = require("ecstatic");
+const {readFile,writeFile} = require("fs").promises;
 
 var router = new Router();
 var defaultHeaders = {"Content-Type": "text/plain"};
+
+let dump=path.resolve(process.cwd(),'talksdump.tmp');
+
 
 var SkillShareServer = class SkillShareServer {
   constructor(talks) {
@@ -107,9 +112,11 @@ router.add("POST", /^\/talks\/([^\/]+)\/comments$/,
 
 SkillShareServer.prototype.talkResponse = function() {
   let talks = [];
+  console.log(this.talks)
   for (let title of Object.keys(this.talks)) {
     talks.push(this.talks[title]);
   }
+  //console.log(talks)
   return {
     body: JSON.stringify(talks),
     headers: {"Content-Type": "application/json",
@@ -130,21 +137,39 @@ router.add("GET", /^\/talks$/, async (server, request) => {
 });
 
 SkillShareServer.prototype.waitForChanges = function(time) {
-  return new Promise(resolve => {
-    this.waiting.push(resolve);
-    setTimeout(() => {
-      if (!this.waiting.includes(resolve)) return;
-      this.waiting = this.waiting.filter(r => r != resolve);
-      resolve({status: 304});
-    }, time * 1000);
-  });
+    return new Promise(resolve => {
+        this.waiting.push(resolve); //resolve is Callback functions for delayed requests
+        //console.log('in waiting',this.waiting)
+        //timer tic-toc for each added resolve
+        setTimeout(() => {
+            //in case if it already resolved? patch.
+            if (!this.waiting.includes(resolve)) return;
+            //leaving only resolves from other calls
+            this.waiting = this.waiting.filter(r => r != resolve);
+            //resolving resolve for this call
+            resolve({status: 304});
+        }, time * 100);
+    });
 };
 
 SkillShareServer.prototype.updated = function() {
-  this.version++;
-  let response = this.talkResponse();
-  this.waiting.forEach(resolve => resolve(response));
-  this.waiting = [];
+   this.version++;
+   writeFile(dump,JSON.stringify(this.talks)).catch(e => console.log('error',e));
+   let response = this.talkResponse();
+   this.waiting.forEach(resolve => resolve(response));
+   this.waiting = [];
 };
 
-new SkillShareServer(Object.create(null)).start(8000);
+async function loadServer() {
+    let state;
+    try{
+state= await readFile(dump);}
+catch (_) {
+new SkillShareServer(Object.create(null)).start(8000)}
+
+if(state){
+    new SkillShareServer(JSON.parse(state)).start(8000)
+
+}}
+
+loadServer();
