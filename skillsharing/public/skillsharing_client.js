@@ -84,7 +84,11 @@ function renderTalk(talk, dispatch) {
         dispatch({type: "newComment",
                   talk: talk.title,
                   message: form.elements.comment.value});
+<<<<<<< HEAD
        // form.reset();
+=======
+        form.reset();
+>>>>>>> 7d2555da0205cff842b00d7bd28ae02bc2154664
       }
     }, elt("input", {type: "text", name: "comment"}), " ",
        elt("button", {type: "submit"}, "Add comment")));

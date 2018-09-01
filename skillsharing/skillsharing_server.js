@@ -4,11 +4,14 @@ var Router = require("./router");
 var ecstatic = require("ecstatic");
 const {readFile,writeFile} = require("fs").promises;
 
+var Router = require("./router");
+var ecstatic = require("ecstatic");
+
+
 var router = new Router();
 var defaultHeaders = {"Content-Type": "text/plain"};
 
 let dump=path.resolve(process.cwd(),'talksdump.tmp');
-
 
 var SkillShareServer = class SkillShareServer {
   constructor(talks) {
@@ -112,11 +115,11 @@ router.add("POST", /^\/talks\/([^\/]+)\/comments$/,
 
 SkillShareServer.prototype.talkResponse = function() {
   let talks = [];
-  console.log(this.talks)
   for (let title of Object.keys(this.talks)) {
     talks.push(this.talks[title]);
   }
   //console.log(talks)
+
   return {
     body: JSON.stringify(talks),
     headers: {"Content-Type": "application/json",
@@ -137,6 +140,7 @@ router.add("GET", /^\/talks$/, async (server, request) => {
 });
 
 SkillShareServer.prototype.waitForChanges = function(time) {
+
     return new Promise(resolve => {
         this.waiting.push(resolve); //resolve is Callback functions for delayed requests
         //console.log('in waiting',this.waiting)
