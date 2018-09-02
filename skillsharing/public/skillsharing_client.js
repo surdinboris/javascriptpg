@@ -84,13 +84,11 @@ function renderTalk(talk, dispatch) {
         dispatch({type: "newComment",
                   talk: talk.title,
                   message: form.elements.comment.value});
-<<<<<<< HEAD
-       // form.reset();
-=======
         form.reset();
->>>>>>> 7d2555da0205cff842b00d7bd28ae02bc2154664
       }
-    }, elt("input", {type: "text", name: "comment"}), " ",
+    }, elt("input", {type: "text", name: "comment",
+        onkeydown(e){
+            alert('changed '+e.key)}}), " ",
        elt("button", {type: "submit"}, "Add comment")));
 }
 
@@ -116,9 +114,15 @@ function renderTalkForm(dispatch) {
      elt("label", null, "Summary: ", summary),
      elt("button", {type: "submit"}, "Submit"));
 }
+function loadFormState(){
+    console.log('loadformstate');
+    //alert(document.getElementsByName('comment').value)
 
+}
 async function pollTalks(update) {
   let tag = undefined;
+  loadFormState();
+  //tag will be sent to a server that descides to send updated data or not
   for (;;) {
     let response;
     try {
@@ -133,9 +137,11 @@ async function pollTalks(update) {
     }
     if (response.status == 304) continue;
     tag = response.headers.get("ETag");
+
     update(await response.json());
   }
 }
+
 
 var SkillShareApp = class SkillShareApp {
   constructor(state, dispatch) {
