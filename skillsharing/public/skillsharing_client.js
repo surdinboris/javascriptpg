@@ -88,7 +88,9 @@ function renderTalk(talk, dispatch) {
       }
     }, elt("input", {type: "text", name: "comment",
         onkeydown(e){
-            alert('changed '+e.key)}}), " ",
+            localStorage.setItem("comment",e.target.value);
+            //alert('changed'+e.target.value)
+            }}), " ",
        elt("button", {type: "submit"}, "Add comment")));
 }
 
@@ -137,8 +139,8 @@ async function pollTalks(update) {
     }
     if (response.status == 304) continue;
     tag = response.headers.get("ETag");
-
     update(await response.json());
+    document.getElementsByName("comment")[0].value=localStorage.getItem("comment")
   }
 }
 
