@@ -3,6 +3,7 @@ function handleAction(state, action) {
     localStorage.setItem("userName", action.user);
     return Object.assign({}, state, {user: action.user});
   } else if (action.type == "setTalks") {
+      //this is talks collection
     return Object.assign({}, state, {talks: action.talks});
   } else if (action.type == "newTalk") {
     fetchOK(talkURL(action.title), {
@@ -140,7 +141,7 @@ async function pollTalks(update) {
     if (response.status == 304) continue;
     tag = response.headers.get("ETag");
     update(await response.json());
-    document.getElementsByName("comment")[0].value=localStorage.getItem("comment")
+    //document.getElementsByName("comment")[0].value=localStorage.getItem("comment")
   }
 }
 
@@ -166,7 +167,7 @@ var SkillShareApp = class SkillShareApp {
       this.talks = state.talks;
     }
   }
-}
+};
 
 function runApp() {
   let user = localStorage.getItem("userName") || "Anon";
