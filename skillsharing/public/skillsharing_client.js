@@ -155,7 +155,16 @@ var SkillShareApp = class SkillShareApp {
   syncState(state) {
     //detecting difference
       if (state.talks != this.talks) {
-         // talkDOM is current dom being replaced
+         //1. Making talk components under the talk titles
+          this.talksOb = {};
+          for (let talk of state.talks) {
+              this.talksOb[talk.title]=talk
+          }
+          }
+          console.log('talkobj',this.talksOb);
+
+
+          // talkDOM is current dom being replaced
           //need to change this method for advanced
           //definitely - remove resetting talkDOM and add more advanced DOM change method
           this.talkDOM.textContent = "";
@@ -164,7 +173,7 @@ var SkillShareApp = class SkillShareApp {
         //appending to DOM
           this.talkDOM.appendChild(
           renderTalk(talk, this.dispatch));
-      }
+      
       this.talks = state.talks
 
     //adding more comments case
