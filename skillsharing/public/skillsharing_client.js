@@ -117,14 +117,9 @@ function renderTalkForm(dispatch) {
      elt("label", null, "Summary: ", summary),
      elt("button", {type: "submit"}, "Submit"));
 }
-function loadFormState(){
-    console.log('loadformstate');
-    //alert(document.getElementsByName('comment').value)
 
-}
 async function pollTalks(update) {
   let tag = undefined;
-  loadFormState();
   //tag will be sent to a server that descides to send updated data or not
   for (;;) {
     let response;
@@ -158,13 +153,25 @@ var SkillShareApp = class SkillShareApp {
   }
 
   syncState(state) {
-    if (state.talks != this.talks) {
-      this.talkDOM.textContent = "";
-      for (let talk of state.talks) {
-        this.talkDOM.appendChild(
+    //detecting difference
+      if (state.talks != this.talks) {
+         // talkDOM is current dom being replaced
+          //need to change this method for advanced
+          //definitely - remove resetting talkDOM and add more advanced DOM change method
+          this.talkDOM.textContent = "";
+
+        for (let talk of state.talks) {
+        //appending to DOM
+          this.talkDOM.appendChild(
           renderTalk(talk, this.dispatch));
       }
-      this.talks = state.talks;
+      this.talks = state.talks
+
+    //adding more comments case
+    //deleting components
+    //updating components
+    //
+
     }
   }
 };
@@ -176,11 +183,12 @@ function runApp() {
     state = handleAction(state, action);
     app.syncState(state);
   }
-
+//refresing function
   pollTalks(talks => {
     if (!app) {
       state = {user, talks};
       app = new SkillShareApp(state, dispatch);
+      //appending new DOM
       document.body.appendChild(app.dom);
     } else {
       dispatch({type: "setTalks", talks});
