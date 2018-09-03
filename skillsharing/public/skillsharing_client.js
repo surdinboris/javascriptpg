@@ -1,10 +1,13 @@
 function handleAction(state, action) {
+    console.log(state)
   if (action.type == "setUser") {
     localStorage.setItem("userName", action.user);
     return Object.assign({}, state, {user: action.user});
   } else if (action.type == "setTalks") {
       //this is talks collection
-    return Object.assign({}, state, {talks: action.talks});
+
+      return Object.assign({}, state, {talks: action.talks});
+
   } else if (action.type == "newTalk") {
     fetchOK(talkURL(action.title), {
       method: "PUT",
@@ -156,24 +159,23 @@ var SkillShareApp = class SkillShareApp {
     //detecting difference
       if (state.talks != this.talks) {
          //1. Making talk components under the talk titles
-          this.talksOb = {};
+          this.arrivedTalks = {};
           for (let talk of state.talks) {
-              this.talksOb[talk.title]=talk
+              this.arrivedTalks[talk.title]=talk }
           }
-          }
-          console.log('talkobj',this.talksOb);
-
 
           // talkDOM is current dom being replaced
           //need to change this method for advanced
           //definitely - remove resetting talkDOM and add more advanced DOM change method
-          this.talkDOM.textContent = "";
-
+         ///// this.talkDOM.textContent = "";
+        for (let arrTalk of this.arrivedTalks){
+          console.log('arrtask',arrTalk);
+      }
         for (let talk of state.talks) {
         //appending to DOM
           this.talkDOM.appendChild(
           renderTalk(talk, this.dispatch));
-      
+
       this.talks = state.talks
 
     //adding more comments case
