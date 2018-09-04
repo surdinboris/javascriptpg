@@ -1,5 +1,5 @@
 function handleAction(state, action) {
-    console.log(state)
+    //console.log(state)
   if (action.type == "setUser") {
     localStorage.setItem("userName", action.user);
     return Object.assign({}, state, {user: action.user});
@@ -158,24 +158,49 @@ var SkillShareApp = class SkillShareApp {
   syncState(state) {
     //detecting difference
       if (state.talks != this.talks) {
-         //1. Making talk components under the talk titles
+         //1. Making arrivedtalk components under the talk titles
           this.arrivedTalks = {};
           for (let talk of state.talks) {
-              this.arrivedTalks[talk.title]=talk }
+              this.arrivedTalks[talk.title]=talk
           }
 
+  }
           // talkDOM is current dom being replaced
           //need to change this method for advanced
           //definitely - remove resetting talkDOM and add more advanced DOM change method
-         ///// this.talkDOM.textContent = "";
-        for (let arrTalk of this.arrivedTalks){
-          console.log('arrtask',arrTalk);
-      }
-        for (let talk of state.talks) {
-        //appending to DOM
-          this.talkDOM.appendChild(
-          renderTalk(talk, this.dispatch));
+        //  ///// this.talkDOM.textContent = "";
+      //if this.task already contained something - need to execute comapartion block
 
+      if(this.talks) {
+          //Making current talk components object under the talk titles
+          this.currentTalks = {};
+          for (let talk of this.talks) {
+              this.currentTalks[talk.title]=talk }
+
+          for (let arrTalk of Object.keys(this.arrivedTalks)) {
+              let arrTitle=this.arrivedTalks[arrTalk].title;
+
+              if(this.currentTalks[arrTitle])
+              console.log('talk already present',arrTitle);
+              //verifying if this presented talk has all arrived comments
+
+              else {
+                  console.log('new talk arrived', arrTitle);
+                  //appending to DOM without any checks
+                this.talkDOM.appendChild(
+                     renderTalk(this.arrivedTalks[arrTalk], this.dispatch))
+              }
+          }
+      }
+      //in case of first run(this.taks empty) executing fast DOM rendering
+      else{
+          console.log('first run populating');
+        for (let talk of state.talks) {
+            //appending to DOM
+            this.talkDOM.appendChild(
+                renderTalk(talk, this.dispatch));
+        }
+        }
       this.talks = state.talks
 
     //adding more comments case
@@ -183,7 +208,7 @@ var SkillShareApp = class SkillShareApp {
     //updating components
     //
 
-    }
+
   }
 };
 
