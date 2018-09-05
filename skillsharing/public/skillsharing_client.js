@@ -175,14 +175,88 @@ var SkillShareApp = class SkillShareApp {
           //Making current talk components object under the talk titles
           this.currentTalks = {};
           for (let talk of this.talks) {
-              this.currentTalks[talk.title]=talk }
+              this.currentTalks[talk.title]=talk
+          }
 
           for (let arrTalk of Object.keys(this.arrivedTalks)) {
               let arrTitle=this.arrivedTalks[arrTalk].title;
+              //checking if arrived task's title already present in dom's state
+              if(this.currentTalks[arrTitle]) {
+                  //verifying if this presented talk has all arrived comments
+                  console.log('talk already present',arrTitle);
+                  console.log('currtalk', this.currentTalks[arrTitle]);
+                  console.log('arrtalk', this.arrivedTalks[arrTitle]);
 
-              if(this.currentTalks[arrTitle])
-              console.log('talk already present',arrTitle);
-              //verifying if this presented talk has all arrived comments
+
+                  /////////////////////
+              //     {title: "new", presenter: "bobobkkk", summary: "ok", comments: Array(6)}
+              //     comments
+              //         :
+              //         Array(6)
+              //     0
+              // :
+              //     {author: "bobobkkk", message: "hfgh"}
+              //     1
+              // :
+              //     {author: "bobobkkk", message: "tytyttyty"}
+              //     2
+              // :
+              //     {author: "bobobkkk", message: "tytytytytytytytyty"}
+              //     3
+              // :
+              //     {author: "bobobkkk", message: "fghfg"}
+              //     4
+              // :
+              //     {author: "bobobkkk", message: "ghgh"}
+              //     5
+              // :
+              //     {author: "bobobkkk", message: "hghgh"}
+              //     length
+              //         :
+              //         6
+              //     __proto__
+              //         :
+              //         Array(0)
+              //     presenter
+              //         :
+              //         "bobobkkk"
+              //     summary
+              //         :
+              //         "ok"
+              //     title
+              //         :
+              //         "new"
+              //     __proto__
+              //         :
+              //         Object
+              //     skillsharing_client.js:188 arrtalk
+              //     {title: "new", presenter: "bobobkkk", summary: "ok", comments: Array(7)}
+              //     comments
+              //         :
+              //         Array(7)
+              //     0
+              // :
+              //     {author: "bobobkkk", message: "hfgh"}
+              //     1
+              // :
+              //     {author: "bobobkkk", message: "tytyttyty"}
+              //     2
+              // :
+              //     {author: "bobobkkk", message: "tytytytytytytytyty"}
+              //     3
+              // :
+              //     {author: "bobobkkk", message: "fghfg"}
+              //     4
+              // :
+              //     {author: "bobobkkk", message: "ghgh"}
+              //     5
+              // :
+              //     {author: "bobobkkk", message: "hghgh"}
+              //     6
+              // :
+              //     {author: "bobobkkk", message: "why whoa?"}
+
+              }
 
               else {
                   console.log('new talk arrived', arrTitle);
@@ -202,13 +276,10 @@ var SkillShareApp = class SkillShareApp {
         }
         }
       this.talks = state.talks
-
     //adding more comments case
     //deleting components
     //updating components
     //
-
-
   }
 };
 
