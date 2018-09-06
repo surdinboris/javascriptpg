@@ -194,7 +194,7 @@ class SkillShareApp {
 
               if (this.currentTalks[arrTitle]) {
                   //verifying if this presented talk has all arrived comments
-                  console.log('talk already present', arrTitle);
+                  console.log('talk already present but lets check comments', arrTitle);
               }
               else {
                   console.log('new talk arrived', arrTitle);
@@ -208,12 +208,9 @@ class SkillShareApp {
               let currTitle = this.currentTalks[currTalk].title;
               if (!this.arrivedTalks[currTitle]){
               console.log('removed',currTitle);
-                  //to be transferred to "remooving iterating over current talks"
-                  // retrieving talks and remooving these that not present in arrived data
                   let toBeremoved=document.getElementById(currTitle);
                   this.talkDOM.removeChild(toBeremoved)
-                  //  this.talkDOM.appendChild(
-            //     renderTalk(this.arrivedTalks[arrTalk], this.dispatch))
+
               }
           }
       }
