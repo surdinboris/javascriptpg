@@ -70,7 +70,7 @@ function elt(type, props, ...children) {
 
 function renderTalk(talk, dispatch) {
   return elt(
-    "section", {className: "talk"},
+    "section", {className: "talk", id:talk.title},
     elt("h2", null, talk.title, " ", elt("button", {
       type: "button",
       onclick() {
@@ -113,6 +113,7 @@ function renderTalkForm(dispatch) {
       dispatch({type: "newTalk",
                 title: title.value,
                 summary: summary.value});
+
       event.target.reset();
     }
   }, elt("h3", null, "Submit a Talk"),
@@ -144,7 +145,7 @@ async function pollTalks(update) {
 }
 
 
-var SkillShareApp = class SkillShareApp {
+class SkillShareApp {
   constructor(state, dispatch) {
     this.dispatch = dispatch;
     this.talkDOM = elt("div", {className: "talks"});
@@ -165,107 +166,58 @@ var SkillShareApp = class SkillShareApp {
           }
 
   }
-          // talkDOM is current dom being replaced
+      /////// this.talkDOM.textContent = "";
+
+            // talkDOM is current dom being replaced
           //need to change this method for advanced
           //definitely - remove resetting talkDOM and add more advanced DOM change method
-        //  ///// this.talkDOM.textContent = "";
+
       //if this.task already contained something - need to execute comapartion block
 
       if(this.talks) {
           //Making current talk components object under the talk titles
           this.currentTalks = {};
           for (let talk of this.talks) {
-              this.currentTalks[talk.title]=talk
+              this.currentTalks[talk.title] = talk
           }
 
+
+
+
+
+          //appending
           for (let arrTalk of Object.keys(this.arrivedTalks)) {
-              let arrTitle=this.arrivedTalks[arrTalk].title;
+              let arrTitle = this.arrivedTalks[arrTalk].title;
               //checking if arrived task's title already present in dom's state
-              if(this.currentTalks[arrTitle]) {
+              console.log('currtalk', this.currentTalks[arrTitle]);
+              console.log('arrtalk', this.arrivedTalks[arrTitle]);
+
+              if (this.currentTalks[arrTitle]) {
                   //verifying if this presented talk has all arrived comments
-                  console.log('talk already present',arrTitle);
-                  console.log('currtalk', this.currentTalks[arrTitle]);
-                  console.log('arrtalk', this.arrivedTalks[arrTitle]);
-
-
-                  /////////////////////
-              //     {title: "new", presenter: "bobobkkk", summary: "ok", comments: Array(6)}
-              //     comments
-              //         :
-              //         Array(6)
-              //     0
-              // :
-              //     {author: "bobobkkk", message: "hfgh"}
-              //     1
-              // :
-              //     {author: "bobobkkk", message: "tytyttyty"}
-              //     2
-              // :
-              //     {author: "bobobkkk", message: "tytytytytytytytyty"}
-              //     3
-              // :
-              //     {author: "bobobkkk", message: "fghfg"}
-              //     4
-              // :
-              //     {author: "bobobkkk", message: "ghgh"}
-              //     5
-              // :
-              //     {author: "bobobkkk", message: "hghgh"}
-              //     length
-              //         :
-              //         6
-              //     __proto__
-              //         :
-              //         Array(0)
-              //     presenter
-              //         :
-              //         "bobobkkk"
-              //     summary
-              //         :
-              //         "ok"
-              //     title
-              //         :
-              //         "new"
-              //     __proto__
-              //         :
-              //         Object
-              //     skillsharing_client.js:188 arrtalk
-              //     {title: "new", presenter: "bobobkkk", summary: "ok", comments: Array(7)}
-              //     comments
-              //         :
-              //         Array(7)
-              //     0
-              // :
-              //     {author: "bobobkkk", message: "hfgh"}
-              //     1
-              // :
-              //     {author: "bobobkkk", message: "tytyttyty"}
-              //     2
-              // :
-              //     {author: "bobobkkk", message: "tytytytytytytytyty"}
-              //     3
-              // :
-              //     {author: "bobobkkk", message: "fghfg"}
-              //     4
-              // :
-              //     {author: "bobobkkk", message: "ghgh"}
-              //     5
-              // :
-              //     {author: "bobobkkk", message: "hghgh"}
-              //     6
-              // :
-              //     {author: "bobobkkk", message: "why whoa?"}
-
+                  console.log('talk already present', arrTitle);
               }
-
               else {
                   console.log('new talk arrived', arrTitle);
                   //appending to DOM without any checks
-                this.talkDOM.appendChild(
-                     renderTalk(this.arrivedTalks[arrTalk], this.dispatch))
+                  this.talkDOM.appendChild(
+                      renderTalk(this.arrivedTalks[arrTalk], this.dispatch))
+              }
+          }
+          //remooving iterating over current talks
+          for (let currTalk of Object.keys(this.currentTalks)) {
+              let currTitle = this.currentTalks[currTalk].title;
+              if (!this.arrivedTalks[currTitle]){
+              console.log('removed',currTitle);
+                  //to be transferred to "remooving iterating over current talks"
+                  // retrieving talks and remooving these that not present in arrived data
+                  let toBeremoved=document.getElementById(currTitle);
+                  this.talkDOM.removeChild(toBeremoved)
+                  //  this.talkDOM.appendChild(
+            //     renderTalk(this.arrivedTalks[arrTalk], this.dispatch))
               }
           }
       }
+
       //in case of first run(this.taks empty) executing fast DOM rendering
       else{
           console.log('first run populating');
@@ -274,12 +226,11 @@ var SkillShareApp = class SkillShareApp {
             this.talkDOM.appendChild(
                 renderTalk(talk, this.dispatch));
         }
-        }
+      }
       this.talks = state.talks
     //adding more comments case
     //deleting components
     //updating components
-    //
   }
 };
 
