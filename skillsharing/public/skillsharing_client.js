@@ -181,16 +181,11 @@ class SkillShareApp {
                       console.log('replacing comments', this.arrivedTalks[arrTitle].comments.length, this.currentTalks[arrTitle].comments.length)
                       //removing talk
                       let toBecommentsUpd = document.getElementById(arrTitle);
-                      let remComments = toBecommentsUpd.getElementsByClassName('comment');
-                      //clearing old comments
-                      //console.log(toBecommentsUpd.childNodes[-2])
-
-                      for (let c = 0; c < remComments.length; c++) {
-                          remComments[c].textContent = "";
+                      for (let c = 0; c < toBecommentsUpd.getElementsByClassName('comment').length; c++) {
+                          toBecommentsUpd.getElementsByClassName('comment')[c].textContent = "";
                       }
-                      let insertion= toBecommentsUpd.getElementsByClassName("comments")[0]
-                      this.arrivedTalks[arrTitle].comments.forEach(comm=>insertion.appendChild(renderComment(comm)))
-                      //sending talk
+                      this.arrivedTalks[arrTitle].comments.forEach(comm=>toBecommentsUpd.getElementsByClassName("comments")[0].appendChild(renderComment(comm)))
+
                   }
                   //console.log('resComments',resComments)
               }
