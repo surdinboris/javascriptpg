@@ -79,8 +79,9 @@ function renderTalk(talk, dispatch) {
     }, "Delete")),
     elt("div", null, "by ",
         elt("strong", null, talk.presenter)),
-    elt("p", null, talk.summary),
-    ...talk.comments.map(renderComment),
+      elt("p", null, talk.summary),
+      elt("div", {className:"comments"}, "comments: ",
+    ...talk.comments.map(renderComment)),
     elt("form", {
       onsubmit(event) {
         event.preventDefault();
@@ -143,8 +144,6 @@ async function pollTalks(update) {
     //document.getElementsByName("comment")[0].value=localStorage.getItem("comment")
   }
 }
-
-
 class SkillShareApp {
   constructor(state, dispatch) {
     this.dispatch = dispatch;
@@ -155,46 +154,45 @@ class SkillShareApp {
                    renderTalkForm(dispatch));
     this.syncState(state);
   }
-
   syncState(state) {
-    //detecting difference
+          /////// this.talkDOM.textContent = "";
+      //detecting difference
+  if (this.talks) {
+
       if (state.talks != this.talks) {
-         //1. Making arrivedtalk components under the talk titles
-          this.arrivedTalks = {};
-          for (let talk of state.talks) {
-              this.arrivedTalks[talk.title]=talk
-          }
-
-  }
-      /////// this.talkDOM.textContent = "";
-
-            // talkDOM is current dom being replaced
-          //need to change this method for advanced
-          //definitely - remove resetting talkDOM and add more advanced DOM change method
-
-      //if this.task already contained something - need to execute comapartion block
-
-      if(this.talks) {
+          //1. Making arrivedtalk components under the talk titles
+              this.arrivedTalks = {};
+              for (let talk of state.talks) {
+                  this.arrivedTalks[talk.title] = talk
+              }
           //Making current talk components object under the talk titles
           this.currentTalks = {};
           for (let talk of this.talks) {
               this.currentTalks[talk.title] = talk
           }
-
-
-
-
-
           //appending
           for (let arrTalk of Object.keys(this.arrivedTalks)) {
               let arrTitle = this.arrivedTalks[arrTalk].title;
               //checking if arrived task's title already present in dom's state
-              console.log('currtalk', this.currentTalks[arrTitle]);
-              console.log('arrtalk', this.arrivedTalks[arrTitle]);
-
               if (this.currentTalks[arrTitle]) {
                   //verifying if this presented talk has all arrived comments
                   console.log('talk already present but lets check comments', arrTitle);
+                  if (this.arrivedTalks[arrTitle].comments.length > this.currentTalks[arrTitle].comments.length) {
+                      console.log('replacing comments', this.arrivedTalks[arrTitle].comments.length, this.currentTalks[arrTitle].comments.length)
+                      //removing talk
+                      let toBecommentsUpd = document.getElementById(arrTitle);
+                      let remComments = toBecommentsUpd.getElementsByClassName('comment');
+                      //clearing old comments
+                      //console.log(toBecommentsUpd.childNodes[-2])
+
+                      for (let c = 0; c < remComments.length; c++) {
+                          remComments[c].textContent = "";
+                      }
+                      let insertion= toBecommentsUpd.getElementsByClassName("comments")[0]
+                      this.arrivedTalks[arrTitle].comments.forEach(comm=>insertion.appendChild(renderComment(comm)))
+                      //sending talk
+                  }
+                  //console.log('resComments',resComments)
               }
               else {
                   console.log('new talk arrived', arrTitle);
@@ -206,28 +204,25 @@ class SkillShareApp {
           //remooving iterating over current talks
           for (let currTalk of Object.keys(this.currentTalks)) {
               let currTitle = this.currentTalks[currTalk].title;
-              if (!this.arrivedTalks[currTitle]){
-              console.log('removed',currTitle);
-                  let toBeremoved=document.getElementById(currTitle);
+              if (!this.arrivedTalks[currTitle]) {
+                  console.log('removed', currTitle);
+                  let toBeremoved = document.getElementById(currTitle);
                   this.talkDOM.removeChild(toBeremoved)
-
               }
           }
       }
+  }
+  //in case of first run(this.taks empty) executing fast DOM rendering
+  else{
+      console.log('first run populating');
+    for (let talk of state.talks) {
+        //appending to DOM
+        this.talkDOM.appendChild(
+            renderTalk(talk, this.dispatch));
+    }
+  }
+  this.talks = state.talks
 
-      //in case of first run(this.taks empty) executing fast DOM rendering
-      else{
-          console.log('first run populating');
-        for (let talk of state.talks) {
-            //appending to DOM
-            this.talkDOM.appendChild(
-                renderTalk(talk, this.dispatch));
-        }
-      }
-      this.talks = state.talks
-    //adding more comments case
-    //deleting components
-    //updating components
   }
 };
 
