@@ -1,34 +1,138 @@
-var myRevealingModule = (function () {
+var mySingleton = (function () {
 
-    var privateVar = "Ben Cherry",
-        publicVar = "Hey there!";
+    // Instance stores a reference to the Singleton
+    var instance;
 
-    function privateFunction() {
-        return  "Name:" + privateVar ;
-    }
+    function init() {
 
-    function publicSetName( strName ) {
-        privateVar = strName;
-    }
+        // Singleton
 
-    function publicGetName() {
-        privateFunction;
-    }
+        // Private methods and variables
+        function privateMethod(){
+            console.log( "I am private" );
+        }
 
+        var privateVariable = "Im also private";
 
-    // Reveal public pointers to
-    // private functions and properties
+        var privateRandomNumber = Math.random();
+
+        return {
+
+            // Public methods and variables
+            publicMethod: function () {
+                console.log( "The public can see me!" );
+            },
+
+            publicProperty: "I am also public",
+
+            getRandomNumber: function() {
+                return privateRandomNumber;
+            }
+
+        };
+
+    };
 
     return {
-        setName: publicSetName,
-        greeting: publicVar,
-        getName: publicGetName
+
+        // Get the Singleton instance if one exists
+        // or create one if it doesn't
+        getInstance: function () {
+
+            if ( !instance ) {
+                instance = init();
+            }
+
+            return instance;
+        }
+
     };
 
 })();
 
-myRevealingModule.setName( "Paul Kinlan" );
-console.log(myRevealingModule.getName)
+var myBadSingleton = (function () {
+
+    // Instance stores a reference to the Singleton
+    var instance;
+
+    function init() {
+
+        // Singleton
+
+        var privateRandomNumber = Math.random();
+
+        return {
+
+            getRandomNumber: function() {
+                return privateRandomNumber;
+            }
+
+        };
+
+    };
+
+    return {
+
+        // Always create a new Singleton instance
+        getInstance: function () {
+
+            instance = init();
+
+            return instance;
+        }
+
+    };
+
+})();
+
+
+// Usage:
+
+var singleA = mySingleton.getInstance();
+var singleB = mySingleton.getInstance();
+console.log( singleA.getRandomNumber() === singleB.getRandomNumber() ); // true
+
+var badSingleA = myBadSingleton.getInstance();
+var badSingleB = myBadSingleton.getInstance();
+console.log( badSingleA.getRandomNumber() !== badSingleB.getRandomNumber() ); // true
+
+// Note: as we are working with random numbers, there is a
+// mathematical possibility both numbers will be the same,
+// however unlikely. The above example should otherwise still
+// be valid.
+
+
+// var myRevealingModule = (function () {
+//
+//     var privateVar = "Ben Cherry",
+//         publicVar = "Hey there!";
+//
+//     function privateFunction() {
+//         return  "Name:" + privateVar ;
+//     }
+//
+//     function publicSetName( strName ) {
+//         privateVar = strName;
+//     }
+//
+//     function publicGetName() {
+//         privateFunction;
+//     }
+
+
+    // Reveal public pointers to
+    // private functions and properties
+//
+//     return {
+//         setName: publicSetName,
+//         greeting: publicVar,
+//         getName: publicGetName
+//     };
+//
+// })();
+//
+// myRevealingModule.setName( "Paul Kinlan" );
+// console.log(myRevealingModule.getName)
 
 // function library( module ) {
 //
@@ -204,15 +308,16 @@ console.log(myRevealingModule.getName)
 // Car.prototype.toString = function () {
 //          return this.model + " has done " + this.miles + " miles";
 //      }
-
-
-// We can create new instances of the car
+//
+//
+// //We can create new instances of the car
 // var civic = new Car( "Honda Civic", 2009, 20000 );
 // var mondeo = new Car( "Ford Mondeo", 2010, 5000 );
-//
-// // and then open our browser console to view the
-// // output of the toString() method being called on
-// // these objects
-// //console.log( civic.toString );
-// console.log( mondeo.toString() );
-// console.log(civic.toString());
+
+// and then open our browser console to view the
+// output of the toString() method being called on
+// these objects
+//console.log( civic.toString );
+console.log( mondeo.toString() );
+console.log(civic.toString());
+console.log(civic.model);
