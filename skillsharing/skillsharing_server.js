@@ -13,7 +13,7 @@ var defaultHeaders = {"Content-Type": "text/plain"};
 
 let dump=path.resolve(process.cwd(),'talksdump.tmp');
 
-var SkillShareServer = class SkillShareServer {
+class SkillShareServer {
   constructor(talks) {
     this.talks = talks;
     this.version = 0;
