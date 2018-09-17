@@ -1,53 +1,95 @@
-class Observer {
-    constructor(params) {
-        this.name = params.name;
-        this.reg = params.reg || 0;
-        this.state = 'init';
-    }
-}
-Observer.prototype.update = function (state) {
-    this.state =state
-    console.log(this.name, 'was updated to ', this.state)
-
+function ObserverList() {
+    this.observerList = [];
 }
 
-class Subject{
-    constructor(sname){
-        this.sname = sname
-        this.registry = {}
-    }
-    factory (params) {
-        let obs = new Observer(params)
-        this.registry[obs.name]=obs
-        return obs
-    }
-    update(state){
-       Object.keys(this.registry).forEach(ob =>
-       this.registry[ob].update(state))
+ObserverList.prototype.add = function (obj) {
+    return this.observerList.push(obj);
+};
 
-       return this.registry
-    }
-    unreg(obs){
-        delete this.registry[obs.name]
-        console.log(this.registry)
-    }
-}
+ObserverList.prototype.count = function () {
+    return this.observerList.length;
+};
 
-// creating instanc subject
-let sub1 = new Subject("myname");
-//creating observers
-let ob1= sub1.factory({reg:1, name:"kaka1"})
-let ob2= sub1.factory({reg:2, name:"kaka2"})
+ObserverList.prototype.get = function (index) {
+    if (index > -1 && index < this.observerList.length) {
+        return this.observerList[index];
+    }
+};
 
+ObserverList.prototype.indexOf = function (obj, startIndex) {
+    var i = startIndex;
+
+    while (i < this.observerList.length) {
+        if (this.observerList[i] === obj) {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+};
+
+ObserverList.prototype.removeAt = function (index) {
+    this.observerList.splice(index, 1);
+};
+
+
+
+// class Observer {
+//     constructor(params) {
+//         this.name = params.name;
+//         this.reg = params.reg || 0;
+//         this.state = 'init';
+//     }
+// }
+// Observer.prototype.update = function (state) {
+//     this.state = state
+//     console.log(this.name, 'was updated to ', this.state)
+//
+// }
+//
+// class Subject{
+//     constructor(sname){
+//         this.sname = sname
+//         this.registry = {}
+//     }
+//     factory (params) {
+//         let obs = new Observer(params)
+//         this.registry[obs.name]=obs
+//         return obs
+//     }
+//     update(state){
+//        Object.keys(this.registry).forEach(ob =>
+//        this.registry[ob].update(state))
+//
+//        return this.registry
+//     }
+//     unreg(obs){
+//         delete this.registry[obs.name]
+//         console.log(this.registry)
+//     }
+//     reg(obs){
+//         this.registry[obs.name] = obs;
+//         console.log(this.registry)
+//     }
+// }
+//
+// // creating instanc subject
+// let sub1 = new Subject("myname");
+//
+// //creating observers via subject
+// let ob1= sub1.factory({reg:1, name:"kaka1"})
+// let ob2= sub1.factory({reg:2, name:"kaka2"})
+
+//its possible to create free observers and register them afterwards
 
 //console.log(ob1)
-console.log(sub1.update('ready'))
-console.log(sub1.update('opened'))
+//console.log(sub1.update('ready'))
+//console.log(sub1.update('opened'))
 
 
-sub1.unreg(ob1)
+//sub1.unreg(ob1)
 
-console.log(ob1)
 // var SingletonTester = (function () {
 //     // options: an object containing configuration options for the singleton
 //     // e.g var options = { name: "test", pointX: 5};
