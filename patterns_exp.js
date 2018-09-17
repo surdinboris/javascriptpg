@@ -5,6 +5,11 @@ class Observer {
         this.state = 'init';
     }
 }
+Observer.prototype.update = function (state) {
+    this.state =state
+    console.log(this.name, 'was updated to ', this.state)
+
+}
 
 class Subject{
     constructor(sname){
@@ -17,7 +22,9 @@ class Subject{
         return obs
     }
     update(state){
-       Object.keys(this.registry).forEach(ob => this.registry[ob].state=state )
+       Object.keys(this.registry).forEach(ob =>
+       this.registry[ob].update(state))
+
        return this.registry
     }
     unreg(obs){
@@ -40,6 +47,7 @@ console.log(sub1.update('opened'))
 
 sub1.unreg(ob1)
 
+console.log(ob1)
 // var SingletonTester = (function () {
 //     // options: an object containing configuration options for the singleton
 //     // e.g var options = { name: "test", pointX: 5};
