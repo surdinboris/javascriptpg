@@ -1,100 +1,143 @@
-var mySingleton = (function () {
+class Observer {
+    constructor(params) {
+        this.name = params.name;
+        this.reg = params.reg || 0;
+        this.state = 'init';
+    }
+}
 
-    // Instance stores a reference to the Singleton
-    var instance;
+class Subject{
+    constructor(sname){
+        this.sname = sname
+        this.registry = {}
+    }
+    factory (params) {
+        let obs = new Observer(params)
+        this.registry[obs.name]=obs
+        return obs
+    }
+    update(state){
+       Object.keys(this.registry).forEach(ob => this.registry[ob].state=state )
+       return this.registry
+    }
+    unreg(obs){
+        delete this.registry[obs.name]
+        console.log(this.registry)
+    }
+}
 
-    function init() {
-
-        // Singleton
-
-        // Private methods and variables
-        function privateMethod(){
-            console.log( "I am private" );
-        }
-
-        var privateVariable = "Im also private";
-
-        var privateRandomNumber = Math.random();
-
-        return {
-
-            // Public methods and variables
-            publicMethod: function () {
-                console.log( "The public can see me!" );
-            },
-
-            publicProperty: "I am also public",
-
-            getRandomNumber: function() {
-                return privateRandomNumber;
-            }
-
-        };
-
-    };
-
-    return {
-
-        // Get the Singleton instance if one exists
-        // or create one if it doesn't
-        getInstance: function () {
-
-            if ( !instance ) {
-                instance = init();
-            }
-
-            return instance;
-        }
-
-    };
-
-})();
-
-var myBadSingleton = (function () {
-
-    // Instance stores a reference to the Singleton
-    var instance;
-
-    function init() {
-
-        // Singleton
-
-        var privateRandomNumber = Math.random();
-
-        return {
-
-            getRandomNumber: function() {
-                return privateRandomNumber;
-            }
-
-        };
-
-    };
-
-    return {
-
-        // Always create a new Singleton instance
-        getInstance: function () {
-
-            instance = init();
-
-            return instance;
-        }
-
-    };
-
-})();
+// creating instanc subject
+let sub1 = new Subject("myname");
+//creating observers
+let ob1= sub1.factory({reg:1, name:"kaka1"})
+let ob2= sub1.factory({reg:2, name:"kaka2"})
 
 
-// Usage:
+//console.log(ob1)
+console.log(sub1.update('ready'))
+console.log(sub1.update('opened'))
 
-var singleA = mySingleton.getInstance();
-var singleB = mySingleton.getInstance();
-console.log( singleA.getRandomNumber() === singleB.getRandomNumber() ); // true
 
-var badSingleA = myBadSingleton.getInstance();
-var badSingleB = myBadSingleton.getInstance();
-console.log( badSingleA.getRandomNumber() !== badSingleB.getRandomNumber() ); // true
+sub1.unreg(ob1)
+
+// var SingletonTester = (function () {
+//     // options: an object containing configuration options for the singleton
+//     // e.g var options = { name: "test", pointX: 5};
+//     function Singleton( options ) {
+//         // set options to the options supplied
+//         // or an empty object if none are provided
+//         options = options || {};
+//         // set some properties for our singleton
+//         this.name = options.name || "SingletonTester";
+//         this.pointX = options.pointX || 6;
+//         this.pointY = options.pointY || 10;
+//     }
+//     // our instance holder
+//     var instance;
+//     // an emulation of static variables and methods
+//     return {
+//         name: "SingletonTester",
+//         // Method for getting an instance. It returns
+//         // a singleton instance of a singleton object
+//         getInstance: function( options ) {
+//             if( instance === undefined ) {
+//                 instance = new Singleton( options );
+//             }
+//             return instance;
+//         }
+//     };
+//
+// })();
+//
+// var singletonTest = SingletonTester.getInstance({
+//     pointX: 5,
+//     name: "kaka"
+// });
+//
+// // Log the output of pointX just to verify it is correct
+// // Outputs: 5
+// console.log( singletonTest.pointX );
+// console.log( singletonTest.name );
+//
+// var singletonTest2 = SingletonTester.getInstance({
+//     pointX: 7,
+//     name: "kako"
+// });
+//
+// console.log( singletonTest2.pointX );
+// console.log( singletonTest2.name );
+
+// var mySingleton = (function () {
+//    // Instance stores a reference to the Singleton
+//     var instance;
+//     function init1() {
+//         // Singleton
+//         // Private methods and variables
+//         function privateMethod(){
+//             console.log( "I am private" );
+//         }
+//         var privateVariable = "Im also private";
+//         var privateRandomNumber = Math.random();
+//
+//         return {
+//             // Public methods and variables
+//             publicMethod: function () {
+//                 console.log( "The public can see me! class1" );
+//             },
+//             publicProperty: "I am also public",
+//             getRandomNumber: function() {
+//                 return privateRandomNumber;
+//             }
+//         };
+//
+//     };
+//     return {
+//         // Get the Singleton instance if one exists
+//         // or create one if it doesn't
+//         getInstance: function () {
+//
+//             if ( !instance ) {
+//                 instance = init();
+//             }
+//
+//             return instance;
+//         }
+//
+//     };
+//
+// })();
+//
+//
+//
+//
+//
+// var singleA = mySingleton.getInstance();
+// var singleB = mySingleton.getInstance();
+// console.log( singleA.getRandomNumber() === singleB.getRandomNumber() ); // true
+//
+// var badSingleA = myBadSingleton.getInstance();
+// var badSingleB = myBadSingleton.getInstance();
+// console.log( badSingleA.getRandomNumber() !== badSingleB.getRandomNumber() ); // true
 
 // Note: as we are working with random numbers, there is a
 // mathematical possibility both numbers will be the same,
@@ -318,6 +361,6 @@ console.log( badSingleA.getRandomNumber() !== badSingleB.getRandomNumber() ); //
 // output of the toString() method being called on
 // these objects
 //console.log( civic.toString );
-console.log( mondeo.toString() );
-console.log(civic.toString());
-console.log(civic.model);
+// console.log( mondeo.toString() );
+// console.log(civic.toString());
+// console.log(civic.model);
