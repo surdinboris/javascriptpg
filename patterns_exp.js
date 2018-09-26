@@ -1,52 +1,67 @@
-//
-// 338
-// down vote
-// Very simply said, new X is Object.create(X.prototype) with additionally running the constructor function. (And giving the constructor the chance to return the actual object that should be the result of the expression instead of this.)
+
+function Car() {
+    this.num_wheels = 4;
+}
+
+var car0 = new Car();
+
+var car1 = Object.create(new Car)
+console.log(car1.num_wheels)
+console.log(car0.num_wheels)
+// Very simply said, new X is Object.create(X.prototype)
+// with additionally running the constructor function.
+// (And giving the constructor the chance to return the actual
+// object that should be the result of the expression instead of this.)
 //
 // That’s it. :)
 //
 // The rest of the answers are just confusing, because apparently nobody else reads the definition of new either. ;)
-
-function Sclass() {
-    this.cll='cll'
-};
-
-Sclass.prototype.clname='sclass';
-
-var tt= new Sclass();
-//console.log(tt.clname);
+//
+// function Gclass(y){
+//     this.cll=y.concat('7')
+// }
+//
+// function Sclass(y) {
+//     return new Gclass(y)
+//
+// };
+//
+// Sclass.prototype.clname='sclass';
+//
+// var tt= new Sclass('uuu');
+// console.log(tt.cll);
 
 ///
+//
+// function Gclass() {};
+//
+// //subclassing - via copyng trough Object.create// Object.create(Classobj.prototype) or  new Classobj()
+// Gclass.prototype=Object.create(Sclass.prototype);
+//
+// Gclass.prototype.newp='newpp'
+//
+//
+// var gc = new Gclass();
+// console.log(gc.clname);
+// console.log(gc.newp);
+//
 
-function Gclass() {};
-
-//subclassing - via copyng trough Object.create// Object.create(Classobj.prototype) or  new Classobj()
-Gclass.prototype=Object.create(Sclass.prototype);
-
-Gclass.prototype.newp='newpp'
 
 
-var gc = new Gclass();
-console.log(gc.clname);
-console.log(gc.newp);
-
-
-
-
-// with object
+// // with object
 // var newMainSh= {
 //     getsh:'shhh'
 // }
 //
-// newMainSh.gotsh = 'gotsh'
+// newMainSh.gotsh = 'gotsh';
 //
-// function Newconstr (){};
+// //function Newconstr (){};
 //
-// Newconstr.prototype=Object.create(newMainSh)
+// //Newconstr.prototype=Object.create(newMainSh);
 //
-// Newconstr.prototype.gitsh='gitch'
+// //newMainSh.prototype.gitsh='gitch';
 //
-// var newf = Object.create(Newconstr.prototype)
+// var newf = Object.create(newMainSh);
 //
 // console.log(newf.gitsh)
 // console.log(newf.getsh)
