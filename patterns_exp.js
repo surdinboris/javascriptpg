@@ -1,13 +1,325 @@
+Function.prototype.implementsFor = function( parentClassOrObject ){
+    if ( parentClassOrObject.constructor === Function )
+    {
+        // Normal Inheritance
+       console.log('j',this);
+       this.prototype = new parentClassOrObject();
 
-function Car() {
-    this.num_wheels = 4;
+
+       this.prototype.constructor = this;
+       this.prototype.parent = parentClassOrObject.prototype;
+    }
+    else
+    {
+        // Pure Virtual Inheritance
+        this.prototype = parentClassOrObject;
+        this.prototype.constructor = this;
+        this.prototype.parent = parentClassOrObject;
+    }
+    return this;
+};
+
+function Home (addr) {
+ this.addr = 'addr';
 }
 
-var car0 = new Car();
+function Bayit (address) {
+    this.address = address;
+}
+//'Home will be this' argument = parent
 
-var car1 = Object.create(new Car)
-console.log(car1.num_wheels)
-console.log(car0.num_wheels)
+Bayit.implementsFor(Home);
+
+let bait = new Bayit('litovsky');
+
+console.log(bait.addr);
+
+// let Myhome= new Home;
+// console.log(Myhome.constructor.parent)
+
+
+//let grob = new Myhome()
+
+
+// /**
+//  Code copyright Dustin Diaz and Ross Harmes, Pro JavaScript Design Patterns.
+//  **/
+//
+// // Constructor.
+// var Interface = function (name, methods) {
+//     if (arguments.length != 2) {
+//         throw new Error("Interface constructor called with " + arguments.length + "arguments, but expected exactly 2.");
+//     }
+//     this.name = name;
+//     this.methods = [];
+//     for (var i = 0, len = methods.length; i < len; i++) {
+//         if (typeof methods[i] !== 'string') {
+//             throw new Error("Interface constructor expects method names to be " + "passed in as a string.");
+//         }
+//         this.methods.push(methods[i]);
+//     }
+// };
+//
+//
+// // Static class method.
+// Interface.ensureImplements = function (object) {
+//     if (arguments.length < 2) {
+//         throw new Error("Function Interface.ensureImplements called with " + arguments.length + "arguments, but expected at least 2.");
+//     }
+//     for (var i = 1, len = arguments.length; i < len; i++) {
+//         var interface = arguments[i];
+//         //console.log('interface',interface.constructor)
+//         if (interface.constructor !== Interface) {
+//             throw new Error("Function Interface.ensureImplements expects arguments" + "two and above to be instances of Interface.");
+//         }
+//         for (var j = 0, methodsLen = interface.methods.length; j < methodsLen; j++) {
+//
+//             var method = interface.methods[j];
+//             //console.log('method',object[method]);
+//             if (!object[method] || typeof object[method] !== 'function') {
+//                 throw new Error("Function Interface.ensureImplements: object " + "does not implement the " + interface.name + " interface. Method " + method + " was not found.");
+//             }
+//         }
+//     }
+// };
+// var Macbook = new Interface( "Macbook",
+//     ["addEngraving",
+//         "addParallels",
+//         "add4GBRam",
+//         "add8GBRam",
+//         "addCase"]);
+//
+// // A Macbook Pro might thus be represented as follows:
+// var MacbookPro = function(){
+//     // implements Macbook
+// };
+//
+// MacbookPro.prototype = {
+//     addEngraving: function(){
+//     },
+//     addParallels: function(){
+//     },
+//     add4GBRam: function(){
+//     },
+//     add8GBRam:function(){
+//     },
+//     addCase: function(){
+//         return "beatiful mac "
+//     },
+//     getPrice: function(){
+//         // Base price
+//         return 900.00;
+//     }
+// };
+//
+// // Macbook decorator abstract decorator class
+//
+// var MacbookDecorator = function( macbook ){
+//
+//
+//     Interface.ensureImplements( macbook, Macbook );
+//     this.macbook = macbook;
+//
+// };
+//
+// MacbookDecorator.prototype = {
+//     addEngraving: function(){
+//         return this.macbook.addEngraving();
+//     },
+//     addParallels: function(){
+//         return this.macbook.addParallels();
+//     },
+//     add4GBRam: function(){
+//         return this.macbook.add4GBRam();
+//     },
+//     add8GBRam:function(){
+//         return this.macbook.add8GBRam();
+//     },
+//     addCase: function(){
+//         return this.macbook.addCase();
+//     },
+//     getPrice: function(){
+//         return this.macbook.getPrice();
+//     }
+// };
+//
+// function extend( a, b ){
+//     for( var key in b )
+//         if( b.hasOwnProperty(key) )
+//             a[key] = b[key];
+//     return a;
+// }
+//
+//
+//
+//
+// var CaseDecorator = function( macbook ){
+//     this.macbook = macbook;
+// };
+//
+// // Let's now extend (decorate) the CaseDecorator
+// // with a MacbookDecorator
+// extend( CaseDecorator, MacbookDecorator );
+//
+// CaseDecorator.prototype.addCase = function(){
+//     return this.macbook.addCase() + "Adding case to macbook";
+// };
+//
+// CaseDecorator.prototype.getPrice = function(){
+//     return this.macbook.getPrice() + 45.00;
+// };
+//
+// // Instantiation of the macbook
+// var myMacbookPro = new MacbookPro();
+//
+// // Outputs: 900.00
+// console.log( myMacbookPro.getPrice() );
+//
+// // Decorate the macbook
+//
+// var decoratedMacbookPro = new CaseDecorator( myMacbookPro );
+// var decoratedMacbookPro2 = new CaseDecorator( decoratedMacbookPro );
+// // This will return 945.00
+//
+// console.log(decoratedMacbookPro.addCase());
+//
+// console.log( decoratedMacbookPro2.getPrice() );
+
+// var Drawable = new Interface("Drawable", ["onDraw","onDraw2"]);
+//
+//
+// //dumb class  that should implement onDraw/2
+// var Surface = function() {
+//     //this.implements = ["Drawable"];
+//
+//     this.onDraw = function() {
+//         console.log("Surface Drawing");
+//     };
+//     this.onDraw2 = function() {
+//         console.log("Surface Drawing");
+//     };
+// };
+//
+//
+//
+// var myDrawableSurface = new Surface();
+// console.log(Drawable)
+// // Returns true
+// Interface.ensureImplements(myDrawableSurface, Drawable);
+
+// Returns false (Error thrown)
+//Interface.ensureImplements(myDrawableSurface, Array);
+
+
+// // The constructor to decorate
+// function MacBook() {
+//
+//     this.cost = function () { return 997; };
+//     this.screenSize = function () { return 11.6; };
+//
+// }
+//
+// // Decorator 1
+// function memory( macbook ) {
+//
+//     var v = macbook.cost();
+//     macbook.cost = function() {
+//         return v + 75;
+//     };
+//
+// }
+//
+// // Decorator 2
+// function engraving( macbook ){
+//
+//     var v = macbook.cost();
+//     macbook.cost = function(){
+//         return v + 200;
+//     };
+//
+// }
+//
+// // Decorator 3
+// function insurance( macbook ){
+//
+//     var v = macbook.cost();
+//     macbook.cost = function(){
+//         return v + 250;
+//     };
+//
+// }
+//
+// var mb = new MacBook();
+// memory( mb );
+//
+// console.log( mb.cost.toString())
+// engraving( mb );
+//
+// console.log( mb.cost.toString())
+// insurance( mb );
+//
+// // Outputs: 1522
+// console.log( mb.cost() );
+//
+// // Outputs: 11.6
+// console.log( mb.screenSize() );
+
+//
+// var myMixins = {
+//
+//     moveUp: function(){
+//         console.log( this.per,"move up" );
+//     },
+//
+//     moveDown: function(){
+//         console.log( this.per,"move down" );
+//     },
+//
+//     stop: function(){
+//         console.log( this.per,"stop! in the name of love!" );
+//     }
+//
+// };
+//
+// // A skeleton carAnimator constructor
+// function CarAnimator(superclass,per){
+//     this.per=per;
+//     for(let prop of Object.keys(superclass)){
+//         this[prop]=superclass[prop]
+//     }
+//     this.moveLeft = function(){
+//         console.log( "move left" );
+//     };
+// }
+//
+// let anim= new CarAnimator(myMixins,'katz')
+// anim.moveLeft()
+// anim.stop()
+//
+// // A skeleton personAnimator constructor
+// function PersonAnimator(per){
+//     this.per=per;
+//     this.moveRandomly = function(){ /*..*/ };
+// }
+//
+// PersonAnimator.prototype.go=function(){
+//     console.log( "move go" );
+// };
+//
+// function extend(what,extention){
+//    for(let prop of Object.keys(extention)){
+//       // console.log(prop, 'added')
+//        what.prototype[prop]=extention[prop]
+//    }
+// }
+//
+// extend(PersonAnimator,myMixins);
+// //console.log(PersonAnimator)
+//
+// let pa = new PersonAnimator('jaques');
+//
+// pa.go();
+// pa.moveUp();
 // Very simply said, new X is Object.create(X.prototype)
 // with additionally running the constructor function.
 // (And giving the constructor the chance to return the actual
@@ -27,7 +339,7 @@ console.log(car0.num_wheels)
 // };
 //
 // Sclass.prototype.clname='sclass';
-//
+//-
 // var tt= new Sclass('uuu');
 // console.log(tt.cll);
 
