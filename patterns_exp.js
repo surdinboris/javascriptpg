@@ -2,7 +2,10 @@ Function.prototype.implementsFor = function( parentClassOrObject ){
     //in case of
     if ( parentClassOrObject.constructor === Function )
     {
-        // Normal Inheritance
+        // Normal Inheritance - building new this that will
+        // be new plain constructor function for new objects
+        // that inherit from created object assigned as prototype
+        //
        this.prototype = new parentClassOrObject();
        this.prototype.constructor = this;
        this.prototype.parent = parentClassOrObject.prototype;
@@ -17,11 +20,8 @@ Function.prototype.implementsFor = function( parentClassOrObject ){
     return this;
 };
 
-
 function CoffeeFlavor( newFlavor ){
-
     var flavor = newFlavor;
-
     // If an interface has been defined for a feature
     // implement the feature
     if( typeof this.getFlavor === "function" ){
@@ -29,7 +29,6 @@ function CoffeeFlavor( newFlavor ){
             return flavor;
         };
     }
-
     if( typeof this.serveCoffee === "function" ){
         this.serveCoffee = function( context ) {
             console.log("Serving Coffee flavor "
@@ -38,13 +37,22 @@ function CoffeeFlavor( newFlavor ){
                 + context.getTable());
         };
     }
-
 }
+function Bayit (address) {
+    this.address = address;
+}
+//console.log(typeof  Bayit.constructor)
+let bibi = {};
 
-//
-// function Bayit (address) {
-//     this.address = address;
-// }
+
+let ba= new Bayit(7);
+console.log(Bayit.prototype.toString());
+//ba.constructor = this;
+console.log(ba.constructor.toString());
+console.log(Bayit.prototype.constructor.toString());
+
+//console.log(typeof Bayit )
+// console.log(
 // //'Home will be this' argument = parent
 //
 // Bayit.implementsFor(Home);
@@ -56,37 +64,33 @@ function CoffeeFlavor( newFlavor ){
 ///
 //dumb function passing
 
-let hoha = Object.create(null)
-hoha.kk=90
-hoha.constructor = CoffeeFlavor.constructor === Function
-
-console.log('const',hoha.constructor)
-let thirdPartyConstr={ugauga:'005'}
+// let hoha = Object.create(null)
+// hoha.kk=90
+// hoha.constructor = CoffeeFlavor.constructor === Function
 //
-function Repl(ty,ru) {
-    console.log('Repl constructor init')
-    this.bla = ty + ru
-    if (this.bla > 68) {
-        let fun =function (blo) {
-            //ty, ru - predefined via main Repl class,
-            // blo will be passed at new instance step (using outcome of object created via Repl)
-            console.log('Replik',ty, ru, blo)
-            this.tyi=ty - ru
-
-        }
-
-        return fun
-        }
-    }
-
-let Replik = new Repl(34,36)
-let rep = new Replik(666)
-
-console.log('r',rep.__proto__.constructor)
-rep.__proto__.constructor=thirdPartyConstr;
-//target
-console.log('r',rep.__proto__.constructor)
-console.log(rep[ugauga'])
+// console.log('const',hoha.constructor)
+// let thirdPartyConstr={ugauga:'005'}
+// //
+// function Repl(ty,ru) {
+//     console.log('Repl constructor init')
+//     this.bla = ty + ru
+//     if (this.bla > 68) {
+//         let fun =function (blo) {
+//             //ty, ru - predefined via main Repl class,
+//             // blo will be passed at new instance step (using outcome of object created via Repl)
+//             console.log('Replik',ty, ru, blo)
+//             this.tyi=ty - ru
+//
+//         }
+//
+//         return fun
+//         }
+//     }
+//
+// let Replik = new Repl(34,36)
+// let rep = new Replik(666)
+//
+// console.log('r',rep.__proto__);
 
 //
 // console.log('Repl.prototype.constructor',Repl.prototype.constructor)
