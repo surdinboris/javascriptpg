@@ -2,9 +2,11 @@ Function.prototype.implementsFor = function( parentClassOrObject ){
     //in case of
     if ( parentClassOrObject.constructor === Function )
     {
+        console.log('t',this.toString())
         // Normal Inheritance - building new this that will
-        // be new plain constructor function for new objects
-        // that inherit from created object assigned as prototype
+        // be 'ConstructorFunction.implementsFor' constructor.
+        //prototype object will be developed via new method
+        // and assigned as prototype to this
         //
        this.prototype = new parentClassOrObject();
        this.prototype.constructor = this;
@@ -41,6 +43,9 @@ function CoffeeFlavor( newFlavor ){
 function Bayit (address) {
     this.address = address;
 }
+
+console.log(Bayit.implementsFor(Bayit));
+
 //console.log(typeof  Bayit.constructor)
 let bibi = {};
 
