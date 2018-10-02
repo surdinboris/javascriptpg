@@ -1,11 +1,9 @@
 Function.prototype.implementsFor = function( parentClassOrObject ){
+    //in case of
     if ( parentClassOrObject.constructor === Function )
     {
         // Normal Inheritance
-       console.log('j',this);
        this.prototype = new parentClassOrObject();
-
-
        this.prototype.constructor = this;
        this.prototype.parent = parentClassOrObject.prototype;
     }
@@ -19,29 +17,104 @@ Function.prototype.implementsFor = function( parentClassOrObject ){
     return this;
 };
 
-function Home (addr) {
- this.addr = 'addr';
+
+function CoffeeFlavor( newFlavor ){
+
+    var flavor = newFlavor;
+
+    // If an interface has been defined for a feature
+    // implement the feature
+    if( typeof this.getFlavor === "function" ){
+        this.getFlavor = function() {
+            return flavor;
+        };
+    }
+
+    if( typeof this.serveCoffee === "function" ){
+        this.serveCoffee = function( context ) {
+            console.log("Serving Coffee flavor "
+                + flavor
+                + " to table number "
+                + context.getTable());
+        };
+    }
+
 }
 
-function Bayit (address) {
-    this.address = address;
-}
-//'Home will be this' argument = parent
+//
+// function Bayit (address) {
+//     this.address = address;
+// }
+// //'Home will be this' argument = parent
+//
+// Bayit.implementsFor(Home);
+//
+// let bait = new Bayit('litovsky');
+//
+// console.log(bait.addr);
 
-Bayit.implementsFor(Home);
+///
+//dumb function passing
 
-let bait = new Bayit('litovsky');
+let hoha = Object.create(null)
+hoha.kk=90
+hoha.constructor = CoffeeFlavor.constructor === Function
 
-console.log(bait.addr);
+console.log('const',hoha.constructor)
+let thirdPartyConstr={ugauga:'005'}
+//
+function Repl(ty,ru) {
+    console.log('Repl constructor init')
+    this.bla = ty + ru
+    if (this.bla > 68) {
+        let fun =function (blo) {
+            //ty, ru - predefined via main Repl class,
+            // blo will be passed at new instance step (using outcome of object created via Repl)
+            console.log('Replik',ty, ru, blo)
+            this.tyi=ty - ru
 
-// let Myhome= new Home;
-// console.log(Myhome.constructor.parent)
+        }
+
+        return fun
+        }
+    }
+
+let Replik = new Repl(34,36)
+let rep = new Replik(666)
+
+console.log('r',rep.__proto__.constructor)
+rep.__proto__.constructor=thirdPartyConstr;
+//target
+console.log('r',rep.__proto__.constructor)
+console.log(rep[ugauga'])
+
+//
+// console.log('Repl.prototype.constructor',Repl.prototype.constructor)
+//
+// let repl=new Repl(78,54)
+// console.log('repl.__proto__',repl.__proto__)
+// console.log(repl.__proto__.constructor)
+// console.log(Repl.prototype === repl.__proto__)
+
+//
+// Function.prototype.zapupents = function () {
+//     //modifying function - return modified chainable function
+//     //console.log('---', this)
+//     //this.prototype.constructor=this
+//     this.prototype = Hoha
+//     console.log('constructor',this.prototype.constructor)
+//     return this
+//
+// }
+//
 
 
-//let grob = new Myhome()
 
+//Zyama.constructor=Repl
+// console.log(Zyama.prototype.constructor)
+// Zyama.prototype.constructor = Repl.prototype.constructor
+// console.log(Zyama.prototype.constructor);
 
-// /**
 //  Code copyright Dustin Diaz and Ross Harmes, Pro JavaScript Design Patterns.
 //  **/
 //
