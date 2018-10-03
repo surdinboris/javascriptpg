@@ -1,16 +1,32 @@
+//parentClassOrObject => interface
 Function.prototype.implementsFor = function( parentClassOrObject ){
     //in case of
     if ( parentClassOrObject.constructor === Function )
     {
-        console.log('t',this.toString())
-        // Normal Inheritance - building new this that will
+      //  console.log('is this.prototype.constructor this?',this.prototype.constructor === this)
+
+        // Normal Inheritance
+        // building new this that will
         // be 'ConstructorFunction.implementsFor' constructor.
-        //prototype object will be developed via new method
+        //parent prototype object will be developed via new method
         // and assigned as prototype to this
         //
-       this.prototype = new parentClassOrObject();
+        //1.develop Parent function as prototype object (argument)
+     //  console.log('start',this.prototype)
+        //console.log(this.prototype)
+        this.prototype = Object.assign(this.prototype,new parentClassOrObject());
+       // this.prototype = new parentClassOrObject();
+      //  console.log(this.prototype )
+       // console.log('is this.prototype.constructor this?',this.prototype.constructor === this)
+        //2.returning original construcror property for replaced prototype
+        // this -- constructor of function on wich method was called
        this.prototype.constructor = this;
+       // console.log('is this.prototype.constructor this?',this.prototype.constructor === this)
+       //so only a prototype Object itself will be overrided
+
+        //assigning some virtual property 'parent' as parentClassOrObject.prototype (prototype Object)
        this.prototype.parent = parentClassOrObject.prototype;
+        //console.log('finish',this.prototype.constructor )
     }
     else
     {
@@ -21,6 +37,19 @@ Function.prototype.implementsFor = function( parentClassOrObject ){
     }
     return this;
 };
+
+//in other words, defined above code changes prototype object with defined in argument
+// and assigning .paret prperty to object defined in argument
+
+
+var CoffeeOrder = {
+
+    // Interfaces
+    serveCoffee:function(context){console.log('pshhh',this.region)},
+    getFlavor:function(){console.log('mmmmmmm',this.region || '')}
+
+};
+
 
 function CoffeeFlavor( newFlavor ){
     var flavor = newFlavor;
@@ -40,21 +69,37 @@ function CoffeeFlavor( newFlavor ){
         };
     }
 }
-function Bayit (address) {
-    this.address = address;
+
+function City (region) {
+    this.region = region;
+    if(this.getFlavor){
+        console.log('flavor!')
+    }
+
 }
 
-console.log(Bayit.implementsFor(Bayit));
+City.implementsFor(CoffeeOrder);
 
+let taster= new City('Ohio')
+//
+// taster.serveCoffee()
+//
+// City.prototype.getFlavor()
+
+//console.log(City.prototype)
 //console.log(typeof  Bayit.constructor)
-let bibi = {};
-
-
-let ba= new Bayit(7);
-console.log(Bayit.prototype.toString());
+// let bibi = {};
+//
+//
+// let ba= new Bayit(7);
+// Bayit.prototype.kaka='gh'
+// console.log(Bayit.prototype.constructor.toString());
+// console.log(ba)
+// let bo= new Bayit(8);
+// console.log(bo.__proto__.constructor)
 //ba.constructor = this;
-console.log(ba.constructor.toString());
-console.log(Bayit.prototype.constructor.toString());
+// console.log(ba.constructor.toString());
+// console.log(Bayit.prototype.constructor.toString());
 
 //console.log(typeof Bayit )
 // console.log(
