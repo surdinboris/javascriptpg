@@ -39,20 +39,32 @@ Function.prototype.implementsFor = function( parentClassOrObject ){
 };
 
 //in other words, defined above code changes prototype object with defined in argument
-// and assigning .paret prperty to object defined in argument
+// and assigning .parent prperty to object defined in argument
+//so these two functions from CoffeeOrder will be implemented for all instanses
 
-
+// Flyweight object
 var CoffeeOrder = {
 
     // Interfaces
-    serveCoffee:function(context){console.log('pshhh',this.region)},
-    getFlavor:function(){console.log('mmmmmmm',this.region || '')}
+    serveCoffee:function(context){console.log('pshhh')},
+    getFlavor:function(){console.log('mmmmmmm')}
 
 };
 
+// CoffeeOrder: Flyweight
+// CoffeeFlavor: Concrete Flyweight
+// CoffeeOrderContext: Helper
+// CoffeeFlavorFactory: Flyweight Factory
+// testFlyweight: Utilization of our Flyweights
 
+
+
+// ConcreteFlyweight object that creates ConcreteFlyweight
+// Implements CoffeeOrder
 function CoffeeFlavor( newFlavor ){
+
     var flavor = newFlavor;
+
     // If an interface has been defined for a feature
     // implement the feature
     if( typeof this.getFlavor === "function" ){
@@ -60,6 +72,7 @@ function CoffeeFlavor( newFlavor ){
             return flavor;
         };
     }
+
     if( typeof this.serveCoffee === "function" ){
         this.serveCoffee = function( context ) {
             console.log("Serving Coffee flavor "
@@ -68,19 +81,102 @@ function CoffeeFlavor( newFlavor ){
                 + context.getTable());
         };
     }
+
 }
 
-function City (region) {
-    this.region = region;
-    if(this.getFlavor){
-        console.log('flavor!')
+
+// Implement interface for CoffeeOrder
+CoffeeFlavor.implementsFor( CoffeeOrder );
+
+
+// Handle table numbers for a coffee order
+function CoffeeOrderContext( tableNumber ) {
+    return{
+        getTable: function() {
+            return tableNumber;
+        }
+    };
+}
+
+
+function CoffeeFlavorFactory() {
+    //local storage and counter for flavors
+    var flavors = {},
+        length = 0;
+
+    return {
+        getCoffeeFlavor: function (flavorName) {
+
+            var flavor = flavors[flavorName];
+            //key moment  - creating new CoffeeFlavor that
+            if (typeof flavor === "undefined") {
+                flavor = new CoffeeFlavor(flavorName);
+                flavors[flavorName] = flavor;
+                length++;
+            }
+            return flavor;
+        },
+
+        getTotalCoffeeFlavorsMade: function () {
+            return length;
+        }
+    };
+}
+
+// Sample usage:
+// testFlyweight()
+
+function testFlyweight(){
+
+
+    // The flavors ordered.
+    var flavors = [],
+
+        // The tables for the orders.
+        tables = [],
+
+        // Number of orders made
+        ordersMade = 0,
+
+        // The CoffeeFlavorFactory instance
+        flavorFactory = new CoffeeFlavorFactory();
+    //flavorFactory.getCoffeeFlavor - optimizing flavor objects consumption. Flavor Object will be created
+    //only if its a new unseen flavor
+    function takeOrders( flavorIn, table) {
+        //optimizing step to avoid equal object creation
+        flavors.push( flavorFactory.getCoffeeFlavor( flavorIn ) );
+        tables.push( new CoffeeOrderContext( table ) );
+        ordersMade++;
     }
 
+    takeOrders("Cappuccino", 2);
+    takeOrders("Cappuccino", 2);
+    takeOrders("Frappe", 1);
+    takeOrders("Frappe", 1);
+    takeOrders("Xpresso", 1);
+    takeOrders("Frappe", 897);
+    takeOrders("Cappuccino", 97);
+    takeOrders("Cappuccino", 97);
+    takeOrders("Frappe", 3);
+    takeOrders("Xpresso", 3);
+    takeOrders("Cappuccino", 3);
+    takeOrders("Xpresso", 96);
+    takeOrders("Frappe", 552);
+    takeOrders("Cappuccino", 121);
+    takeOrders("Xpresso", 121);
+
+
+
+    for (var i = 0; i < ordersMade; ++i) {
+
+        flavors[i].serveCoffee(tables[i]);
+    }
+    console.log(flavors.length == ordersMade.length);
+    console.log("total CoffeeFlavor objects made: " + flavorFactory.getTotalCoffeeFlavorsMade());
 }
+testFlyweight()
+let ok= 'ok';
 
-City.implementsFor(CoffeeOrder);
-
-let taster= new City('Ohio')
 //
 // taster.serveCoffee()
 //
